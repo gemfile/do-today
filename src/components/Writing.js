@@ -3,14 +3,22 @@ import { View, Image } from 'react-native';
 import { Card, CardSection, Input, Button } from './common';
 
 class Writing extends Component {
-  onFocus() {
+  state = {
+    hasFocus: false
+  }
 
+  onFocus() {
+    this.setState({ hasFocus: true });
   }
 
   renderButton() {
-    return (
-      <Button />
-    );
+    if (this.state.hasFocus) {
+      return (
+        <View style={styles.lowerContainerStyle}>
+          <Button>Add</Button>
+        </View>
+      );
+    }
   }
 
   render() {
@@ -20,7 +28,6 @@ class Writing extends Component {
       imageContainerStyle,
       imageStyle,
       inputContainerStyle,
-      lowerContainerStyle,
     } = styles;
 
     return (
@@ -43,9 +50,7 @@ class Writing extends Component {
               </View>
             </View>
 
-            <View style={lowerContainerStyle}>
-              <Button>Add</Button>
-            </View>
+            { this.renderButton() }
 
           </View>
         </CardSection>
@@ -77,7 +82,7 @@ const styles = {
   },
   inputContainerStyle: {
     flex: 6,
-    marginRight: 8
+    marginRight: 7
   },
 
   lowerContainerStyle: {

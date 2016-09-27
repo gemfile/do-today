@@ -1,7 +1,14 @@
 import React from 'react';
 import { TextInput, View } from 'react-native';
 
-const Input = ({ value, onChangeText, placeholder, secureTextEntry, onSubmitEditing }) => {
+const Input = ({
+  value,
+  onChangeText,
+  placeholder,
+  secureTextEntry,
+  onSubmitEditing,
+  onFocus
+}) => {
   const { inputStyle, inputContainerStyle } = styles;
 
   return (
@@ -13,6 +20,7 @@ const Input = ({ value, onChangeText, placeholder, secureTextEntry, onSubmitEdit
         style={inputStyle}
         value={value}
         onChangeText={onChangeText}
+        onFocus={onFocus}
         onSubmitEditing={onSubmitEditing}
       />
     </View>
