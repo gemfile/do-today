@@ -9,7 +9,7 @@ import Writing from './components/Writing';
 const App = () => (
   <Provider store={createStore(reducers)}>
     <View style={{ flex: 1 }}>
-      <Header headerText="Todo Today" />
+      <Header headerText="TODO TODAY" />
       <Writing />
     </View>
   </Provider>

@@ -27,7 +27,7 @@ class Writing extends Component {
   }
 
   renderButton() {
-    if (this.state.inputIsFocused) {
+    if (this.state.inputIsFocused || this.state.inputValue !== '') {
       return (
         <View style={styles.lowerContainerStyle}>
           <Button
@@ -91,7 +91,7 @@ const styles = {
   },
 
   upperContainerStyle: {
-    height: 40,
+    height: 48,
     flex: 1,
     flexDirection: 'row',
   },
