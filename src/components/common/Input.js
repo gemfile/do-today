@@ -3,7 +3,6 @@ import { TextInput, View } from 'react-native';
 
 class Input extends Component {
   clear() {
-    console.log('clear');
     this.textInput.setNativeProps({ editable: false });
     this.textInput.setNativeProps({ editable: true });
   }
