@@ -30,7 +30,12 @@ class Writing extends Component {
     if (this.state.inputIsFocused) {
       return (
         <View style={styles.lowerContainerStyle}>
-          <Button onPress={this.onSubmitEditing.bind(this)}>Add</Button>
+          <Button
+            onPress={this.onSubmitEditing.bind(this)}
+            disabled={this.state.inputValue === ''}
+          >
+            Add
+          </Button>
         </View>
       );
     }

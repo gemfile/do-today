@@ -1,8 +1,13 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ onPress, children }) => {
-const { buttonStyle, textStyle } = styles;
+const Button = ({ onPress, children, disabled }) => {
+  let { buttonStyle, textStyle } = styles;
+  const { buttonStyleDisabled, textStyleDisabled } = styles;
+  if (disabled) {
+    buttonStyle = { ...buttonStyle, ...buttonStyleDisabled };
+    textStyle = { ...textStyle, ...textStyleDisabled };
+  }
 
   return (
     <TouchableOpacity onPress={onPress} style={buttonStyle}>
@@ -22,6 +27,9 @@ const styles = {
     paddingTop: 3,
     paddingBottom: 3,
   },
+  textStyleDisabled: {
+    color: '#ddd'
+  },
   buttonStyle: {
     flex: 1,
     alignSelf: 'stretch',
@@ -31,6 +39,9 @@ const styles = {
     borderColor: '#007aff',
     marginLeft: 5,
     marginRight: 5
+  },
+  buttonStyleDisabled: {
+    borderColor: '#ddd'
   }
 };
 
