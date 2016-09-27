@@ -4,18 +4,33 @@ import { Card, CardSection, Input, Button } from './common';
 
 class Writing extends Component {
   state = {
-    hasFocus: false
+    inputIsFocused: false,
+    inputValue: ''
   }
 
   onFocus() {
-    this.setState({ hasFocus: true });
+    this.setState({ inputIsFocused: true });
+  }
+
+  onChangeText(text) {
+    this.setState({ inputValue: text });
+  }
+
+  onSubmitEditing() {
+    const savedValue = this.state.inputValue;
+    this.setState({
+      inputIsFocused: false,
+      inputValue: ''
+    });
+    this.input.clear();
+    console.log(`onSubmitEditing : ${savedValue}`);
   }
 
   renderButton() {
-    if (this.state.hasFocus) {
+    if (this.state.inputIsFocused) {
       return (
         <View style={styles.lowerContainerStyle}>
-          <Button>Add</Button>
+          <Button onPress={this.onSubmitEditing.bind(this)}>Add</Button>
         </View>
       );
     }
@@ -46,6 +61,11 @@ class Writing extends Component {
                 <Input
                   placeholder={'What will you do today?'}
                   onFocus={this.onFocus.bind(this)}
+                  onChangeText={this.onChangeText.bind(this)}
+                  onSubmitEditing={this.onSubmitEditing.bind(this)}
+                  value={this.state.inputValue}
+                  editable={this.state.inputIsFocused}
+                  ref={(component) => { this.input = component; }}
                 />
               </View>
             </View>
