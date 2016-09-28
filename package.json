@@ -10,7 +10,7 @@
     "firebase": "^3.4.1",
     "immutable": "^3.8.1",
     "react": "15.3.2",
-    "react-native": "0.34.0",
+    "react-native": "^0.37.0",
     "react-native-device-info": "^0.9.5",
     "react-native-firestack": "^2.3.3",
     "react-native-material-kit": "^0.3.3",
@@ -19,9 +19,14 @@
     "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
+    "babel-jest": "^17.0.0",
+    "babel-preset-react-native": "^1.9.0",
     "eslint": "^3.7.1",
     "eslint-plugin-react": "^6.4.1",
     "eslint-plugin-react-native": "^2.0.0",
-    "flow-bin": "^0.33.0"
+    "flow-bin": "^0.33.0",
+    "jest": "^17.0.0",
+    "jest-react-native": "^17.0.0",
+    "react-test-renderer": "^15.3.2"
   }
 }
