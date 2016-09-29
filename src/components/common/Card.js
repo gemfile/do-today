@@ -1,15 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
 
-const Card = (props) => {
+const Card = ({ style, children }) => {
   let { containerStyle } = styles;
-  if (props.style) {
-    containerStyle = { ...containerStyle, ...props.style };
+  if (style) {
+    containerStyle = { ...containerStyle, ...style };
   }
 
   return (
     <View style={containerStyle}>
-      {props.children}
+      {children}
     </View>
   );
 };

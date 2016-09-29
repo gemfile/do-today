@@ -5,7 +5,7 @@ import { CardSection } from './common';
 const TodoSubmenu = ({ expanded }) => {
   if (expanded) {
     return (
-      <CardSection>
+      <CardSection style={{ backgroundColor: '#f8f8f8' }}>
         <View style={{ height: 48 }} />
       </CardSection>
     );

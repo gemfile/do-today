@@ -39,7 +39,7 @@ class Todo extends Component {
         onPress={this.onPress.bind(this)}
       >
         <View>
-          <CardSection>
+          <CardSection style={{ height: 76 }}>
             <Text style={titleStyle}>
               {todo.title}
             </Text>
@@ -54,9 +54,8 @@ class Todo extends Component {
 const styles = {
   titleStyle: {
     fontSize: 20,
-    paddingLeft: 15,
+    marginLeft: 15,
     color: '#666',
-    lineHeight: 76
   }
 };
 
