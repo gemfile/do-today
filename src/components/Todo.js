@@ -1,35 +1,68 @@
 import React, { Component } from 'react';
-import { Text, LayoutAnimation, UIManager } from 'react-native';
+import {
+  Text,
+  View,
+  LayoutAnimation,
+  UIManager,
+  TouchableWithoutFeedback,
+  Platform
+} from 'react-native';
 import { connect } from 'react-redux';
 import { CardSection } from './common';
+import * as actions from './actions';
+import TodoSubmenu from './TodoSubmenu';
 
 class Todo extends Component {
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-    UIManager.setLayoutAnimationEnabledExperimental(true);
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+
+  onPress() {
+    const { todo, expanded } = this.props;
+
+    if (!expanded) {
+      this.props.selectTodo(todo.id);
+    } else {
+      this.props.deselectTodo();
+    }
   }
 
   render() {
     const { titleStyle } = styles;
-    const { title } = this.props.todo;
+    const { todo, expanded } = this.props;
 
     return (
-      <CardSection>
-        <Text style={titleStyle}>
-          {title}
-        </Text>
-      </CardSection>
+      <TouchableWithoutFeedback
+        onPress={this.onPress.bind(this)}
+      >
+        <View>
+          <CardSection>
+            <Text style={titleStyle}>
+              {todo.title}
+            </Text>
+          </CardSection>
+          <TodoSubmenu expanded={expanded} />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
 
 const styles = {
   titleStyle: {
-    fontSize: 16,
+    fontSize: 20,
     paddingLeft: 15,
     color: '#666',
-    lineHeight: 48
+    lineHeight: 76
   }
 };
 
-export default connect(null, null)(Todo);
+const mapStateToProps = (state, ownProps) => {
+  const expanded = state.selectedTodoId === ownProps.todo.id;
+  return { expanded };
+};
+
+export default connect(mapStateToProps, actions)(Todo);

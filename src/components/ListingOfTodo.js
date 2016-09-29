@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Card } from './common';
 import Todo from './Todo';
 
-class Listing extends Component {
+class ListingOfTodo extends Component {
   componentWillMount() {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
@@ -19,7 +19,7 @@ class Listing extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, marginBottom: 10 }}>
+      <View style={{ flex: 1 }}>
         <Card style={{ flex: 1 }}>
           <ListView
             dataSource={this.dataSource}
@@ -35,4 +35,4 @@ const mapStateToProps = state => ({
   todos: state.todos
 });
 
-export default connect(mapStateToProps)(Listing);
+export default connect(mapStateToProps)(ListingOfTodo);

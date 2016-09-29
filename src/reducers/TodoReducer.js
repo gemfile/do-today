@@ -1,3 +1,3 @@
-import data from './TodoList.json';
+import data from './DataOfTodo.json';
 
 export default () => data;

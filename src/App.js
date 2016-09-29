@@ -5,16 +5,38 @@ import { createStore } from 'redux';
 import reducers from './reducers';
 import { Header } from './components/common';
 import Writing from './components/Writing';
-import Listing from './components/Listing';
+import ListingOfTodo from './components/ListingOfTodo';
 
-const App = () => (
-  <Provider store={createStore(reducers)}>
-    <View style={{ flex: 1 }}>
-      <Header headerText="TODO TODAY" />
-      <Writing />
-      <Listing />
-    </View>
-  </Provider>
-);
+const App = () => {
+  const { writingContainerStyle, listingContainerStyle } = styles;
+
+  return (
+    <Provider store={createStore(reducers)}>
+      <View style={{ flex: 1, backgroundColor: '#eee' }}>
+        <Header headerText="TODO TODAY" />
+        <View style={writingContainerStyle}>
+          <Writing />
+        </View>
+        <View style={listingContainerStyle}>
+          <ListingOfTodo />
+        </View>
+      </View>
+    </Provider>
+  );
+};
+
+const styles = {
+  writingContainerStyle: {
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  listingContainerStyle: {
+    flex: 1,
+    marginBottom: 11,
+    marginLeft: 10,
+    marginRight: 10
+  }
+};
 
 export default App;

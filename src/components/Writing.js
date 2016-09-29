@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Image } from 'react-native';
+import pomodoroImage from './img/pomodoro.png';
 import { Card, CardSection, Input, Button } from './common';
 
 class Writing extends Component {
@@ -59,7 +60,7 @@ class Writing extends Component {
               <View style={imageContainerStyle}>
                 <Image
                   style={imageStyle}
-                  source={require('./img/pomodoro.png')}
+                  source={pomodoroImage}
                 />
               </View>
               <View style={inputContainerStyle}>
