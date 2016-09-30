@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { View, Image } from 'react-native';
+import { connect } from 'react-redux';
 import pomodoroImage from './img/pomodoro.png';
 import { Card, CardSection, Input, Button } from './common';
+import * as actions from './actions';
 
 class Writing extends Component {
   state = {
@@ -24,6 +26,11 @@ class Writing extends Component {
       inputValue: ''
     });
     this.input.clear();
+
+    if (savedValue !== '') {
+      this.props.addTodo(savedValue);
+    }
+
     console.log(`onSubmitEditing : ${savedValue}`);
   }
 
@@ -119,4 +126,4 @@ const styles = {
   }
 };
 
-export default Writing;
+export default connect(null, actions)(Writing);

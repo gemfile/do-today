@@ -21,12 +21,12 @@ class Todo extends Component {
   }
 
   onPress() {
-    const { todo, expanded } = this.props;
+    const { todo, expanded, selectTodo, deselectTodo } = this.props;
 
     if (!expanded) {
-      this.props.selectTodo(todo.id);
+      selectTodo(todo.id);
     } else {
-      this.props.deselectTodo();
+      deselectTodo();
     }
   }
 

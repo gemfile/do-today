@@ -8,15 +8,21 @@ import Writing from './components/Writing';
 import ListingOfTodo from './components/ListingOfTodo';
 
 const App = () => {
-  const { writingContainerStyle, listingContainerStyle } = styles;
+  const {
+    writingContainerStyle,
+    listingContainerStyle,
+    wholeContainerStyle
+  } = styles;
 
   return (
     <Provider store={createStore(reducers)}>
-      <View style={{ flex: 1, backgroundColor: '#eee' }}>
+      <View style={wholeContainerStyle}>
         <Header headerText="TODO TODAY" />
+
         <View style={writingContainerStyle}>
           <Writing />
         </View>
+
         <View style={listingContainerStyle}>
           <ListingOfTodo />
         </View>
@@ -26,6 +32,10 @@ const App = () => {
 };
 
 const styles = {
+  wholeContainerStyle: {
+    flex: 1,
+    backgroundColor: '#eee'
+  },
   writingContainerStyle: {
     marginTop: 10,
     marginLeft: 10,
