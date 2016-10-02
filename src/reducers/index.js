@@ -6,5 +6,5 @@ import AddingReducer from './AddingReducer';
 export default combineReducers({
   todos: TodoReducer,
   selectedTodoId: SelectionReducer,
-  addingTitle: AddingReducer
+  addingTodo: AddingReducer
 });

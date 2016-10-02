@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
-import pomodoroImage from './img/pomodoro.png';
 import { Card, CardSection, Input, Button } from './common';
 import * as actions from './actions';
+import PomodoroImage from './PomodoroImage';
 
 class Writing extends Component {
   state = {
@@ -64,12 +64,10 @@ class Writing extends Component {
           <View style={wholeContainerStyle}>
 
             <View style={upperContainerStyle}>
-              <View style={imageContainerStyle}>
-                <Image
-                  style={imageStyle}
-                  source={pomodoroImage}
-                />
-              </View>
+              <PomodoroImage
+                imageContainerStyle={imageContainerStyle}
+                imageStyle={imageStyle}
+              />
               <View style={inputContainerStyle}>
                 <Input
                   placeholder={'What will you do today?'}

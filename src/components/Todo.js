@@ -4,13 +4,14 @@ import {
   View,
   LayoutAnimation,
   UIManager,
-  TouchableWithoutFeedback,
+  TouchableHighlight,
   Platform
 } from 'react-native';
 import { connect } from 'react-redux';
 import { CardSection } from './common';
 import * as actions from './actions';
 import TodoSubmenu from './TodoSubmenu';
+import PomodoroImage from './PomodoroImage';
 
 class Todo extends Component {
   componentWillUpdate() {
@@ -31,11 +32,12 @@ class Todo extends Component {
   }
 
   render() {
-    const { titleStyle } = styles;
+    const { titleStyle, countStyle, countContainerStyle } = styles;
     const { todo, expanded } = this.props;
 
     return (
-      <TouchableWithoutFeedback
+      <TouchableHighlight
+        underlayColor='transparent'
         onPress={this.onPress.bind(this)}
       >
         <View>
@@ -43,10 +45,18 @@ class Todo extends Component {
             <Text style={titleStyle}>
               {todo.title}
             </Text>
+            <View style={{ flex: 1, marginRight: 15, }}>
+              <PomodoroImage imageStyle={{ width: 16, height: 16 }} />
+              <View style={countContainerStyle}>
+                <Text style={countStyle}>
+                  {todo.count}
+                </Text>
+              </View>
+            </View>
           </CardSection>
           <TodoSubmenu expanded={expanded} />
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableHighlight>
     );
   }
 }
@@ -56,6 +66,19 @@ const styles = {
     fontSize: 20,
     marginLeft: 15,
     color: '#666',
+    flex: 14,
+  },
+  countContainerStyle: {
+    backgroundColor: '#eee',
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: 'transparent',
+    marginBottom: 12,
+    width: 15
+  },
+  countStyle: {
+    color: '#666',
+    textAlign: 'center',
   }
 };
 

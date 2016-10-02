@@ -9,5 +9,6 @@ export const deselectTodo = () => ({
 
 export const addTodo = (title) => ({
   type: 'add_todo',
-  title
+  title,
+  count: 0
 });

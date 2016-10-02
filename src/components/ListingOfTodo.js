@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
-import { Card } from './common';
+import { Card, Spinner } from './common';
 import Todo from './Todo';
 
 class ListingOfTodo extends Component {
@@ -39,7 +39,7 @@ class ListingOfTodo extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.addingTitle !== nextProps.addingTitle) {
-      this.addItem(nextProps.addingTitle);
+      this.addItem(nextProps.addingTitle, nextProps.addingCount);
     }
   }
 
@@ -49,6 +49,7 @@ class ListingOfTodo extends Component {
       snap.forEach((child) => {
         items.push({
           title: child.val().title,
+          count: child.val().count,
           id: child.key,
           index: items.length
         });
@@ -60,8 +61,8 @@ class ListingOfTodo extends Component {
     });
   }
 
-  addItem(title) {
-    this.itemsRef.push({ title });
+  addItem(title, count) {
+    this.itemsRef.push({ title, count });
   }
 
   renderRow(todo) {
@@ -82,9 +83,14 @@ class ListingOfTodo extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  addingTitle: state.addingTitle,
-  todos: state.todos
-});
+const mapStateToProps = state => {
+  const { title, count } = state.addingTodo;
+
+  return {
+    addingTitle: title,
+    addingCount: count,
+    todos: state.todos
+  };
+};
 
 export default connect(mapStateToProps)(ListingOfTodo);
