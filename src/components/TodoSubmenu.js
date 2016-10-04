@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableWithoutFeedback } from 'react-native';
-import { CardSection } from './common';
+import { Animated, View, Image, TouchableWithoutFeedback } from 'react-native';
+import { CardSection, TouchableWithPressEffect } from './common';
 import TodoProgress from './TodoProgress';
 import playImage from './img/play.png';
 
 class TodoSubmenu extends Component {
-  onPlay(event) {
-    console.log("onPlay");
-  }
-
   onProgress(event) {
     console.log("onPress");
   }
@@ -26,11 +22,9 @@ class TodoSubmenu extends Component {
                 <TodoProgress ratio={0} />
               </View>
 
-              <TouchableWithoutFeedback onPress={this.onPlay.bind(this)}>
-                <View style={rightSideContainer}>
-                  <Image source={playImage} />
-                </View>
-              </TouchableWithoutFeedback>
+              <TouchableWithPressEffect style={rightSideContainer}>
+                <Image source={playImage} />
+              </TouchableWithPressEffect>
             </View>
 
           </TouchableWithoutFeedback>
