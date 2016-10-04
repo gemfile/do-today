@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Animated, Easing } from 'react-native';
 
 class TodoProgress extends Component {
   constructor(props) {
     super(props);
     this.state = {
       width: 0,
-      ratio: props.ratio
+      filledWidth: new Animated.Value(0)
     };
   }
 
@@ -17,10 +17,16 @@ class TodoProgress extends Component {
 
   render() {
     const { emptyBarStyle, barStyle } = styles;
-    const width = this.state.width * this.state.ratio;
+    const filledWidth = this.state.width * this.props.ratio;
+    Animated.timing(this.state.filledWidth, {
+      toValue: filledWidth,
+      easing: Easing.linear,
+      duration: 1000
+    }).start();
+
     return (
       <View style={emptyBarStyle} onLayout={this.onLayout.bind(this)}>
-        <View style={{ ...barStyle, width }} />
+        <Animated.View style={{ ...barStyle, width: this.state.filledWidth }} />
       </View>
     );
   }

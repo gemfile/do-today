@@ -21,7 +21,17 @@ class Todo extends Component {
     }
   }
 
-  onPress(event) {
+  onLongPress() {
+    const { todo, modifying, modifyTodo } = this.props;
+    if (!modifying) {
+      modifyTodo(todo.id);
+    }
+    else {
+
+    }
+  }
+
+  onPress() {
     const { todo, expanded, selectTodo, deselectTodo } = this.props;
 
     if (!expanded) {
@@ -31,28 +41,65 @@ class Todo extends Component {
     }
   }
 
+  renderMenu() {
+    const { countStyle, countContainerStyle } = styles;
+    const { todo, modifying } = this.props;
+    let menu;
+    if (!modifying) {
+      menu = (
+        <View>
+          <PomodoroImage imageStyle={{ width: 16, height: 16 }} />
+          <View style={countContainerStyle}>
+            <Text style={countStyle}>
+            {todo.count}
+            </Text>
+          </View>
+        </View>
+      );
+    } else {
+      menu = (
+        <View
+          style={{ width: 20,
+                   height: 20,
+                   borderWidth: 3,
+                   borderColor: 'red',
+                   borderRadius: 3 }}
+        >
+
+        </View>
+      );
+    }
+
+    return (
+      <View
+        style={{ flex: 1,
+                 marginRight: 15,
+                 justifyContent: 'center',
+                 alignItems: 'center' }}
+      >
+        {menu}
+      </View>
+    );
+
+    return null;
+  }
+
   render() {
-    const { titleStyle, countStyle, countContainerStyle } = styles;
+    const { titleStyle } = styles;
     const { todo, expanded } = this.props;
 
     return (
       <TouchableHighlight
         underlayColor='transparent'
         onPress={this.onPress.bind(this)}
+        onLongPress={this.onLongPress.bind(this)}
       >
         <View>
           <CardSection style={{ height: 76 }}>
             <Text style={titleStyle}>
               {todo.title}
             </Text>
-            <View style={{ flex: 1, marginRight: 15, }}>
-              <PomodoroImage imageStyle={{ width: 16, height: 16 }} />
-              <View style={countContainerStyle}>
-                <Text style={countStyle}>
-                  {todo.count}
-                </Text>
-              </View>
-            </View>
+            {this.renderMenu()}
           </CardSection>
           <TodoSubmenu expanded={expanded} />
         </View>
@@ -84,7 +131,8 @@ const styles = {
 
 const mapStateToProps = (state, ownProps) => {
   const expanded = state.selectedTodoId === ownProps.todo.id;
-  return { expanded };
+  const modifying = state.modifyingTodoId === ownProps.todo.id;
+  return { expanded, modifying };
 };
 
 export default connect(mapStateToProps, actions)(Todo);

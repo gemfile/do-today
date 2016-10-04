@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { TouchableWithoutFeedback, Animated } from 'react-native';
 
 class TouchableWithPressEffect extends Component {
-  state = {
-    bounceValue: new Animated.Value(1)
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      bounceValue: new Animated.Value(1)
+    };
+  }
 
   onPress() {
     this.state.bounceValue.setValue(0.9);
@@ -12,14 +15,18 @@ class TouchableWithPressEffect extends Component {
       toValue: 1,
       friction: 7,
     }).start();
+    const { onPress } = this.props;
+    if (onPress) {
+      onPress();
+    }
   }
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={this.onPress.bind(this)}>
         <Animated.View
-        style={{ ...this.props.style,
-                 transform: [{ scale: this.state.bounceValue }] }}
+          style={{ ...this.props.style,
+                   transform: [{ scale: this.state.bounceValue }] }}
         >
           { this.props.children }
         </Animated.View>
