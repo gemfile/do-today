@@ -21,7 +21,7 @@ class Todo extends Component {
     }
   }
 
-  onPress() {
+  onPress(event) {
     const { todo, expanded, selectTodo, deselectTodo } = this.props;
 
     if (!expanded) {
@@ -73,7 +73,7 @@ const styles = {
     borderWidth: 1,
     borderRadius: 4,
     borderColor: 'transparent',
-    marginBottom: 12,
+    marginBottom: 8,
     width: 15
   },
   countStyle: {
