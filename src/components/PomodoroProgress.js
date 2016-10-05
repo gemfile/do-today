@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Animated, Easing } from 'react-native';
 
-class TodoProgress extends Component {
+class PomodoroProgress extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,4 +45,4 @@ const styles = {
   }
 };
 
-export default TodoProgress;
+export default PomodoroProgress;

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { CardSection, TouchableWithPressEffect } from './common';
-import TodoProgress from './TodoProgress';
-import TodoButton from './TodoButton';
+import PomodoroProgress from './PomodoroProgress';
+import PomodoroButton from './PomodoroButton';
 import { secondsToMinutes } from './util/TimeFormat';
 
-class TodoSubmenu extends Component {
+class Pomodoro extends Component {
   constructor(props) {
     super(props);
     const minutesAtATime = 1;
@@ -70,7 +70,7 @@ class TodoSubmenu extends Component {
 
             <View style={{ flex: 1, height: 48, flexDirection: 'row' }}>
               <View style={leftSideContainerStyle}>
-                <TodoProgress
+                <PomodoroProgress
                   ratio={ratioOfProgress}
                   style={{ flex: 1 }}
                 />
@@ -83,7 +83,7 @@ class TodoSubmenu extends Component {
                 style={rightSideContainerStyle}
                 onPress={this.onPress.bind(this)}
               >
-                <TodoButton submenuButton={this.state.submenuButton} />
+                <PomodoroButton type={this.state.submenuButton} />
 
               </TouchableWithPressEffect>
             </View>
@@ -117,4 +117,4 @@ const styles = {
   }
 };
 
-export default TodoSubmenu;
+export default Pomodoro;

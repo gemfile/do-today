@@ -10,8 +10,9 @@ import {
 import { connect } from 'react-redux';
 import { CardSection } from './common';
 import * as actions from './actions';
-import TodoSubmenu from './TodoSubmenu';
-import PomodoroImage from './PomodoroImage';
+import TodoButton from './TodoButton';
+import TodoStatus from './TodoStatus';
+import Pomodoro from './Pomodoro';
 
 class Todo extends Component {
   componentWillUpdate() {
@@ -41,52 +42,9 @@ class Todo extends Component {
     }
   }
 
-  renderMenu() {
-    const { countStyle, countContainerStyle } = styles;
-    const { todo, modifying } = this.props;
-    let menu;
-    if (!modifying) {
-      menu = (
-        <View>
-          <PomodoroImage imageStyle={{ width: 16, height: 16 }} />
-          <View style={countContainerStyle}>
-            <Text style={countStyle}>
-            {todo.count}
-            </Text>
-          </View>
-        </View>
-      );
-    } else {
-      menu = (
-        <View
-          style={{ width: 20,
-                   height: 20,
-                   borderWidth: 3,
-                   borderColor: 'red',
-                   borderRadius: 3 }}
-        >
-
-        </View>
-      );
-    }
-
-    return (
-      <View
-        style={{ flex: 1,
-                 marginRight: 15,
-                 justifyContent: 'center',
-                 alignItems: 'center' }}
-      >
-        {menu}
-      </View>
-    );
-
-    return null;
-  }
-
   render() {
     const { titleStyle } = styles;
-    const { todo, expanded } = this.props;
+    const { todo, expanded, modifying } = this.props;
 
     return (
       <TouchableHighlight
@@ -94,14 +52,16 @@ class Todo extends Component {
         onPress={this.onPress.bind(this)}
         onLongPress={this.onLongPress.bind(this)}
       >
+
         <View>
           <CardSection style={{ height: 76 }}>
+            <TodoButton />
             <Text style={titleStyle}>
               {todo.title}
             </Text>
-            {this.renderMenu()}
+            <TodoStatus todo={todo} modifying={modifying} />
           </CardSection>
-          <TodoSubmenu expanded={expanded} />
+          <Pomodoro expanded={expanded} />
         </View>
       </TouchableHighlight>
     );
@@ -115,18 +75,6 @@ const styles = {
     color: '#666',
     flex: 14,
   },
-  countContainerStyle: {
-    backgroundColor: '#eee',
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: 'transparent',
-    marginBottom: 8,
-    width: 15
-  },
-  countStyle: {
-    color: '#666',
-    textAlign: 'center',
-  }
 };
 
 const mapStateToProps = (state, ownProps) => {

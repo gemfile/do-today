@@ -1,39 +1,28 @@
 import React from 'react';
-import { Image, View } from 'react-native';
-import playImage from './img/play.png';
-import PomodoroImage from './PomodoroImage';
+import { View, Image } from 'react-native';
+import { TouchableWithPressEffect } from './common';
+import doneImage from './img/done.png';
 
-const TodoButton = (props) => {
-  let symbol;
-  const { submenuButton } = props;
-
-  switch (submenuButton) {
-    case 'start':
-    default:
-    symbol = <Image source={playImage} />;
-    break;
-
-    case 'stop':
-    symbol = (
-      <View
-        style={{ width: 16,
-                 height: 16,
-                 backgroundColor: '#000',
-                 borderRadius: 1 }}
-      />
-    );
-    break;
-
-    case 'get':
-    symbol = <PomodoroImage imageStyle={{ width: 24, height: 24 }} />;
-    break;
-  }
-
+const TodoButton = () => {
+  const { containerStyle } = styles;
   return (
-    <View style={{ marginLeft: 4 }}>
-      {symbol}
-    </View>
+    <TouchableWithPressEffect>
+      <View style={containerStyle}>
+        <Image source={doneImage} />
+      </View>
+    </TouchableWithPressEffect>
   );
+};
+
+const styles = {
+  containerStyle: {
+    width: 24,
+    height: 24,
+    backgroundColor: '#eee',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 };
 
 export default TodoButton;

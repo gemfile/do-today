@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { Card, CardSection, Input, Button } from './common';
+import { Card, CardSection, Input, Button, TomatoImage } from './common';
 import * as actions from './actions';
-import PomodoroImage from './PomodoroImage';
 
 class Writing extends Component {
   state = {
@@ -64,7 +63,7 @@ class Writing extends Component {
           <View style={wholeContainerStyle}>
 
             <View style={upperContainerStyle}>
-              <PomodoroImage
+              <TomatoImage
                 imageContainerStyle={imageContainerStyle}
                 imageStyle={imageStyle}
               />
