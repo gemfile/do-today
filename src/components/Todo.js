@@ -28,7 +28,7 @@ class Todo extends Component {
       modifyTodo(todo.id);
     }
     else {
-
+      
     }
   }
 

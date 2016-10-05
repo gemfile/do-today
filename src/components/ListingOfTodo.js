@@ -27,14 +27,6 @@ class ListingOfTodo extends Component {
 
     this.itemsRef = firebase.database().ref();
     this.listenForItems(this.itemsRef);
-
-    // firebase.auth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     this.setState({ loggedIn: true });
-    //   } else {
-    //     this.setState({ loggedIn: false });
-    //   }
-    // });
   }
 
   componentWillReceiveProps(nextProps) {

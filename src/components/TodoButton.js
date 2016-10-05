@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, Image } from 'react-native';
 import { TouchableWithPressEffect } from './common';
-import doneImage from './img/done.png';
+import doneBlackImage from './img/done_black.png';
+import doneWhiteImage from './img/done_white.png';
+import closeBlackImage from './img/close_black.png';
+import closeWhiteImage from './img/close_white.png';
 
-const TodoButton = () => {
-  const { containerStyle } = styles;
-  return (
-    <TouchableWithPressEffect>
-      <View style={containerStyle}>
-        <Image source={doneImage} />
-      </View>
-    </TouchableWithPressEffect>
-  );
-};
+class TodoButton extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      condition: 'normal'
+    };
+
+    this.iconMap = {
+      close: { normal: closeWhiteImage, pressed: closeBlackImage },
+      done: { normal: doneWhiteImage, pressed: doneBlackImage }
+    };
+  }
+
+  onPressIn() {
+    this.setState({ condition: 'pressed' });
+  }
+
+  render() {
+    const { type = 'close' } = this.props;
+    const { containerStyle } = styles;
+
+    const iconImage = this.iconMap[type][this.state.condition];
+
+    return (
+      <TouchableWithPressEffect onPressIn={this.onPressIn.bind(this)}>
+        <View style={containerStyle}>
+          <Image source={iconImage} />
+        </View>
+      </TouchableWithPressEffect>
+    );
+  }
+}
 
 const styles = {
   containerStyle: {
