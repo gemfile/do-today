@@ -27,9 +27,6 @@ class Todo extends Component {
     if (!modifying) {
       modifyTodo(todo.id);
     }
-    else {
-      
-    }
   }
 
   onPress() {

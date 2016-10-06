@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux';
-import TodoReducer from './TodoReducer';
+import TodosReducer from './TodosReducer';
 import SelectionReducer from './SelectionReducer';
-import AddingReducer from './AddingReducer';
 import ModifyingReducer from './ModifyingReducer';
 
 export default combineReducers({
-  todos: TodoReducer,
+  todos: TodosReducer,
   selectedTodoId: SelectionReducer,
-  addingTodo: AddingReducer,
   modifyingTodoId: ModifyingReducer
 });

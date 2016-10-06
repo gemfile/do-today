@@ -1,7 +1,7 @@
 export default (state = {}, action) => {
   switch (action.type) {
-    case 'add_todo':
-      return { title: action.title, count: action.count };
+    case 'fetch_todos':
+      return action.payload;
     default:
       return state;
   }
