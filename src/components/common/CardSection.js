@@ -16,7 +16,6 @@ const CardSection = ({ style, children }) => {
 
 const styles = {
   containerStyle: {
-    borderBottomWidth: 1,
     padding: 5,
     backgroundColor: '#fff',
     borderColor: '#ddd',

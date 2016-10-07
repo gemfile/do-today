@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Card, Spinner } from './common';
 import Todo from './Todo';
 import * as actions from './actions';
 
@@ -33,12 +32,10 @@ class ListingOfTodo extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Card style={{ flex: 1 }}>
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderRow.bind(this)}
-          />
-        </Card>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this.renderRow.bind(this)}
+        />
       </View>
     );
   }

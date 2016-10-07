@@ -18,7 +18,6 @@ const App = () => {
   return (
     <Provider store={createStore(reducers, applyMiddleware(thunk))}>
       <View style={wholeContainerStyle}>
-        <Header headerText="TODO TODAY" />
 
         <View style={writingContainerStyle}>
           <Writing />
@@ -27,6 +26,9 @@ const App = () => {
         <View style={listingContainerStyle}>
           <ListingOfTodo />
         </View>
+
+        <Header />
+
       </View>
     </Provider>
   );
@@ -35,18 +37,18 @@ const App = () => {
 const styles = {
   wholeContainerStyle: {
     flex: 1,
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
   },
   writingContainerStyle: {
-    marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
   listingContainerStyle: {
     flex: 1,
-    marginBottom: 11,
-    marginLeft: 10,
-    marginRight: 10
   }
 };
 

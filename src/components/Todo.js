@@ -40,7 +40,7 @@ class Todo extends Component {
   }
 
   render() {
-    const { titleStyle } = styles;
+    const { titleStyle, containerStyle } = styles;
     const { todo, expanded, modifying } = this.props;
 
     return (
@@ -51,7 +51,7 @@ class Todo extends Component {
       >
 
         <View>
-          <CardSection style={{ height: 76 }}>
+          <CardSection style={containerStyle}>
             <TodoButton />
             <Text style={titleStyle}>
               {todo.title}
@@ -66,6 +66,10 @@ class Todo extends Component {
 }
 
 const styles = {
+  containerStyle: {
+    height: 76,
+    marginTop: 5,
+  },
   titleStyle: {
     fontSize: 20,
     marginLeft: 15,

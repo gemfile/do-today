@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { Card, CardSection, Input, Button, TomatoImage } from './common';
+import { CardSection, Input, Button, TomatoImage } from './common';
 import * as actions from './actions';
 
 class Writing extends Component {
@@ -58,33 +58,31 @@ class Writing extends Component {
     } = styles;
 
     return (
-      <Card>
-        <CardSection>
-          <View style={wholeContainerStyle}>
+      <CardSection>
+        <View style={wholeContainerStyle}>
 
-            <View style={upperContainerStyle}>
-              <TomatoImage
-                imageContainerStyle={imageContainerStyle}
-                imageStyle={imageStyle}
+          <View style={upperContainerStyle}>
+            <TomatoImage
+              imageContainerStyle={imageContainerStyle}
+              imageStyle={imageStyle}
+            />
+            <View style={inputContainerStyle}>
+              <Input
+                placeholder={'What will you do today?'}
+                onFocus={this.onFocus.bind(this)}
+                onChangeText={this.onChangeText.bind(this)}
+                onSubmitEditing={this.onSubmitEditing.bind(this)}
+                value={this.state.inputValue}
+                editable={this.state.inputIsFocused}
+                ref={(component) => { this.input = component; }}
               />
-              <View style={inputContainerStyle}>
-                <Input
-                  placeholder={'What will you do today?'}
-                  onFocus={this.onFocus.bind(this)}
-                  onChangeText={this.onChangeText.bind(this)}
-                  onSubmitEditing={this.onSubmitEditing.bind(this)}
-                  value={this.state.inputValue}
-                  editable={this.state.inputIsFocused}
-                  ref={(component) => { this.input = component; }}
-                />
-              </View>
             </View>
-
-            { this.renderButton() }
-
           </View>
-        </CardSection>
-      </Card>
+
+          { this.renderButton() }
+
+        </View>
+      </CardSection>
     );
   }
 }
@@ -96,7 +94,7 @@ const styles = {
   },
 
   upperContainerStyle: {
-    height: 48,
+    height: 50,
     flex: 1,
     flexDirection: 'row',
   },
@@ -110,6 +108,7 @@ const styles = {
     width: 36,
     height: 36,
   },
+
   inputContainerStyle: {
     flex: 6,
     marginRight: 7

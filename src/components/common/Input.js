@@ -47,10 +47,8 @@ const styles = {
   },
   inputContainerStyle: {
     flex: 1,
-    borderWidth: 1,
-    borderRadius: 2,
     borderColor: '#ddd',
-    margin: 4,
+    margin: 2,
   },
 };
 
