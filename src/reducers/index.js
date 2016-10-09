@@ -6,5 +6,5 @@ import ModifyingReducer from './ModifyingReducer';
 export default combineReducers({
   todos: TodosReducer,
   selectedTodoId: SelectionReducer,
-  modifyingTodoId: ModifyingReducer
+  modifyingTodoId: ModifyingReducer,
 });

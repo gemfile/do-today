@@ -68,7 +68,7 @@ class Writing extends Component {
             />
             <View style={inputContainerStyle}>
               <Input
-                placeholder={'What will you do today?'}
+                placeholder={'What are you going to do?'}
                 onFocus={this.onFocus.bind(this)}
                 onChangeText={this.onChangeText.bind(this)}
                 onSubmitEditing={this.onSubmitEditing.bind(this)}

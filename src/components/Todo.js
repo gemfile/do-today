@@ -33,15 +33,19 @@ class Todo extends Component {
     const { todo, expanded, selectTodo, deselectTodo } = this.props;
 
     if (!expanded) {
-      selectTodo(todo.id);
+      selectTodo(todo.index);
     } else {
       deselectTodo();
     }
   }
 
   render() {
-    const { titleStyle, containerStyle } = styles;
     const { todo, expanded, modifying } = this.props;
+    const { titleStyle, shadowStyle } = styles;
+    let { containerStyle } = styles;
+    if (expanded) {
+      containerStyle = { ...containerStyle, ...shadowStyle };
+    }
 
     return (
       <TouchableHighlight
@@ -49,7 +53,6 @@ class Todo extends Component {
         onPress={this.onPress.bind(this)}
         onLongPress={this.onLongPress.bind(this)}
       >
-
         <View>
           <CardSection style={containerStyle}>
             <TodoButton />
@@ -70,6 +73,14 @@ const styles = {
     height: 76,
     marginTop: 5,
   },
+  shadowStyle: {
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 1,
+  },
   titleStyle: {
     fontSize: 20,
     marginLeft: 15,
@@ -79,7 +90,7 @@ const styles = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const expanded = state.selectedTodoId === ownProps.todo.id;
+  const expanded = state.selectedTodoId === ownProps.todo.index;
   const modifying = state.modifyingTodoId === ownProps.todo.id;
   return { expanded, modifying };
 };

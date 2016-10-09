@@ -35,6 +35,10 @@ class ListingOfTodo extends Component {
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
+          onLayout={
+            event => {
+              this.listViewHeight = event.nativeEvent.layout.height;
+            }}
         />
       </View>
     );
@@ -42,7 +46,7 @@ class ListingOfTodo extends Component {
 }
 
 const mapStateToProps = state => ({
-    todos: state.todos
+    todos: state.todos,
 });
 
 export default connect(mapStateToProps, actions)(ListingOfTodo);
