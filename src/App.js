@@ -1,54 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducers from './reducers';
-import { Header } from './components/common';
-import Writing from './components/Writing';
-import ListingOfTodo from './components/ListingOfTodo';
+import RootNavigator from './components/RootNavigator';
+import RootTabs from './components/RootTabs';
 
-const App = () => {
-  const {
-    writingContainerStyle,
-    listingContainerStyle,
-    wholeContainerStyle
-  } = styles;
-
-  return (
-    <Provider store={createStore(reducers, applyMiddleware(thunk))}>
-      <View style={wholeContainerStyle}>
-
-        <View style={writingContainerStyle}>
-          <Writing />
+class App extends Component {
+  render() {
+    return (
+      <Provider store={createStore(reducers, applyMiddleware(thunk))}>
+        <View style={styles.containerStyle}>
+          <RootNavigator style={{ zIndex: 1 }} />
+          <RootTabs style={{ zIndex: 0 }} />
         </View>
-
-        <View style={listingContainerStyle}>
-          <ListingOfTodo />
-        </View>
-
-        <Header />
-
-      </View>
-    </Provider>
-  );
-};
+      </Provider>
+    );
+  }
+}
 
 const styles = {
-  wholeContainerStyle: {
-    flex: 1,
-    backgroundColor: '#eee',
-  },
-  writingContainerStyle: {
-    borderWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  listingContainerStyle: {
-    flex: 1,
+  containerStyle: {
+    flex: 1
   }
 };
 

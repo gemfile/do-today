@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { CardSection, Input, Button, TomatoImage } from './common';
 import * as actions from './actions';
+import { CardSection, Input, Button, TomatoImage } from './common';
 
 class Writing extends Component {
   state = {

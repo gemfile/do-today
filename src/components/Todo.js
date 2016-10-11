@@ -30,12 +30,10 @@ class Todo extends Component {
   }
 
   onPress() {
-    const { todo, expanded, selectTodo, deselectTodo } = this.props;
+    const { expanded, todo } = this.props;
 
     if (!expanded) {
-      selectTodo(todo.index);
-    } else {
-      deselectTodo();
+      this.props.navigateJump('todo');
     }
   }
 

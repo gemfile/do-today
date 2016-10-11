@@ -46,3 +46,21 @@ export const modifyTodo = todoId => ({
   type: 'modify_todo',
   payload: todoId
 });
+
+export const navigateBack = () => ({
+  type: 'navigate_back',
+});
+
+export const navigateForward = () => ({
+  type: 'navigate_forward',
+});
+
+export const navigateJump = key => ({
+  type: 'navigate_jump',
+  payload: key
+});
+
+export const notifyNavigatingPosition = position => ({
+  type: 'notify_navigating_position',
+  payload: position
+});
