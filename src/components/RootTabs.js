@@ -19,7 +19,8 @@ class RootTabs extends Component {
 
   render() {
     const { wholeContainerStyle, tabContainerStyle, selectedLineStyle } = styles;
-    const { navigationState } = this.props;
+    const { navigationState, navigatingPosition } = this.props;
+    const { tabWidth } = this.state;
 
     const renderingTabs = navigationState.routes.map((route, index) => {
       const selected = navigationState.index === index;
@@ -44,24 +45,14 @@ class RootTabs extends Component {
       );
     });
 
-    // Animated.timing(
-    //   this.state.barX,
-    //   {
-    //     toValue: navigationState.index * this.state.tabWidth,
-    //     easing: Easing.linear,
-    //     duration: 250
-    //   }
-    // ).start();
-    console.log(this.props.navigatingPosition);
-    console.log(this.state.tabWidth);
     return (
       <View style={wholeContainerStyle}>
         <Animated.View
           style={[
             selectedLineStyle,
             {
-               width: this.state.tabWidth,
-               left: this.props.navigatingPosition * this.state.tabWidth
+               width: tabWidth,
+               left: navigatingPosition * tabWidth
             }
           ]}
         />
