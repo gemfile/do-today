@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { TouchableOpacity, Text, View, Animated, Easing } from 'react-native';
+import React, { Component, PropTypes } from 'react';
+import { TouchableOpacity, Text, View, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 
@@ -18,17 +18,17 @@ class RootTabs extends Component {
   }
 
   render() {
-    const { wholeContainerStyle, tabContainerStyle, selectedLineStyle } = styles;
+    const { tabContainerStyle, wholeContainerStyle, tabStyle, selectedLineStyle } = styles;
     const { navigationState, navigatingPosition } = this.props;
     const { tabWidth } = this.state;
 
-    const renderingTabs = navigationState.routes.map((route, index) => {
-      const selected = navigationState.index === index;
+    const renderingTabs = navigationState.routes.map((route/*, index*/) => {
+      // const selected = navigationState.index === index;
 
       return (
         <TouchableOpacity
           key={route.key}
-          style={{ flex: 1 }}
+          style={tabContainerStyle}
           onLayout={
             event => {
               this.setState({ tabWidth: event.nativeEvent.layout.width });
@@ -36,7 +36,7 @@ class RootTabs extends Component {
           }
           onPress={this.onPress.bind(this, route.key)}
         >
-          <View style={tabContainerStyle}>
+          <View style={tabStyle}>
             <Text>
               {route.key}
             </Text>
@@ -62,7 +62,16 @@ class RootTabs extends Component {
   }
 }
 
+RootTabs.propTypes = {
+  navigateJump: PropTypes.func,
+  navigationState: PropTypes.object,
+  navigatingPosition: PropTypes.object,
+};
+
 const styles = {
+  tabContainerStyle:  {
+    flex: 1
+  },
   wholeContainerStyle: {
     flexDirection: 'row',
     backgroundColor: '#f8f8f8',
@@ -77,7 +86,7 @@ const styles = {
     backgroundColor: '#f80000',
     position: 'absolute'
   },
-  tabContainerStyle: {
+  tabStyle: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'

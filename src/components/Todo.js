@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   Text,
   View,
@@ -30,7 +30,7 @@ class Todo extends Component {
   }
 
   onPress() {
-    const { expanded, todo } = this.props;
+    const { expanded } = this.props;
 
     if (!expanded) {
       this.props.navigateJump('todo');
@@ -65,6 +65,14 @@ class Todo extends Component {
     );
   }
 }
+
+Todo.propTypes = {
+  todo: PropTypes.object.isRequired,
+  expanded: PropTypes.bool,
+  modifying: PropTypes.bool,
+  modifyTodo: PropTypes.func,
+  navigateJump: PropTypes.func,
+};
 
 const styles = {
   containerStyle: {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { CardSection, TouchableWithPressEffect } from './common';
 import PomodoroProgress from './PomodoroProgress';
@@ -29,7 +29,7 @@ class Pomodoro extends Component {
     } else if (submenuButton === 'stop') {
       this.stopTimer('start', this.state.fullSeconds);
     } else if (submenuButton === 'get') {
-      console.log('get');
+      // console.log('get');
     }
   }
 
@@ -55,8 +55,11 @@ class Pomodoro extends Component {
   render() {
     const { expanded } = this.props;
     const {
+      backgroundStyle,
+      wholeContainerStyle,
       leftSideContainerStyle,
       rightSideContainerStyle,
+      progressStyle,
       progressTextStyle
     } = styles;
     const ratioOfProgress =
@@ -65,14 +68,14 @@ class Pomodoro extends Component {
 
     if (expanded) {
       return (
-        <CardSection style={{ backgroundColor: '#f8f8f8' }}>
+        <CardSection style={backgroundStyle}>
           <TouchableWithoutFeedback>
 
-            <View style={{ flex: 1, height: 48, flexDirection: 'row' }}>
+            <View style={wholeContainerStyle}>
               <View style={leftSideContainerStyle}>
                 <PomodoroProgress
                   ratio={ratioOfProgress}
-                  style={{ flex: 1 }}
+                  style={progressStyle}
                 />
                 <Text style={progressTextStyle}>
                   {timeLefts}
@@ -97,11 +100,26 @@ class Pomodoro extends Component {
   }
 }
 
+Pomodoro.propTypes = {
+  expanded: PropTypes.bool,
+};
+
 const styles = {
+  backgroundStyle: {
+    backgroundColor: '#f8f8f8'
+  },
+  wholeContainerStyle: {
+    flex: 1,
+    height: 48,
+    flexDirection: 'row'
+  },
   leftSideContainerStyle: {
     flex: 8,
     paddingLeft: 0,
     paddingRight: 5,
+  },
+  progressStyle: {
+    flex: 1
   },
   progressTextStyle: {
     flex: 8,

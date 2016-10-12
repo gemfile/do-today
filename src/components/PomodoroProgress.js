@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { View, Animated, Easing } from 'react-native';
 
 class PomodoroProgress extends Component {
@@ -30,6 +30,10 @@ class PomodoroProgress extends Component {
       </View>
     );
   }
+}
+
+PomodoroProgress.propTypes = {
+  ratio: PropTypes.number.isRequired,
 }
 
 const styles = {

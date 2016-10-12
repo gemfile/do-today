@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Image, View } from 'react-native';
 import playImage from './img/play.png';
 import { TomatoImage } from './common';
@@ -6,6 +6,7 @@ import { TomatoImage } from './common';
 const PomodoroButton = (props) => {
   let symbol;
   const { type } = props;
+  const { containerStyle, stopSymbolStyle, getSymbolStyle } = styles;
 
   switch (type) {
     case 'start':
@@ -15,25 +16,40 @@ const PomodoroButton = (props) => {
 
     case 'stop':
     symbol = (
-      <View
-        style={{ width: 16,
-                 height: 16,
-                 backgroundColor: '#000',
-                 borderRadius: 1 }}
-      />
+      <View style={stopSymbolStyle} />
     );
     break;
 
     case 'get':
-    symbol = <TomatoImage imageStyle={{ width: 24, height: 24 }} />;
+    symbol = <TomatoImage imageStyle={getSymbolStyle} />;
     break;
   }
 
   return (
-    <View style={{ marginLeft: 4 }}>
+    <View style={containerStyle}>
       {symbol}
     </View>
   );
 };
+
+PomodoroButton.propTypes = {
+  type: PropTypes.string,
+}
+
+const styles = {
+  containerStyle: {
+    marginLeft: 4
+  },
+  stopSymbolStyle: {
+    width: 16,
+    height: 16,
+    backgroundColor: '#000',
+    borderRadius: 1
+  },
+  getSymbolStyle: {
+    width: 24,
+    height: 24
+  },
+}
 
 export default PomodoroButton;

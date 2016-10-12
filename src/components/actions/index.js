@@ -30,7 +30,7 @@ export const fetchTodos = () => (
 );
 
 export const addTodo = title => (
-  dispatch => ref.push({ title, count: 0 })
+  () => ref.push({ title, count: 0 })
 );
 
 export const selectTodo = todoId => ({

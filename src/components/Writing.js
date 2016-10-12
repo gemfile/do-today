@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from './actions';
@@ -30,7 +30,7 @@ class Writing extends Component {
       this.props.addTodo(savedValue);
     }
 
-    console.log(`onSubmitEditing : ${savedValue}`);
+    // console.log(`onSubmitEditing : ${savedValue}`);
   }
 
   renderButton() {
@@ -85,6 +85,10 @@ class Writing extends Component {
       </CardSection>
     );
   }
+}
+
+Writing.propTypes = {
+  addTodo: PropTypes.func,
 }
 
 const styles = {

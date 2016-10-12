@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { View, Text } from 'react-native';
 import { TomatoImage } from './common';
 
 const TodoStatus = (props) => {
-  const { countStyle, countContainerStyle } = styles;
+  const {
+    wholeContainerStyle,
+    imageStyle,
+    countStyle,
+    countContainerStyle,
+    modifyingMenuStyle
+  } = styles;
+
   const { todo, modifying } = props;
   let menu;
   if (!modifying) {
     menu = (
       <View>
-        <TomatoImage imageStyle={{ width: 16, height: 16 }} />
+        <TomatoImage imageStyle={imageStyle} />
         <View style={countContainerStyle}>
           <Text style={countStyle}>
           {todo.count}
@@ -19,29 +26,40 @@ const TodoStatus = (props) => {
     );
   } else {
     menu = (
-      <View
-        style={{ width: 20,
-                 height: 20,
-                 borderWidth: 3,
-                 borderColor: 'red',
-                 borderRadius: 3 }}
-      />
+      <View style={modifyingMenuStyle} />
     );
   }
 
   return (
-    <View
-      style={{ flex: 1,
-               marginRight: 15,
-               justifyContent: 'center',
-               alignItems: 'center' }}
-    >
+    <View style={wholeContainerStyle}>
       {menu}
     </View>
   );
 };
 
+TodoStatus.propTypes = {
+  todo: PropTypes.object,
+  modifying: PropTypes.bool
+};
+
 const styles = {
+  wholeContainerStyle: {
+    flex: 1,
+    marginRight: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modifyingMenuStyle: {
+    width: 20,
+    height: 20,
+    borderWidth: 3,
+    borderColor: 'red',
+    borderRadius: 3
+  },
+  imageStyle: {
+    width: 16,
+    height: 16
+  },
   countContainerStyle: {
     backgroundColor: '#eee',
     borderWidth: 1,

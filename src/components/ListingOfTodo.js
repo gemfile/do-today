@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
-import Todo from './Todo';
 import * as actions from './actions';
+import Todo from './Todo';
 
 class ListingOfTodo extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class ListingOfTodo extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.containerStyle}>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
@@ -42,6 +42,16 @@ class ListingOfTodo extends Component {
         />
       </View>
     );
+  }
+}
+
+ListingOfTodo.propTypes = {
+  fetchTodos: PropTypes.func,
+};
+
+const styles = {
+  containerStyle: {
+    flex: 1
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { NavigationExperimental, View, Text, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from './actions';
@@ -57,7 +57,7 @@ class RootNavigator extends Component {
         case 'scene_todo':
         default:
           renderingScene = (
-            <View style={{ flex: 1, backgroundColor: '#ddd' }}><Text>hi</Text></View>
+            <View><Text>hi</Text></View>
           );
           break;
       }
@@ -87,7 +87,7 @@ class RootNavigator extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.containerStyle}>
         <NavigationTransitioner
           navigationState={this.props.navigationState}
           render={this.renderScene.bind(this)}
@@ -97,7 +97,17 @@ class RootNavigator extends Component {
   }
 }
 
+RootNavigator.propTypes = {
+  notifyNavigatingPosition: PropTypes.func,
+  navigateBack: PropTypes.func,
+  navigateForward: PropTypes.func,
+  navigationState: PropTypes.object,
+}
+
 const styles = {
+  containerStyle: {
+    flex: 1
+  },
   wholeContainerStyle: {
     flex: 1,
     backgroundColor: '#eee',
