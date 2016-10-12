@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { View } from 'react-native';
 
 const CardSection = ({ style, children }) => {
@@ -12,6 +12,11 @@ const CardSection = ({ style, children }) => {
       {children}
     </View>
   );
+};
+
+CardSection.propTypes = {
+  style: PropTypes.object,
+  children: PropTypes.node,
 };
 
 const styles = {

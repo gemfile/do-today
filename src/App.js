@@ -9,11 +9,13 @@ import RootTabs from './components/RootTabs';
 
 class App extends Component {
   render() {
+    const { navigatorStyle, tabsStyle } = styles;
+
     return (
       <Provider store={createStore(reducers, applyMiddleware(thunk))}>
         <View style={styles.containerStyle}>
-          <RootNavigator style={{ zIndex: 1 }} />
-          <RootTabs style={{ zIndex: 0 }} />
+          <RootNavigator style={navigatorStyle} />
+          <RootTabs style={tabsStyle} />
         </View>
       </Provider>
     );
@@ -23,6 +25,12 @@ class App extends Component {
 const styles = {
   containerStyle: {
     flex: 1
+  },
+  navigatorStyle: {
+    zIndex: 1
+  },
+  tabsStyle: {
+    zIndex: 0
   }
 };
 

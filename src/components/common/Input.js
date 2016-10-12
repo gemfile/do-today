@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { TextInput, View } from 'react-native';
 
 class Input extends Component {
@@ -35,6 +35,15 @@ class Input extends Component {
     );
   }
 }
+
+Input.propTypes = {
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  secureTextEntry: PropTypes.string,
+  onChangeText: PropTypes.func,
+  onSubmitEditing: PropTypes.func,
+  onFocus: PropTypes.func,
+};
 
 const styles = {
   inputStyle: {

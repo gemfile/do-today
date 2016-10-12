@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { TouchableWithoutFeedback, Animated, Easing } from 'react-native';
 
 const MAX_BOUNCE = 0.87;
@@ -53,5 +53,12 @@ class TouchableWithPressEffect extends Component {
     );
   }
 }
+
+TouchableWithPressEffect.propTypes = {
+  style: PropTypes.object,
+  onPress: PropTypes.func,
+  onPressIn: PropTypes.func,
+  children: PropTypes.node,
+};
 
 export { TouchableWithPressEffect };

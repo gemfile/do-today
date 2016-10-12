@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
 const Spinner = ({ size }) => (
@@ -6,6 +6,10 @@ const Spinner = ({ size }) => (
     <ActivityIndicator size={size || 'large'} />
   </View>
 );
+
+Spinner.propTypes = {
+  size: PropTypes.string,
+};
 
 const styles = {
   spinnerStyle: {

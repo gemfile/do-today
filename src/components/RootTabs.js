@@ -65,7 +65,7 @@ class RootTabs extends Component {
 RootTabs.propTypes = {
   navigateJump: PropTypes.func,
   navigationState: PropTypes.object,
-  navigatingPosition: PropTypes.object,
+  navigatingPosition: PropTypes.number,
 };
 
 const styles = {
