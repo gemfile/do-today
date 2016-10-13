@@ -1,10 +1,18 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
-import * as actions from './actions';
+import { bindActionCreators } from 'redux';
+import { fetchTodos } from './actions';
 import Todo from './Todo';
 
 class ListingOfTodo extends Component {
+  state: {
+    dataSource: ListView.DataSource
+  };
+  listViewHeight: number;
+
   constructor(props) {
     super(props);
 
@@ -45,10 +53,6 @@ class ListingOfTodo extends Component {
   }
 }
 
-ListingOfTodo.propTypes = {
-  fetchTodos: PropTypes.func,
-};
-
 const styles = {
   containerStyle: {
     flex: 1
@@ -59,4 +63,8 @@ const mapStateToProps = state => ({
     todos: state.todos,
 });
 
-export default connect(mapStateToProps, actions)(ListingOfTodo);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  fetchTodos,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListingOfTodo);

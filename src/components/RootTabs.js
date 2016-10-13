@@ -1,15 +1,21 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, Text, View, Animated } from 'react-native';
 import { connect } from 'react-redux';
-import * as actions from './actions';
+import { bindActionCreators } from 'redux';
+import { navigateJump } from './actions';
 
 class RootTabs extends Component {
+  state: {
+    tabWidth: number,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
       tabWidth: 0,
-      barX: new Animated.Value(0)
     };
   }
 
@@ -62,12 +68,6 @@ class RootTabs extends Component {
   }
 }
 
-RootTabs.propTypes = {
-  navigateJump: PropTypes.func,
-  navigationState: PropTypes.object,
-  navigatingPosition: PropTypes.number,
-};
-
 const styles = {
   tabContainerStyle:  {
     flex: 1
@@ -98,4 +98,8 @@ const mapStateToProps = state => ({
     navigatingPosition: state.navigatingPosition
 });
 
-export default connect(mapStateToProps, actions)(RootTabs);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  navigateJump,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(RootTabs);

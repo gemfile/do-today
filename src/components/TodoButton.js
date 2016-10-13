@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { View, Image } from 'react-native';
 import { TouchableWithPressEffect } from './common';
@@ -6,8 +8,17 @@ import doneWhiteImage from './img/done_white.png';
 import closeBlackImage from './img/close_black.png';
 import closeWhiteImage from './img/close_white.png';
 
+type Props = {
+  type: 'close' | 'done'
+};
+
 class TodoButton extends Component {
-  constructor(props) {
+  state: {
+    condition: 'normal' | 'pressed';
+  };
+  iconMap: Object;
+
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -39,10 +50,6 @@ class TodoButton extends Component {
     );
   }
 }
-
-TodoButton.propTypes = {
-  type: PropTypes.string,
-};
 
 const styles = {
   containerStyle: {

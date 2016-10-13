@@ -1,7 +1,10 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { NavigationExperimental, View, Text, Animated } from 'react-native';
 import { connect } from 'react-redux';
-import * as actions from './actions';
+import { bindActionCreators } from 'redux';
+import { navigateBack, navigateForward, notifyNavigatingPosition } from './actions';
 import Writing from './Writing';
 import ListingOfTodo from './ListingOfTodo';
 import AnimatedValueSubscription from './util/AnimatedValueSubscription';
@@ -17,6 +20,8 @@ const {
 } = NavigationCard;
 
 class RootNavigator extends Component {
+  positionListener: AnimatedValueSubscription;
+
   renderTodoListScene() {
     const {
       writingContainerStyle,
@@ -97,13 +102,6 @@ class RootNavigator extends Component {
   }
 }
 
-RootNavigator.propTypes = {
-  notifyNavigatingPosition: PropTypes.func,
-  navigateBack: PropTypes.func,
-  navigateForward: PropTypes.func,
-  navigationState: PropTypes.object,
-}
-
 const styles = {
   containerStyle: {
     flex: 1
@@ -134,7 +132,13 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-    navigationState: state.navigating,
+  navigationState: state.navigating,
 });
 
-export default connect(mapStateToProps, actions)(RootNavigator);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  navigateBack,
+  navigateForward,
+  notifyNavigatingPosition
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(RootNavigator);

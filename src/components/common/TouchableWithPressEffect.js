@@ -1,10 +1,23 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { TouchableWithoutFeedback, Animated, Easing } from 'react-native';
 
 const MAX_BOUNCE = 0.87;
 
+type Props = {
+  style: Object,
+  onPress: ()=>void,
+  onPressIn: ()=>void,
+  children?: React$Element<*>
+};
+
 class TouchableWithPressEffect extends Component {
-  constructor(props) {
+  state: {
+    bounceValue: Animated.Value
+  };
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       bounceValue: new Animated.Value(1)
@@ -53,12 +66,5 @@ class TouchableWithPressEffect extends Component {
     );
   }
 }
-
-TouchableWithPressEffect.propTypes = {
-  style: PropTypes.object,
-  onPress: PropTypes.func,
-  onPressIn: PropTypes.func,
-  children: PropTypes.node,
-};
 
 export { TouchableWithPressEffect };

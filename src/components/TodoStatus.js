@@ -1,8 +1,15 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { View, Text } from 'react-native';
 import { TomatoImage } from './common';
 
-const TodoStatus = (props) => {
+type Props = {
+  todo: Object,
+  modifying: Boolean
+};
+
+const TodoStatus = (props: Props) => {
   const {
     wholeContainerStyle,
     imageStyle,
@@ -35,11 +42,6 @@ const TodoStatus = (props) => {
       {menu}
     </View>
   );
-};
-
-TodoStatus.propTypes = {
-  todo: PropTypes.object,
-  modifying: PropTypes.bool
 };
 
 const styles = {

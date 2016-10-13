@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "dependencies": {
     "firebase": "^3.4.1",
@@ -17,6 +18,7 @@
   "devDependencies": {
     "eslint": "^3.7.1",
     "eslint-plugin-react": "^6.4.1",
-    "eslint-plugin-react-native": "^2.0.0"
+    "eslint-plugin-react-native": "^2.0.0",
+    "flow-bin": "^0.33.0"
   }
 }

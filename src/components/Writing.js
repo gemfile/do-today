@@ -1,10 +1,15 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import * as actions from './actions';
+import { bindActionCreators } from 'redux';
+import { addTodo } from './actions';
 import { CardSection, Input, Button, TomatoImage } from './common';
 
 class Writing extends Component {
+  input:Input;
+
   state = {
     inputIsFocused: false,
     inputValue: ''
@@ -29,8 +34,6 @@ class Writing extends Component {
     if (savedValue !== '') {
       this.props.addTodo(savedValue);
     }
-
-    // console.log(`onSubmitEditing : ${savedValue}`);
   }
 
   renderButton() {
@@ -87,10 +90,6 @@ class Writing extends Component {
   }
 }
 
-Writing.propTypes = {
-  addTodo: PropTypes.func,
-}
-
 const styles = {
   wholeContainerStyle: {
     flex: 1,
@@ -126,4 +125,8 @@ const styles = {
   }
 };
 
-export default connect(null, actions)(Writing);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  addTodo,
+}, dispatch);
+
+export default connect(null, mapDispatchToProps)(Writing);

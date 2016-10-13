@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { CardSection, TouchableWithPressEffect } from './common';
@@ -5,8 +7,21 @@ import PomodoroProgress from './PomodoroProgress';
 import PomodoroButton from './PomodoroButton';
 import { secondsToMinutes } from './util/TimeFormat';
 
+type Props = {
+  expanded: boolean,
+};
+type SubmenuButton = 'start' | 'stop' | 'get';
+
 class Pomodoro extends Component {
-  constructor(props) {
+  state: {
+    minutesAtATime: number,
+    secondsLeft: number,
+    fullSeconds: number,
+    submenuButton: SubmenuButton
+  };
+  timer: number;
+  
+  constructor(props: Props) {
     super(props);
     const minutesAtATime = 1;
     const secondsLeft = minutesAtATime * 60;
@@ -44,7 +59,7 @@ class Pomodoro extends Component {
     }, 1000);
   }
 
-  stopTimer(submenuButton, secondsLeft) {
+  stopTimer(submenuButton: SubmenuButton, secondsLeft: number) {
     this.setState({
       submenuButton,
       secondsLeft
@@ -99,10 +114,6 @@ class Pomodoro extends Component {
     return null;
   }
 }
-
-Pomodoro.propTypes = {
-  expanded: PropTypes.bool,
-};
 
 const styles = {
   backgroundStyle: {

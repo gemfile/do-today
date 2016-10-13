@@ -1,9 +1,15 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { Image, View } from 'react-native';
 import playImage from './img/play.png';
 import { TomatoImage } from './common';
 
-const PomodoroButton = (props) => {
+type Props = {
+  type: 'start' | 'stop' | 'get'
+};
+
+const PomodoroButton = (props: Props) => {
   let symbol;
   const { type } = props;
   const { containerStyle, stopSymbolStyle, getSymbolStyle } = styles;
@@ -31,10 +37,6 @@ const PomodoroButton = (props) => {
     </View>
   );
 };
-
-PomodoroButton.propTypes = {
-  type: PropTypes.string,
-}
 
 const styles = {
   containerStyle: {

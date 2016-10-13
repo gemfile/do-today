@@ -1,15 +1,17 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
-const Spinner = ({ size }) => (
+type Props = {
+  size: 'large' | 'small'
+};
+
+const Spinner = ({ size }: Props) => (
   <View style={styles.spinnerStyle}>
     <ActivityIndicator size={size || 'large'} />
   </View>
 );
-
-Spinner.propTypes = {
-  size: PropTypes.string,
-};
 
 const styles = {
   spinnerStyle: {

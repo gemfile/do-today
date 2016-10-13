@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import {
   Text,
@@ -8,8 +10,9 @@ import {
   Platform
 } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { CardSection } from './common';
-import * as actions from './actions';
+import { modifyTodo, navigateJump } from './actions';
 import TodoButton from './TodoButton';
 import TodoStatus from './TodoStatus';
 import Pomodoro from './Pomodoro';
@@ -66,14 +69,6 @@ class Todo extends Component {
   }
 }
 
-Todo.propTypes = {
-  todo: PropTypes.object.isRequired,
-  expanded: PropTypes.bool,
-  modifying: PropTypes.bool,
-  modifyTodo: PropTypes.func,
-  navigateJump: PropTypes.func,
-};
-
 const styles = {
   containerStyle: {
     height: 76,
@@ -101,4 +96,9 @@ const mapStateToProps = (state, ownProps) => {
   return { expanded, modifying };
 };
 
-export default connect(mapStateToProps, actions)(Todo);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  modifyTodo,
+  navigateJump
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todo);

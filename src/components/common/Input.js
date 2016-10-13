@@ -1,7 +1,11 @@
+/* @flow */
+
 import React, { Component, PropTypes } from 'react';
 import { TextInput, View } from 'react-native';
 
 class Input extends Component {
+  textInput: TextInput;
+
   clear() {
     this.textInput.setNativeProps({ editable: false });
     this.textInput.setNativeProps({ editable: true });
@@ -35,15 +39,6 @@ class Input extends Component {
     );
   }
 }
-
-Input.propTypes = {
-  value: PropTypes.string,
-  placeholder: PropTypes.string,
-  secureTextEntry: PropTypes.string,
-  onChangeText: PropTypes.func,
-  onSubmitEditing: PropTypes.func,
-  onFocus: PropTypes.func,
-};
 
 const styles = {
   inputStyle: {

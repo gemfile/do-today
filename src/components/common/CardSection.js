@@ -1,7 +1,14 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
 
-const CardSection = ({ style, children }) => {
+type Props = {
+  style?: Object,
+  children?: React$Element<*>,
+};
+
+const CardSection = ({ style, children }: Props) => {
   let { containerStyle } = styles;
   if (style) {
     containerStyle = { ...containerStyle, ...style };
@@ -12,11 +19,6 @@ const CardSection = ({ style, children }) => {
       {children}
     </View>
   );
-};
-
-CardSection.propTypes = {
-  style: PropTypes.object,
-  children: PropTypes.node,
 };
 
 const styles = {

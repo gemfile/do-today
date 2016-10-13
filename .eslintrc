@@ -8,6 +8,7 @@
       "react-native"
   ],
   "extends": [
+      "airbnb",
       "eslint:recommended",
       "plugin:react/recommended"
   ],
