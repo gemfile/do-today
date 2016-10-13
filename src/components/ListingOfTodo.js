@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTodos } from './actions';
+import { fetchTodos } from 'actions';
 import Todo from './Todo';
 
 class ListingOfTodo extends Component {

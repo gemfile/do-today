@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addTodo } from './actions';
+import { addTodo } from 'actions';
 import { CardSection, Input, Button, TomatoImage } from './common';
 
 class Writing extends Component {

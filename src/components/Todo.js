@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { CardSection } from './common';
-import { modifyTodo, navigateJump } from './actions';
+import { modifyTodo, navigateJump } from 'actions';
 import TodoButton from './TodoButton';
 import TodoStatus from './TodoStatus';
 import Pomodoro from './Pomodoro';

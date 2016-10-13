@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { NavigationExperimental, View, Text, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { navigateBack, navigateForward, notifyNavigatingPosition } from './actions';
+import { navigateBack, navigateForward, notifyNavigatingPosition } from 'actions';
 import Writing from './Writing';
 import ListingOfTodo from './ListingOfTodo';
 import AnimatedValueSubscription from './util/AnimatedValueSubscription';

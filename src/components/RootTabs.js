@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, Text, View, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { navigateJump } from './actions';
+import { navigateJump } from 'actions';
 
 class RootTabs extends Component {
   state: {
