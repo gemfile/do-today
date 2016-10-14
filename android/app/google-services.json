@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "806030056707",
+    "firebase_url": "https://todo-today-45864.firebaseio.com",
+    "project_id": "todo-today-45864",
+    "storage_bucket": "todo-today-45864.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806030056707:android:3413daed1738edce",
+        "android_client_info": {
+          "package_name": "com.todo_today"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "806030056707-0j9nv6l7vc6vfkhlufv5a1hph5ec5ta2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFe42ys3LR6kfpi2fSpsD3AxK0HjZZsis"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

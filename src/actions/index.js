@@ -1,32 +1,20 @@
-import firebase from 'firebase';
+import Firestack from 'react-native-firestack';
 import DeviceInfo from 'react-native-device-info';
 
-firebase.initializeApp({
-  apiKey: 'AIzaSyDYYTBUGXBWuPWTecNCB7mdh_V4qJm_3f4',
-  authDomain: 'todo-today-45864.firebaseapp.com',
-  databaseURL: 'https://todo-today-45864.firebaseio.com',
-  storageBucket: 'todo-today-45864.appspot.com',
+const firestack = new Firestack({
+  debug: true,
 });
-firebase.setPersistenceEnabled(true);
+firestack.database.setPersistence(true);
+
 const instanceID = DeviceInfo.getInstanceID();
-const ref = firebase.database().ref('todos/' + instanceID);
+const ref = firestack.database.ref('todos/' + instanceID);
 
 export const fetchTodos = () => (
   dispatch => {
     ref.on('value', snapshot => {
-      const items = [];
-      snapshot.forEach(child => {
-        items.push({
-          title: child.val().title,
-          count: child.val().count,
-          id: child.key,
-          index: items.length
-        });
-      });
-
       dispatch({
         type: 'fetch_todos',
-        payload: items
+        payload: snapshot.val()
       });
     });
   }
