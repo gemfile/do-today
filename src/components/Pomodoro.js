@@ -20,7 +20,7 @@ class Pomodoro extends Component {
     submenuButton: SubmenuButton
   };
   timer: number;
-  
+
   constructor(props: Props) {
     super(props);
     const minutesAtATime = 1;

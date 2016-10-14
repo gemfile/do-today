@@ -8,8 +8,13 @@ import thunk from 'redux-thunk';
 import reducers from './reducers';
 import RootNavigator from './components/RootNavigator';
 import RootTabs from './components/RootTabs';
+import { deviceInfoLogger } from './components/util/DeviceInfoLogger';
 
 class App extends Component {
+  componentDidMount() {
+    deviceInfoLogger();
+  }
+
   render() {
     const { navigatorStyle, tabsStyle } = styles;
 

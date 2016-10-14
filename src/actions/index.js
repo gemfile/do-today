@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import DeviceInfo from 'react-native-device-info';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyDYYTBUGXBWuPWTecNCB7mdh_V4qJm_3f4',
@@ -6,7 +7,9 @@ firebase.initializeApp({
   databaseURL: 'https://todo-today-45864.firebaseio.com',
   storageBucket: 'todo-today-45864.appspot.com',
 });
-const ref = firebase.database().ref();
+firebase.setPersistenceEnabled(true);
+const instanceID = DeviceInfo.getInstanceID();
+const ref = firebase.database().ref('todos/' + instanceID);
 
 export const fetchTodos = () => (
   dispatch => {
