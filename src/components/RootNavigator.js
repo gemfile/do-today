@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { NavigationExperimental, View, Text, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -20,6 +20,12 @@ const {
 } = NavigationCard;
 
 class RootNavigator extends Component {
+  props: {
+    notifyNavigatingPosition: (position: number) => Object,
+    navigateBack: () => Object,
+    navigateForward: () => Object,
+    navigationState: Object
+  };
   positionListener: AnimatedValueSubscription;
 
   renderTodoListScene() {

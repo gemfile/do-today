@@ -1,9 +1,17 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { TextInput, View } from 'react-native';
 
 class Input extends Component {
+  props: {
+    value: string,
+    placeholder: string,
+    secureTextEntry?: boolean,
+    onChangeText: (text: string) => void,
+    onSubmitEditing: () => void,
+    onFocus: () => void
+  };
   textInput: TextInput;
 
   clear() {

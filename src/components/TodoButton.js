@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { View, Image } from 'react-native';
 import { TouchableWithPressEffect } from './common';
 import doneBlackImage from './img/done_black.png';

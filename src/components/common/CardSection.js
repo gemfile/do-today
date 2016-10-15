@@ -1,11 +1,11 @@
 /* @flow */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 
 type Props = {
   style?: Object,
-  children?: React$Element<*>,
+  children?: React.Element<*>,
 };
 
 const CardSection = ({ style, children }: Props) => {

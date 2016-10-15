@@ -1,25 +1,19 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { View, Animated, Easing } from 'react-native';
 
-type Props = {
-  ratio: number
-};
-
 class PomodoroProgress extends Component {
+  props: { ratio: number };
   state: {
     width: number,
     filledWidth: Animated.Value
   };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      width: 0,
-      filledWidth: new Animated.Value(0)
-    };
-  }
+  state = {
+    width: 0,
+    filledWidth: new Animated.Value(0)
+  };
 
   onLayout(event: Object) {
     const { width } = event.nativeEvent.layout;

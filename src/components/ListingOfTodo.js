@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,20 +8,15 @@ import { fetchTodos } from 'actions';
 import Todo from './Todo';
 
 class ListingOfTodo extends Component {
-  state: {
-    dataSource: ListView.DataSource
-  };
+  props: { fetchTodos: () => () => Object, todos: Array<Object> }
+  state: { dataSource: ListView.DataSource };
   listViewHeight: number;
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (r1, r2) => r1 !== r2
-      })
-    };
-  }
+  state = {
+    dataSource: new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    })
+  };
 
   componentWillMount() {
     this.props.fetchTodos();

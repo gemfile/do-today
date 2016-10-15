@@ -1,19 +1,24 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addTodo } from 'actions';
-import { CardSection, Input, Button, TomatoImage } from './common';
+import { CardSection, Input, TomatoImage, Button } from './common';
+
+type Props = {
+  addTodo: ()=>void,
+};
 
 class Writing extends Component {
   input:Input;
+  props:Props;
 
   state = {
     inputIsFocused: false,
     inputValue: ''
-  }
+  };
 
   onFocus() {
     this.setState({ inputIsFocused: true });

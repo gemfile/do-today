@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { Image, View } from 'react-native';
 import playImage from './img/play.png';
 import { TomatoImage } from './common';

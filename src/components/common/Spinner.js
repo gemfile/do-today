@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
 type Props = {

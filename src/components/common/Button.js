@@ -1,11 +1,11 @@
 /* @flow */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
 type Props = {
   onPress: ()=>void,
-  children?: React$Element<*>,
+  children?: React.Element<*>,
   disabled: boolean
 };
 

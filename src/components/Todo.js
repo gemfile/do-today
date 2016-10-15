@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -18,6 +18,13 @@ import TodoStatus from './TodoStatus';
 import Pomodoro from './Pomodoro';
 
 class Todo extends Component {
+  props: {
+    todo: Object,
+    modifying: boolean,
+    expanded: boolean,
+    modifyTodo: (todoId: string) => Object
+  };
+
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
     if (Platform.OS === 'android') {

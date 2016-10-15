@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { CardSection, TouchableWithPressEffect } from './common';
 import PomodoroProgress from './PomodoroProgress';
@@ -23,6 +23,7 @@ class Pomodoro extends Component {
 
   constructor(props: Props) {
     super(props);
+    
     const minutesAtATime = 1;
     const secondsLeft = minutesAtATime * 60;
     this.state = {
