@@ -134,6 +134,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-material-kit')
     compile project(':react-native-firestack')
     compile project(':react-native-device-info')
     compile fileTree(include: ['*.jar'], dir: 'libs')

@@ -5,7 +5,8 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addTodo } from 'actions';
-import { CardSection, Input, TomatoImage, Button } from './common';
+import { MKButton, MKColor } from 'react-native-material-kit';
+import { CardSection, Input, TomatoImage } from './common';
 
 type Props = {
   addTodo: ()=>void,
@@ -43,14 +44,17 @@ class Writing extends Component {
 
   renderButton() {
     if (this.state.inputIsFocused || this.state.inputValue !== '') {
+      const ColoredRaisedButton = MKButton.coloredButton()
+        .withBackgroundColor(MKColor.Red)
+        .withText('Add')
+        .build();
+
       return (
         <View style={styles.lowerContainerStyle}>
-          <Button
+          <ColoredRaisedButton
+            enabled={this.state.inputValue !== ''}
             onPress={this.onSubmitEditing.bind(this)}
-            disabled={this.state.inputValue === ''}
-          >
-            Add
-          </Button>
+          />
         </View>
       );
     }
@@ -126,7 +130,7 @@ const styles = {
     height: 40,
     width: 150,
     alignSelf: 'flex-end',
-    padding: 6,
+    marginRight: 13
   }
 };
 
