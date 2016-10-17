@@ -7,3 +7,5 @@ export * from './Input';
 export * from './Spinner';
 export * from './TouchableWithPressEffect';
 export * from './TomatoImage';
+export * from './ImageView';
+export * from './Color';

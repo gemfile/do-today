@@ -1,10 +1,14 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { TouchableOpacity, Text, View, Animated } from 'react-native';
+import { View, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateJump } from 'actions';
+import { MKButton, MKColor } from 'react-native-material-kit';
+import { ImageView } from './common';
+import TodoListImage from './img/todo_list.png';
+import StatsImage from './img/stats.png';
 
 class RootTabs extends Component {
   props: {
@@ -26,33 +30,43 @@ class RootTabs extends Component {
     this.props.navigateJump(route);
   }
 
-  render() {
-    const { tabContainerStyle, wholeContainerStyle, tabStyle, selectedLineStyle } = styles;
-    const { navigationState, navigatingPosition } = this.props;
-    const { tabWidth } = this.state;
+  renderTabs() {
+    const { tabContainerStyle, iconStyle, highlightingStyle, iconImageMap } = styles;
+    const { navigationState } = this.props;
 
-    const renderingTabs = navigationState.routes.map((route/*, index*/) => {
-      // const selected = navigationState.index === index;
+    return navigationState.routes.map((route, index) => {
+      const selected = navigationState.index === index;
+      const iconImage = iconImageMap[index];
+
+      const icon = (selected) ?
+        <ImageView
+          imageSource={iconImage}
+          imageStyle={{...iconStyle, ...highlightingStyle}}
+        /> :
+        <ImageView
+          imageSource={iconImage}
+          imageStyle={iconStyle}
+        />
 
       return (
-        <TouchableOpacity
-          key={route.key}
-          style={tabContainerStyle}
-          onLayout={
-            event => {
-              this.setState({ tabWidth: event.nativeEvent.layout.width });
-            }
-          }
-          onPress={this.onPress.bind(this, route.key)}
-        >
-          <View style={tabStyle}>
-            <Text>
-              {route.key}
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <View key={route.key} style={tabContainerStyle} onLayout={ event => {
+          this.setState({ tabWidth: event.nativeEvent.layout.width });
+        }}>
+          <MKButton
+            style={tabContainerStyle}
+            onPress={this.onPress.bind(this, route.key)}
+          >
+            {icon}
+          </MKButton>
+        </View>
       );
     });
+  }
+
+  render() {
+    const { wholeContainerStyle, selectedLineStyle } = styles;
+    const { navigatingPosition } = this.props;
+    const { tabWidth } = this.state;
 
     return (
       <View style={wholeContainerStyle}>
@@ -65,7 +79,7 @@ class RootTabs extends Component {
             }
           ]}
         />
-        {renderingTabs}
+        { this.renderTabs() }
       </View>
     );
   }
@@ -86,13 +100,20 @@ const styles = {
   },
   selectedLineStyle: {
     height: 5,
-    backgroundColor: '#f80000',
+    backgroundColor: MKColor.Red,
     position: 'absolute'
   },
-  tabStyle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+  iconImageMap: {
+    '0': TodoListImage,
+    '1': StatsImage
+  },
+  iconStyle: {
+    width: 24,
+    height: 24,
+    tintColor: '#aaaaaa'
+  },
+  highlightingStyle: {
+    tintColor: MKColor.Red
   }
 };
 

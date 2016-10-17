@@ -5,6 +5,7 @@ import { NavigationExperimental, View, Text, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateBack, navigateForward, notifyNavigatingPosition } from 'actions';
+import { Color } from './common';
 import Writing from './Writing';
 import ListingOfTodo from './ListingOfTodo';
 import AnimatedValueSubscription from './util/AnimatedValueSubscription';
@@ -114,7 +115,7 @@ const styles = {
   },
   wholeContainerStyle: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: Color.Background,
   },
   writingContainerStyle: {
     borderWidth: 0,

@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { CardSection } from './common';
-import { modifyTodo, navigateJump } from 'actions';
-import TodoButton from './TodoButton';
+import { CardSection, Color } from './common';
+import { selectTodo, navigateJump } from 'actions';
+import { MKCheckbox } from 'react-native-material-kit';
 import TodoStatus from './TodoStatus';
 import Pomodoro from './Pomodoro';
 
@@ -22,7 +22,8 @@ class Todo extends Component {
     todo: Object,
     modifying: boolean,
     expanded: boolean,
-    modifyTodo: (todoId: string) => Object
+    modifyTodo: (todoId: string) => Object,
+    selectTodo: () => Object
   };
 
   componentWillUpdate() {
@@ -40,19 +41,19 @@ class Todo extends Component {
   }
 
   onPress() {
-    const { expanded } = this.props;
+    const { todo, expanded } = this.props;
 
     if (!expanded) {
-      this.props.navigateJump('todo');
+      this.props.selectTodo(todo.id);
     }
   }
 
   render() {
     const { todo, expanded, modifying } = this.props;
-    const { titleStyle, shadowStyle } = styles;
-    let { containerStyle } = styles;
+    const { titleStyle, shadowStyle, wholeContainerStyle } = styles;
+    let { todoStyle } = styles;
     if (expanded) {
-      containerStyle = { ...containerStyle, ...shadowStyle };
+      todoStyle = { ...todoStyle, ...shadowStyle };
     }
 
     return (
@@ -61,9 +62,9 @@ class Todo extends Component {
         onPress={this.onPress.bind(this)}
         onLongPress={this.onLongPress.bind(this)}
       >
-        <View>
-          <CardSection style={containerStyle}>
-            <TodoButton />
+        <View style={wholeContainerStyle}>
+          <CardSection style={todoStyle}>
+            <MKCheckbox fillColor={Color.Red} borderOnColor={Color.Red}/>
             <Text style={titleStyle}>
               {todo.title}
             </Text>
@@ -77,9 +78,16 @@ class Todo extends Component {
 }
 
 const styles = {
-  containerStyle: {
+  wholeContainerStyle: {
+    borderWidth: 1,
+    borderRadius: 1,
+    borderColor: Color.TodoBackground,
+    marginTop: 3,
+    marginLeft: 3,
+    marginRight: 3,
+  },
+  todoStyle: {
     height: 76,
-    marginTop: 5,
   },
   shadowStyle: {
     borderWidth: 0,
@@ -98,13 +106,13 @@ const styles = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const expanded = state.selectedTodoId === ownProps.todo.index;
+  const expanded = state.selectedTodoId === ownProps.todo.id;
   const modifying = state.modifyingTodoId === ownProps.todo.id;
   return { expanded, modifying };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  modifyTodo,
+  selectTodo,
   navigateJump
 }, dispatch);
 

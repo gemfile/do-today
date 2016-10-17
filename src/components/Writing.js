@@ -5,16 +5,13 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addTodo } from 'actions';
-import { MKButton, MKColor } from 'react-native-material-kit';
-import { CardSection, Input, TomatoImage } from './common';
-
-type Props = {
-  addTodo: ()=>void,
-};
+import { MKButton } from 'react-native-material-kit';
+import { CardSection, Input, ImageView, Color } from './common';
+import WriteImage from './img/write.png';
 
 class Writing extends Component {
-  input:Input;
-  props:Props;
+  input: Input;
+  props: { addTodo: (title: string) => void };
 
   state = {
     inputIsFocused: false,
@@ -43,16 +40,18 @@ class Writing extends Component {
   }
 
   renderButton() {
-    if (this.state.inputIsFocused || this.state.inputValue !== '') {
+    const isValueEmpty = this.state.inputValue === '';
+    const buttonColor = isValueEmpty ? Color.Dim : Color.Red;
+    if (this.state.inputIsFocused || !isValueEmpty) {
       const ColoredRaisedButton = MKButton.coloredButton()
-        .withBackgroundColor(MKColor.Red)
+        .withBackgroundColor(buttonColor)
         .withText('Add')
         .build();
 
       return (
         <View style={styles.lowerContainerStyle}>
           <ColoredRaisedButton
-            enabled={this.state.inputValue !== ''}
+            enabled={!isValueEmpty}
             onPress={this.onSubmitEditing.bind(this)}
           />
         </View>
@@ -64,7 +63,6 @@ class Writing extends Component {
     const {
       wholeContainerStyle,
       upperContainerStyle,
-      imageContainerStyle,
       imageStyle,
       inputContainerStyle,
     } = styles;
@@ -74,13 +72,12 @@ class Writing extends Component {
         <View style={wholeContainerStyle}>
 
           <View style={upperContainerStyle}>
-            <TomatoImage
-              imageContainerStyle={imageContainerStyle}
-              imageStyle={imageStyle}
+            <ImageView imageStyle={imageStyle} imageSource={WriteImage}
+
             />
             <View style={inputContainerStyle}>
               <Input
-                placeholder={'What are you going to do?'}
+                placeholder={'What To Do'}
                 onFocus={this.onFocus.bind(this)}
                 onChangeText={this.onChangeText.bind(this)}
                 onSubmitEditing={this.onSubmitEditing.bind(this)}
@@ -110,28 +107,23 @@ const styles = {
     flex: 1,
     flexDirection: 'row',
   },
-  imageContainerStyle: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   imageStyle: {
-    width: 36,
-    height: 36,
+    width: 24,
+    height: 24,
+    tintColor: Color.Dim
   },
 
   inputContainerStyle: {
     flex: 6,
-    marginRight: 7
+    marginRight: 2
   },
 
   lowerContainerStyle: {
     height: 40,
     width: 150,
     alignSelf: 'flex-end',
-    marginRight: 13
-  }
+    marginRight: 7
+  },
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
