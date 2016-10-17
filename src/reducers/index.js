@@ -8,7 +8,7 @@ import NavigatingPositionReducer from './NavigatingPositionReducer';
 export default combineReducers({
   todos: TodosReducer,
   selectedTodoId: SelectionReducer,
-  modifyingTodoId: ModifyingReducer,
+  modifyingTodos: ModifyingReducer,
   navigating: NavigatingReducer,
   navigatingPosition: NavigatingPositionReducer
 });

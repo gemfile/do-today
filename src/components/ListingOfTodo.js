@@ -33,8 +33,10 @@ class ListingOfTodo extends Component {
   }
 
   render() {
+    const { containerStyle } = styles;
+
     return (
-      <View style={styles.containerStyle}>
+      <View style={containerStyle}>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
@@ -51,7 +53,7 @@ class ListingOfTodo extends Component {
 const styles = {
   containerStyle: {
     flex: 1
-  }
+  },
 }
 
 const mapStateToProps = state => ({

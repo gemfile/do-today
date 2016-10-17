@@ -33,9 +33,9 @@ export const deselectTodo = () => ({
   type: 'deselect_todo',
 });
 
-export const modifyTodo = todoId => ({
+export const modifyTodo = (todoId, checked) => ({
   type: 'modify_todo',
-  payload: todoId
+  payload: {todoId, checked}
 });
 
 export const navigateBack = () => ({

@@ -6,7 +6,7 @@ import { TomatoImage } from './common';
 
 type Props = {
   todo: Object,
-  modifying: boolean
+  modifying?: boolean
 };
 
 const TodoStatus = (props: Props) => {

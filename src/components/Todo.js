@@ -7,12 +7,13 @@ import {
   LayoutAnimation,
   UIManager,
   TouchableHighlight,
-  Platform
+  Platform,
+  PixelRatio
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { CardSection, Color } from './common';
-import { selectTodo, navigateJump } from 'actions';
+import { selectTodo, modifyTodo, navigateJump } from 'actions';
 import { MKCheckbox } from 'react-native-material-kit';
 import TodoStatus from './TodoStatus';
 import Pomodoro from './Pomodoro';
@@ -20,9 +21,8 @@ import Pomodoro from './Pomodoro';
 class Todo extends Component {
   props: {
     todo: Object,
-    modifying: boolean,
     expanded: boolean,
-    modifyTodo: (todoId: string) => Object,
+    modifyTodo: (todoId: string, checked: boolean) => Object,
     selectTodo: () => Object
   };
 
@@ -34,10 +34,12 @@ class Todo extends Component {
   }
 
   onLongPress() {
-    const { todo, modifying, modifyTodo } = this.props;
-    if (!modifying) {
-      modifyTodo(todo.id);
-    }
+
+  }
+
+  onCheckedChange({ checked }) {
+    const { todo } = this.props;
+    this.props.modifyTodo(todo.id, checked);
   }
 
   onPress() {
@@ -49,7 +51,7 @@ class Todo extends Component {
   }
 
   render() {
-    const { todo, expanded, modifying } = this.props;
+    const { todo, expanded } = this.props;
     const { titleStyle, shadowStyle, wholeContainerStyle } = styles;
     let { todoStyle } = styles;
     if (expanded) {
@@ -64,11 +66,16 @@ class Todo extends Component {
       >
         <View style={wholeContainerStyle}>
           <CardSection style={todoStyle}>
-            <MKCheckbox fillColor={Color.Red} borderOnColor={Color.Red}/>
+            <MKCheckbox
+              fillColor={Color.Red}
+              borderOnColor={Color.Red}
+              borderOffColor={Color.Clickable}
+              onCheckedChange={this.onCheckedChange.bind(this)}
+            />
             <Text style={titleStyle}>
               {todo.title}
             </Text>
-            <TodoStatus todo={todo} modifying={modifying} />
+            <TodoStatus todo={todo} />
           </CardSection>
           <Pomodoro expanded={expanded} />
         </View>
@@ -77,10 +84,12 @@ class Todo extends Component {
   }
 }
 
+const pixelRatio = PixelRatio.get();
+
 const styles = {
   wholeContainerStyle: {
-    borderWidth: 1,
-    borderRadius: 1,
+    borderWidth: 2 / pixelRatio,
+    borderRadius: 2 / pixelRatio,
     borderColor: Color.TodoBackground,
     marginTop: 3,
     marginLeft: 3,
@@ -95,24 +104,24 @@ const styles = {
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
-    elevation: 1,
+    elevation: 2 / pixelRatio,
   },
   titleStyle: {
     fontSize: 20,
     marginLeft: 15,
-    color: '#666',
+    color: '#333',
     flex: 14,
   },
 };
 
 const mapStateToProps = (state, ownProps) => {
   const expanded = state.selectedTodoId === ownProps.todo.id;
-  const modifying = state.modifyingTodoId === ownProps.todo.id;
-  return { expanded, modifying };
+  return { expanded };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   selectTodo,
+  modifyTodo,
   navigateJump
 }, dispatch);
 

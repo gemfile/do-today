@@ -29,16 +29,23 @@ class RootNavigator extends Component {
   };
   positionListener: AnimatedValueSubscription;
 
+  state = {
+    width: 0
+  };
+
   renderTodoListScene() {
     const {
       writingContainerStyle,
       listingContainerStyle,
-      wholeContainerStyle
+      wholeContainerStyle,
+      listMenuStyle
     } = styles;
 
     return (
-      <View style={wholeContainerStyle}>
-
+      <View style={wholeContainerStyle} onLayout={ event => {
+        this.setState({ width: event.nativeEvent.layout.width });
+        }}
+      >
         <View style={writingContainerStyle}>
           <Writing />
         </View>
@@ -47,6 +54,8 @@ class RootNavigator extends Component {
           <ListingOfTodo />
         </View>
 
+        <View style={[listMenuStyle, {width: this.state.width}]}>
+        </View>
       </View>
     );
   }
@@ -135,6 +144,13 @@ const styles = {
     bottom: 0,
     left: 0,
     right: 0
+  },
+  listMenuStyle: {
+    flex: 1,
+    height: 48,
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    bottom: 0
   }
 };
 

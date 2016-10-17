@@ -5,8 +5,8 @@ import { View, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateJump } from 'actions';
-import { MKButton, MKColor } from 'react-native-material-kit';
-import { ImageView } from './common';
+import { MKButton } from 'react-native-material-kit';
+import { ImageView, Color } from './common';
 import TodoListImage from './img/todo_list.png';
 import StatsImage from './img/stats.png';
 
@@ -100,7 +100,7 @@ const styles = {
   },
   selectedLineStyle: {
     height: 5,
-    backgroundColor: MKColor.Red,
+    backgroundColor: Color.Red,
     position: 'absolute'
   },
   iconImageMap: {
@@ -110,10 +110,10 @@ const styles = {
   iconStyle: {
     width: 24,
     height: 24,
-    tintColor: '#aaaaaa'
+    tintColor: Color.Clickable
   },
   highlightingStyle: {
-    tintColor: MKColor.Red
+    tintColor: Color.Red
   }
 };
 
