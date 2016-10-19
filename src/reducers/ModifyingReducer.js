@@ -1,10 +1,13 @@
-import Immutable from 'immutable';
+/* @flow */
 
-const initialState = Immutable.List.of();
+import { MODIFY_TODO } from '../actions/Type';
+import { List } from 'immutable';
 
-export default (state = initialState, action) => {
+const initialState = List.of();
+
+export default (state: List<string> = initialState, action: Object) => {
   switch (action.type) {
-    case 'modify_todo': {
+    case MODIFY_TODO: {
       const { todoId, checked } = action.payload;
       let nextState;
       if (checked) {

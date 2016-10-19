@@ -154,8 +154,8 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => ({
-  navigationState: state.navigating,
+const mapStateToProps = ({ navigating }) => ({
+  navigationState: navigating,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

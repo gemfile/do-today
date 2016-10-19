@@ -1,8 +1,12 @@
-export default (state = null, action) => {
+/* @flow */
+
+import { SELECT_TODO, DESELECT_TODO } from '../actions/Type';
+
+export default (state: ?number = null, action: Object) => {
   switch (action.type) {
-    case 'select_todo':
+    case SELECT_TODO:
       return action.payload;
-    case 'deselect_todo':
+    case DESELECT_TODO:
       return null;
     default:
       return state;

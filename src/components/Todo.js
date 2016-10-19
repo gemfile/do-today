@@ -114,8 +114,8 @@ const styles = {
   },
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const expanded = state.selectedTodoId === ownProps.todo.id;
+const mapStateToProps = ({ selectedTodoId }, { todo }) => {
+  const expanded = selectedTodoId === todo.id;
   return { expanded };
 };
 

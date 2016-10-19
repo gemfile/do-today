@@ -8,7 +8,7 @@ import { fetchTodos } from 'actions';
 import Todo from './Todo';
 
 class ListingOfTodo extends Component {
-  props: { fetchTodos: () => () => Object, todos: Array<Object> }
+  props: { fetchTodos: () => () => void, todos: Array<Object> }
   state: { dataSource: ListView.DataSource };
   listViewHeight: number;
 
@@ -44,6 +44,7 @@ class ListingOfTodo extends Component {
             event => {
               this.listViewHeight = event.nativeEvent.layout.height;
             }}
+          enableEmptySections
         />
       </View>
     );
@@ -56,8 +57,8 @@ const styles = {
   },
 }
 
-const mapStateToProps = state => ({
-    todos: state.todos,
+const mapStateToProps = ({ todos }) => ({
+    todos,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

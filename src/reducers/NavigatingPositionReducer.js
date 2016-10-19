@@ -1,7 +1,11 @@
-export default (state = 0, action) => {
+/* @flow */
+
+import { NOTIFY_NAVIGATING_POSITION } from '../actions/Type';
+
+export default (state: number = 0, action: Object) => {
   let nextState;
   switch (action.type) {
-    case 'notify_navigating_position':
+    case NOTIFY_NAVIGATING_POSITION:
       nextState = action.payload;
       break;
 

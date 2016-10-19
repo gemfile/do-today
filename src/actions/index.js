@@ -1,57 +1,70 @@
+/* @flow */
+
 import Firestack from 'react-native-firestack';
 import DeviceInfo from 'react-native-device-info';
+import {
+  FETCH_TODOS,
+  SELECT_TODO,
+  DESELECT_TODO,
+  MODIFY_TODO,
+  NAVIGATE_BACK,
+  NAVIGATE_FORWARD,
+  NAVIGATE_JUMP,
+  NOTIFY_NAVIGATING_POSITION
+} from './Type';
 
 const firestack = new Firestack({
   debug: true,
 });
 firestack.database.setPersistence(true);
 
-const instanceID = DeviceInfo.getInstanceID();
+const instanceID = DeviceInfo.getUniqueID();
 const ref = firestack.database.ref('todos/' + instanceID);
 
+type Dispatch = (action: Object) => void;
 export const fetchTodos = () => (
-  dispatch => {
+  (dispatch: Dispatch) => {
     ref.on('value', snapshot => {
       dispatch({
-        type: 'fetch_todos',
+        type: FETCH_TODOS,
         payload: snapshot.val()
       });
     });
   }
 );
 
-export const addTodo = title => (
+export const addTodo = (title: string) => (
   () => ref.push({ title, count: 0 })
 );
 
-export const selectTodo = todoId => ({
-  type: 'select_todo',
+export const selectTodo = (todoId: string) => ({
+  type: SELECT_TODO,
   payload: todoId
 });
 
 export const deselectTodo = () => ({
-  type: 'deselect_todo',
+  type: DESELECT_TODO,
 });
 
-export const modifyTodo = (todoId, checked) => ({
-  type: 'modify_todo',
+export const modifyTodo = (todoId: string, checked: boolean) => ({
+  type: MODIFY_TODO,
   payload: {todoId, checked}
 });
 
 export const navigateBack = () => ({
-  type: 'navigate_back',
+  type: NAVIGATE_BACK,
 });
 
 export const navigateForward = () => ({
-  type: 'navigate_forward',
+  type: NAVIGATE_FORWARD,
 });
 
-export const navigateJump = key => ({
-  type: 'navigate_jump',
+export const navigateJump = (key: string) => ({
+  type: NAVIGATE_JUMP,
   payload: key
 });
 
-export const notifyNavigatingPosition = position => ({
-  type: 'notify_navigating_position',
+export const notifyNavigatingPosition = (position: number) => ({
+  type: NOTIFY_NAVIGATING_POSITION,
   payload: position
 });
