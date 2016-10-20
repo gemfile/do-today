@@ -1,11 +1,13 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { ListView, View } from 'react-native';
+import { ListView, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos } from 'actions';
 import Todo from './Todo';
+import { ImageView } from './common';
+import TomatoImage from './img/tomato.png';
 
 class TodoList extends Component {
   props: { fetchTodos: () => () => void, todos: Array<Object> }
@@ -32,11 +34,22 @@ class TodoList extends Component {
     return <Todo todo={todo} />;
   }
 
-  render() {
-    const { containerStyle } = styles;
+  renderFooter() {
+    const { footerStyle, iconStyle } = styles;
 
     return (
-      <View style={containerStyle}>
+      <View style={footerStyle}>
+        <ImageView
+          imageSource={TomatoImage}
+          imageStyle={iconStyle}
+        />
+      </View>
+    );
+  }
+
+  render() {
+    return (
+      <View style={styles.containerStyle}>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
@@ -45,6 +58,7 @@ class TodoList extends Component {
               this.listViewHeight = event.nativeEvent.layout.height;
             }}
           enableEmptySections
+          renderFooter={this.renderFooter.bind(this)}
         />
       </View>
     );
@@ -55,6 +69,17 @@ const styles = {
   containerStyle: {
     flex: 1
   },
+  footerStyle: {
+    alignSelf: 'stretch',
+    height: 51,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  iconStyle : {
+    width: 24,
+    height: 24,
+    tintColor: '#fff'
+  }
 }
 
 const mapStateToProps = ({ todos }) => ({

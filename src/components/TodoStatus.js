@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { View, Text } from 'react-native';
-import { TomatoImage } from './common';
+import { ImageView } from './common';
+import TomatoImage from './img/tomato.png'
+
 
 type Props = {
   todo: Object,
@@ -23,10 +25,13 @@ const TodoStatus = (props: Props) => {
   if (!modifying) {
     menu = (
       <View>
-        <TomatoImage imageStyle={imageStyle} />
         <View style={countContainerStyle}>
+          <ImageView
+            imageSource={TomatoImage}
+            imageStyle={imageStyle}
+          />
           <Text style={countStyle}>
-          {todo.count}
+            {todo.count}
           </Text>
         </View>
       </View>
@@ -59,8 +64,8 @@ const styles = {
     borderRadius: 3
   },
   imageStyle: {
-    width: 16,
-    height: 16
+    width: 14,
+    height: 14
   },
   countContainerStyle: {
     backgroundColor: '#eee',
@@ -68,9 +73,12 @@ const styles = {
     borderRadius: 4,
     borderColor: 'transparent',
     marginBottom: 8,
-    width: 15
+    width: 20,
+    height: 20
   },
   countStyle: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
     color: '#666',
     textAlign: 'center',
   }

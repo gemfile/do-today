@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import { View } from 'react-native'
+import { connect } from 'react-redux';
 import Writing from './Writing';
 import TodoList from './TodoList';
+import Modifying from './Modifying';
 import { Color } from './common';
 
 class SceneTodoList extends Component {
+  props: {
+    isModifying: boolean;
+  }
+
   state = {
     width: 0
   };
@@ -16,6 +22,14 @@ class SceneTodoList extends Component {
       wholeContainerStyle,
       listMenuStyle
     } = styles;
+
+    const { isModifying } = this.props;
+
+    const renderModifying = (isModifying) ? (
+      <View style={[listMenuStyle, {width: this.state.width}]}>
+        <Modifying />
+      </View>
+    ) : null;
 
     return (
       <View
@@ -32,8 +46,7 @@ class SceneTodoList extends Component {
           <TodoList />
         </View>
 
-        <View style={[listMenuStyle, {width: this.state.width}]}>
-        </View>
+        { renderModifying }
       </View>
     );
   }
@@ -64,4 +77,9 @@ const styles = {
   }
 };
 
-export default SceneTodoList;
+const mapStateToProps = ({ modifyingTodos }) => {
+  const isModifying = modifyingTodos.count() !== 0;
+  return { isModifying };
+};
+
+export default connect(mapStateToProps)(SceneTodoList);

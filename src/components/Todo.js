@@ -22,6 +22,7 @@ class Todo extends Component {
   props: {
     todo: Object,
     expanded: boolean,
+    checked: boolean,
     modifyTodo: (todoId: string, checked: boolean) => Object,
     selectTodo: () => Object
   };
@@ -51,12 +52,16 @@ class Todo extends Component {
   }
 
   render() {
-    const { todo, expanded } = this.props;
-    const { titleStyle, shadowStyle, wholeContainerStyle } = styles;
+    const { todo, expanded, checked } = this.props;
+    const { titleStyle, shadowStyle, checkedStyle, wholeContainerStyle } = styles;
     let { todoStyle } = styles;
     if (expanded) {
       todoStyle = { ...todoStyle, ...shadowStyle };
     }
+    if (checked) {
+      todoStyle = { ...todoStyle, ...checkedStyle };
+    }
+
 
     return (
       <TouchableHighlight
@@ -71,6 +76,7 @@ class Todo extends Component {
               borderOnColor={Color.Red}
               borderOffColor={Color.Clickable}
               onCheckedChange={this.onCheckedChange.bind(this)}
+              checked={checked}
             />
             <Text style={titleStyle}>
               {todo.title}
@@ -98,6 +104,9 @@ const styles = {
   todoStyle: {
     height: 76,
   },
+  checkedStyle: {
+    backgroundColor: Color.Background
+  },
   shadowStyle: {
     borderWidth: 0,
     shadowColor: '#000',
@@ -114,9 +123,10 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ selectedTodoId }, { todo }) => {
+const mapStateToProps = ({ selectedTodoId, modifyingTodos }, { todo }) => {
   const expanded = selectedTodoId === todo.id;
-  return { expanded };
+  const checked = modifyingTodos.indexOf(todo.id) !== -1;
+  return { expanded, checked };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
