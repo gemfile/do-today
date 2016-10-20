@@ -6,15 +6,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateJump } from 'actions';
 import { MKButton } from 'react-native-material-kit';
-import { ImageView, Color } from './common';
-import TodoListImage from './img/todo_list.png';
-import StatsImage from './img/stats.png';
+import { Color } from './common';
 
 class RootTabs extends Component {
   props: {
     navigationState: Object,
     navigateJump: (key: string) => Object,
     navigatingPosition: (position: number) => Object,
+    renderTabIcon: (tabIndex: string, isSelected:boolean) => React.Element<*>
   };
   state: { tabWidth: number };
 
@@ -31,22 +30,11 @@ class RootTabs extends Component {
   }
 
   renderTabs() {
-    const { tabContainerStyle, iconStyle, highlightingStyle, iconImageMap } = styles;
-    const { navigationState } = this.props;
+    const { tabContainerStyle } = styles;
+    const { navigationState, renderTabIcon } = this.props;
 
     return navigationState.routes.map((route, index) => {
-      const selected = navigationState.index === index;
-      const iconImage = iconImageMap[index];
-
-      const icon = (selected) ?
-        <ImageView
-          imageSource={iconImage}
-          imageStyle={{...iconStyle, ...highlightingStyle}}
-        /> :
-        <ImageView
-          imageSource={iconImage}
-          imageStyle={iconStyle}
-        />
+      const tabIcon = renderTabIcon(index, navigationState.index === index)
 
       return (
         <View key={route.key} style={tabContainerStyle} onLayout={ event => {
@@ -56,8 +44,9 @@ class RootTabs extends Component {
             style={tabContainerStyle}
             onPress={this.onPress.bind(this, route.key)}
           >
-            {icon}
+            {tabIcon}
           </MKButton>
+
         </View>
       );
     });
@@ -103,22 +92,10 @@ const styles = {
     backgroundColor: Color.Red,
     position: 'absolute'
   },
-  iconImageMap: {
-    '0': TodoListImage,
-    '1': StatsImage
-  },
-  iconStyle: {
-    width: 24,
-    height: 24,
-    tintColor: Color.Clickable
-  },
-  highlightingStyle: {
-    tintColor: Color.Red
-  }
 };
 
-const mapStateToProps = ({ navigating, navigatingPosition }) => ({
-    navigationState: navigating,
+const mapStateToProps = ({ navigationState, navigatingPosition }) => ({
+    navigationState,
     navigatingPosition
 });
 

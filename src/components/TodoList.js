@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { fetchTodos } from 'actions';
 import Todo from './Todo';
 
-class ListingOfTodo extends Component {
+class TodoList extends Component {
   props: { fetchTodos: () => () => void, todos: Array<Object> }
   state: { dataSource: ListView.DataSource };
   listViewHeight: number;
@@ -65,4 +65,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListingOfTodo);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

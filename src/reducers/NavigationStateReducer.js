@@ -19,25 +19,19 @@ const initialState = {
 };
 
 export default (state: State = initialState, action: Object) => {
-  let nextState;
   switch (action.type) {
     case NAVIGATE_BACK:
-      nextState = NavigationStateUtils.back(state);
-      break;
+      return NavigationStateUtils.back(state);
 
     case NAVIGATE_FORWARD:
-      nextState = NavigationStateUtils.forward(state);
-      break;
+      return NavigationStateUtils.forward(state);
 
     case NAVIGATE_JUMP: {
       const key = action.payload;
-      nextState = NavigationStateUtils.jumpTo(state, key);
-      break;
+      return NavigationStateUtils.jumpTo(state, key);
     }
 
     default:
-      nextState = state;
+      return state;
   }
-
-  return nextState;
 };

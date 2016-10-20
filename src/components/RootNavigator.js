@@ -1,13 +1,10 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { NavigationExperimental, View, Text, Animated } from 'react-native';
+import { NavigationExperimental, View, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateBack, navigateForward, notifyNavigatingPosition } from 'actions';
-import { Color } from './common';
-import Writing from './Writing';
-import ListingOfTodo from './ListingOfTodo';
 import AnimatedValueSubscription from './util/AnimatedValueSubscription';
 
 const {
@@ -25,40 +22,10 @@ class RootNavigator extends Component {
     notifyNavigatingPosition: (position: number) => Object,
     navigateBack: () => Object,
     navigateForward: () => Object,
-    navigationState: Object
+    navigationState: Object,
+    renderScene: (sceneName: string) => React.Element<*>
   };
   positionListener: AnimatedValueSubscription;
-
-  state = {
-    width: 0
-  };
-
-  renderTodoListScene() {
-    const {
-      writingContainerStyle,
-      listingContainerStyle,
-      wholeContainerStyle,
-      listMenuStyle
-    } = styles;
-
-    return (
-      <View style={wholeContainerStyle} onLayout={ event => {
-        this.setState({ width: event.nativeEvent.layout.width });
-        }}
-      >
-        <View style={writingContainerStyle}>
-          <Writing />
-        </View>
-
-        <View style={listingContainerStyle}>
-          <ListingOfTodo />
-        </View>
-
-        <View style={[listMenuStyle, {width: this.state.width}]}>
-        </View>
-      </View>
-    );
-  }
 
   renderScene(sceneProps) {
     if (!this.positionListener) {
@@ -69,19 +36,7 @@ class RootNavigator extends Component {
     }
 
     const scenes = sceneProps.scenes.map((scene) => {
-      let renderingScene;
-      switch (scene.key) {
-        case 'scene_todo_list':
-          renderingScene = this.renderTodoListScene();
-          break;
-
-        case 'scene_todo':
-        default:
-          renderingScene = (
-            <View><Text>hi</Text></View>
-          );
-          break;
-      }
+      let renderingScene = this.props.renderScene(scene.key);
 
       // boilerplate
       const combineSceneProps = { ...sceneProps, scene };
@@ -122,21 +77,6 @@ const styles = {
   containerStyle: {
     flex: 1
   },
-  wholeContainerStyle: {
-    flex: 1,
-    backgroundColor: Color.Background,
-  },
-  writingContainerStyle: {
-    borderWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  listingContainerStyle: {
-    flex: 1,
-  },
   sceneStyle: {
     flex: 1,
     position: 'absolute',
@@ -145,17 +85,10 @@ const styles = {
     left: 0,
     right: 0
   },
-  listMenuStyle: {
-    flex: 1,
-    height: 48,
-    position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    bottom: 0
-  }
 };
 
-const mapStateToProps = ({ navigating }) => ({
-  navigationState: navigating,
+const mapStateToProps = ({ navigationState }) => ({
+  navigationState,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
