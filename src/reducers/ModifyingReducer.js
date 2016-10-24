@@ -9,13 +9,11 @@ export default (state: List<string> = initialState, action: Object) => {
   switch (action.type) {
     case MODIFY_TODO: {
       const { todoId, checked } = action.payload;
-      let nextState;
       if (checked) {
-        nextState = state.push(todoId);
+        return state.push(todoId);
       } else {
-        nextState = state.delete(state.indexOf(todoId));
+        return state.delete(state.indexOf(todoId));
       }
-      return nextState;
     }
 
     default:

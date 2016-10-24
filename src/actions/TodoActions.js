@@ -2,32 +2,45 @@
 
 import Firestack from 'react-native-firestack';
 import DeviceInfo from 'react-native-device-info';
+import LocalStorage from '../utils/LocalStorage';
 import {
+  LOADING_TODOS,
   FETCH_TODOS,
   SELECT_TODO,
   DESELECT_TODO,
   MODIFY_TODO,
 } from './Type';
 
+const localStorage = new LocalStorage();
 const firestack = new Firestack({
   debug: true,
 });
 firestack.database.setPersistence(true);
 
 const instanceID = DeviceInfo.getUniqueID();
-const ref = firestack.database.ref('todos/' + instanceID);
+const key = `todos/${instanceID}`;
+const ref = firestack.database.ref(key);
 
 type Dispatch = (action: Object) => void;
-export const fetchTodos = () => (
-  (dispatch: Dispatch) => {
-    ref.on('value', snapshot => {
-      dispatch({
-        type: FETCH_TODOS,
-        payload: snapshot.val()
+export const fetchTodos = () => {
+  return (dispatch: Dispatch) => {
+    localStorage.getItem(key, (data) => {
+      dispatchFetchTodo(dispatch, data, true);
+    }).then( () => {
+      ref.on('value', snapshot => {
+        dispatchFetchTodo(dispatch, snapshot.val(), false)
       });
     });
   }
-);
+};
+
+const dispatchFetchTodo = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
+  dispatch({ type: LOADING_TODOS, payload: isLocal });
+
+  if (value !== null) {
+    dispatch({ type: FETCH_TODOS, payload: {key, value} });
+  }
+};
 
 export const addTodo = (title: string) => (
   () => ref.push({ title, count: 0 })

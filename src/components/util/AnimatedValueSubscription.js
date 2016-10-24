@@ -1,5 +1,12 @@
+/* @flow */
+
+import { Animated } from 'react-native';
+
 class AnimatedValueSubscription {
-  constructor(animatedValue, callback) {
+  animatedValue: Animated.Value;
+  token: string;
+
+  constructor(animatedValue: Animated.Value, callback: () => void) {
     this.animatedValue = animatedValue;
     this.token = animatedValue.addListener(callback);
   }
