@@ -6,7 +6,7 @@ export default (state: Array<Object> = [], action: Object) => {
     case FETCH_TODOS: {
       const datas = action.payload;
       const todos = [];
-      for (const key in datas) {
+      for (const key of Object.keys(datas)) {
         const data = datas[key];
         todos.push({
           title: data.title,
@@ -15,6 +15,7 @@ export default (state: Array<Object> = [], action: Object) => {
           index: todos.length
         });
       }
+
       return todos;
     }
 
