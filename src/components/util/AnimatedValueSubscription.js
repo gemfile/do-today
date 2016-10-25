@@ -6,7 +6,7 @@ class AnimatedValueSubscription {
   animatedValue: Animated.Value;
   token: string;
 
-  constructor(animatedValue: Animated.Value, callback: () => void) {
+  constructor(animatedValue: Animated.Value, callback: (animatedData: Object) => void) {
     this.animatedValue = animatedValue;
     this.token = animatedValue.addListener(callback);
   }

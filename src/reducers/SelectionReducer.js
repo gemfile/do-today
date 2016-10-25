@@ -1,6 +1,6 @@
 /* @flow */
 
-import { SELECT_TODO, DESELECT_TODO } from '../actions/Type';
+import { SELECT_TODO, DESELECT_TODO } from '../actions/ActionType';
 
 export default (state: ?number = null, action: Object) => {
   switch (action.type) {

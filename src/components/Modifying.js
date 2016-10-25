@@ -1,25 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { MKButton } from 'react-native-material-kit';
+import { archiveTodos } from 'actions';
 import { ImageView } from './common';
 import InboxDoneImage from './img/inbox_done.png';
 import InboxCloseImage from './img/inbox_close.png';
 
-const Modifying = () => {
-  const { containerStyle, buttonStyle, iconStyle } = styles;
+class Modifying extends Component {
+  props: {
+    archiveTodos: (todos: Array<Object>) => () => void,
+    modifyingTodos: Array<Object>
+  };
 
-  return (
-    <View style={containerStyle}>
-      <MKButton style={buttonStyle}>
-        <ImageView imageSource={InboxDoneImage} imageStyle={iconStyle} />
-      </MKButton>
+  onArchive() {
+    this.props.archiveTodos(this.props.modifyingTodos);
+  }
 
-      <MKButton style={buttonStyle}>
-        <ImageView imageSource={InboxCloseImage} imageStyle={iconStyle}/>
-      </MKButton>
-    </View>
-  );
-};
+  onDelete() {
+
+  }
+
+  render() {
+    const { containerStyle, buttonStyle, iconStyle } = styles;
+
+    return (
+      <View style={containerStyle}>
+        <MKButton style={buttonStyle} onPress={this.onArchive.bind(this)}>
+          <ImageView imageSource={InboxDoneImage} imageStyle={iconStyle} />
+        </MKButton>
+
+        <MKButton style={buttonStyle} onPress={this.onDelete.bind(this)}>
+          <ImageView imageSource={InboxCloseImage} imageStyle={iconStyle}/>
+        </MKButton>
+      </View>
+    );
+  }
+}
 
 const styles = {
   containerStyle: {
@@ -36,4 +54,12 @@ const styles = {
   },
 }
 
-export default Modifying;
+const mapStateToProps = ({ modifyingTodos }) => ({
+  modifyingTodos
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  archiveTodos
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modifying);

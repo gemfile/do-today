@@ -5,7 +5,6 @@ import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos } from 'actions';
-import { Map } from 'immutable';
 import Todo from './Todo';
 import { ImageView } from './common';
 import TomatoImage from './img/tomato.png';
@@ -83,9 +82,9 @@ const styles = {
   }
 }
 
-const mapStateToProps = ({ todos }) => {
-  return { ...todos.toObject() }
-};
+const mapStateToProps = ({ todos }) => ({
+  ...todos.toObject()
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,

@@ -5,7 +5,7 @@ import {
   NAVIGATE_FORWARD,
   NAVIGATE_JUMP,
   NOTIFY_NAVIGATING_POSITION
-} from './Type';
+} from './ActionType';
 
 export const navigateBack = () => ({
   type: NAVIGATE_BACK,

@@ -9,7 +9,7 @@ import {
   SELECT_TODO,
   DESELECT_TODO,
   MODIFY_TODO,
-} from './Type';
+} from './ActionType';
 
 const localStorage = new LocalStorage();
 const firestack = new Firestack({
@@ -17,33 +17,34 @@ const firestack = new Firestack({
 });
 firestack.database.setPersistence(true);
 
-const instanceID = DeviceInfo.getUniqueID();
-const key = `todos/${instanceID}`;
-const ref = firestack.database.ref(key);
+const uid = DeviceInfo.getUniqueID();
+const rootRefKey = `/users/${uid}`;
+const rootRef = firestack.database.ref(rootRefKey);
 
 type Dispatch = (action: Object) => void;
-export const fetchTodos = () => {
-  return (dispatch: Dispatch) => {
-    localStorage.getItem(key, (data) => {
-      dispatchFetchTodo(dispatch, data, true);
-    }).then( () => {
-      ref.on('value', snapshot => {
-        dispatchFetchTodo(dispatch, snapshot.val(), false)
+export const fetchTodos = () => (
+  (dispatch: Dispatch) => {
+    localStorage.getItem(rootRefKey, (data) => {
+      dispatchFetchingOfTodos(dispatch, data, true);
+    })
+    .then( () => {
+      rootRef.on('value', snapshot => {
+        dispatchFetchingOfTodos(dispatch, snapshot.val(), false)
       });
     });
   }
-};
+);
 
-const dispatchFetchTodo = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
+const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
   dispatch({ type: LOADING_TODOS, payload: isLocal });
 
   if (value !== null) {
-    dispatch({ type: FETCH_TODOS, payload: {key, value} });
+    dispatch({ type: FETCH_TODOS, payload: {rootRefKey, value} });
   }
 };
 
 export const addTodo = (title: string) => (
-  () => ref.push({ title, count: 0 })
+  () => rootRef.child('todos').push({ title, count: 0 })
 );
 
 export const selectTodo = (todoId: string) => ({
@@ -55,7 +56,18 @@ export const deselectTodo = () => ({
   type: DESELECT_TODO,
 });
 
-export const modifyTodo = (todoId: string, checked: boolean) => ({
+export const modifyTodo = (todo: Object, checked: boolean) => ({
   type: MODIFY_TODO,
-  payload: {todoId, checked}
+  payload: {todo, checked}
 });
+
+export const archiveTodos = (todos: Array<Object>) => (
+  () => {
+    let updates = {};
+    todos.forEach(todo => {
+      updates[`/todos/${todo.id}`] = null;
+      updates[`/archives/${todo.id}`] = { title: todo.title, count: todo.count };
+    });
+    rootRef.update(updates);
+  }
+);

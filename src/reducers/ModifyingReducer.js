@@ -1,18 +1,23 @@
 /* @flow */
 
-import { MODIFY_TODO } from '../actions/Type';
+import { MODIFY_TODO } from '../actions/ActionType';
 import { List } from 'immutable';
 
 const initialState = List.of();
 
-export default (state: List<string> = initialState, action: Object) => {
+type Todo = {
+  title: string,
+  count: number
+};
+
+export default (state: List<Todo> = initialState, action: Object) => {
   switch (action.type) {
     case MODIFY_TODO: {
-      const { todoId, checked } = action.payload;
+      const { todo, checked } = action.payload;
       if (checked) {
-        return state.push(todoId);
+        return state.push(todo);
       } else {
-        return state.delete(state.indexOf(todoId));
+        return state.delete(state.indexOf(todo));
       }
     }
 

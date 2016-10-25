@@ -23,7 +23,7 @@ class Todo extends Component {
     todo: Object,
     expanded: boolean,
     checked: boolean,
-    modifyTodo: (todoId: string, checked: boolean) => Object,
+    modifyTodo: (todo: Object, checked: boolean) => Object,
     selectTodo: () => Object
   };
 
@@ -40,7 +40,7 @@ class Todo extends Component {
 
   onCheckedChange({ checked }) {
     const { todo } = this.props;
-    this.props.modifyTodo(todo.id, checked);
+    this.props.modifyTodo(todo, checked);
   }
 
   onPress() {
@@ -61,7 +61,6 @@ class Todo extends Component {
     if (checked) {
       todoStyle = { ...todoStyle, ...checkedStyle };
     }
-
 
     return (
       <TouchableHighlight
@@ -125,7 +124,7 @@ const styles = {
 
 const mapStateToProps = ({ selectedTodoId, modifyingTodos }, { todo }) => {
   const expanded = selectedTodoId === todo.id;
-  const checked = modifyingTodos.indexOf(todo.id) !== -1;
+  const checked = modifyingTodos.indexOf(todo) !== -1;
   return { expanded, checked };
 };
 

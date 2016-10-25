@@ -1,7 +1,7 @@
 /* @flow */
 
 import { NavigationExperimental } from 'react-native';
-import { NAVIGATE_BACK, NAVIGATE_FORWARD, NAVIGATE_JUMP } from '../actions/Type';
+import { NAVIGATE_BACK, NAVIGATE_FORWARD, NAVIGATE_JUMP } from '../actions/ActionType';
 
 const { StateUtils: NavigationStateUtils } = NavigationExperimental;
 

@@ -1,10 +1,10 @@
 /* @flow */
 import { Map } from 'immutable';
-
-import { FETCH_TODOS, LOADING_TODO } from '../actions/Type';
+import { FETCH_TODOS, LOADING_TODO } from '../actions/ActionType';
 import LocalStorage from '../utils/LocalStorage';
 
 const localStorage = new LocalStorage();
+const TODOS = 'todos';
 
 type State = Map<string, any>;
 const initialState = Map({
@@ -12,23 +12,28 @@ const initialState = Map({
   isLoading: false
 });
 
+
 export default (state: State = initialState, action: Object) => {
   switch (action.type) {
     case FETCH_TODOS: {
-      const keyOfStorage = action.payload.key;
-      const datas = action.payload.value;
+      const keyOfStorage = action.payload.rootRefKey;
+      const datas = action.payload.value[TODOS];
+      console.log(datas);
+      if (!datas) {
+        return state;
+      }
+
       const todos = [];
-      for (const key of Object.keys(datas)) {
-        const data = datas[key];
+      for (const itemKey of Object.keys(datas)) {
+        const data = datas[itemKey];
         todos.push({
           title: data.title,
           count: data.count,
-          id: key,
+          id: itemKey,
           index: todos.length
         });
       }
-
-      localStorage.setItem(keyOfStorage, todos);
+      localStorage.setItem(`${keyOfStorage}/${TODOS}`, todos);
 
       return state.set('todos', todos);
     }

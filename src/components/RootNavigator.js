@@ -31,7 +31,7 @@ class RootNavigator extends Component {
     if (!this.positionListener) {
       this.positionListener = new AnimatedValueSubscription(
         sceneProps.position,
-        (data) => { this.props.notifyNavigatingPosition(data.value); }
+        (data: Object) => { this.props.notifyNavigatingPosition(data.value); }
       );
     }
 
