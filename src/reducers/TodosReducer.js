@@ -18,23 +18,20 @@ export default (state: State = initialState, action: Object) => {
     case FETCH_TODOS: {
       const keyOfStorage = action.payload.rootRefKey;
       const datas = action.payload.value[TODOS];
-      console.log(datas);
-      if (!datas) {
-        return state;
-      }
-
       const todos = [];
-      for (const itemKey of Object.keys(datas)) {
-        const data = datas[itemKey];
-        todos.push({
-          title: data.title,
-          count: data.count,
-          id: itemKey,
-          index: todos.length
-        });
+      if (datas) {
+        for (const itemKey of Object.keys(datas)) {
+          const data = datas[itemKey];
+          todos.push({
+            title: data.title,
+            count: data.count,
+            id: itemKey,
+            index: todos.length
+          });
+        }
       }
-      localStorage.setItem(`${keyOfStorage}/${TODOS}`, todos);
 
+      localStorage.setItem(`${keyOfStorage}/${TODOS}`, todos);
       return state.set('todos', todos);
     }
 

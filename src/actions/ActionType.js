@@ -3,6 +3,7 @@ export const FETCH_TODOS = 'fetch_todos';
 export const SELECT_TODO = 'select_todo';
 export const DESELECT_TODO = 'deselect_todo';
 export const MODIFY_TODO = 'modify_todo';
+export const DONE_MODIFY_TODO = 'done_modify_todo';
 
 export const NAVIGATE_BACK = 'navigate_back';
 export const NAVIGATE_FORWARD = 'navigate_forward';

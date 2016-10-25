@@ -9,6 +9,7 @@ import {
   SELECT_TODO,
   DESELECT_TODO,
   MODIFY_TODO,
+  DONE_MODIFY_TODO
 } from './ActionType';
 
 const localStorage = new LocalStorage();
@@ -30,6 +31,7 @@ export const fetchTodos = () => (
     .then( () => {
       rootRef.on('value', snapshot => {
         dispatchFetchingOfTodos(dispatch, snapshot.val(), false)
+        dispatch({ type: DONE_MODIFY_TODO });
       });
     });
   }
@@ -67,6 +69,17 @@ export const archiveTodos = (todos: Array<Object>) => (
     todos.forEach(todo => {
       updates[`/todos/${todo.id}`] = null;
       updates[`/archives/${todo.id}`] = { title: todo.title, count: todo.count };
+    });
+    rootRef.update(updates);
+  }
+);
+
+export const deleteTodos = (todos: Array<Object>) => (
+  () => {
+    let updates = {};
+    todos.forEach(todo => {
+      updates[`/todos/${todo.id}`] = null;
+      updates[`/deletes/${todo.id}`] = { title: todo.title, count: todo.count };
     });
     rootRef.update(updates);
   }
