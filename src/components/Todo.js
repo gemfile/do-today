@@ -27,13 +27,6 @@ class Todo extends Component {
     selectTodo: () => Object
   };
 
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-
   onLongPress() {
 
   }
@@ -76,6 +69,7 @@ class Todo extends Component {
               borderOffColor={Color.Clickable}
               onCheckedChange={this.onCheckedChange.bind(this)}
               checked={checked}
+              name={todo.title}
             />
             <Text style={titleStyle}>
               {todo.title}
@@ -124,7 +118,7 @@ const styles = {
 
 const mapStateToProps = ({ selectedTodoId, modifyingTodos }, { todo }) => {
   const expanded = selectedTodoId === todo.id;
-  const checked = modifyingTodos.indexOf(todo) !== -1;
+  const checked = modifyingTodos.some(modifyingTodo => modifyingTodo.id === todo.id);
   return { expanded, checked };
 };
 

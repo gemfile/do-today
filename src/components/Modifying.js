@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { MKButton } from 'react-native-material-kit';
-import { archiveTodos, deleteTodos } from 'actions';
+import { archiveTodos, deleteTodos, clearModifying } from 'actions';
 import { ImageView } from './common';
 import InboxDoneImage from './img/inbox_done.png';
 import InboxCloseImage from './img/inbox_close.png';
@@ -12,15 +12,18 @@ class Modifying extends Component {
   props: {
     archiveTodos: (todos: Array<Object>) => () => void,
     deleteTodos: (todos: Array<Object>) => () => void,
+    clearModifying: () => Object;
     modifyingTodos: Array<Object>
   };
 
   onArchive() {
     this.props.archiveTodos(this.props.modifyingTodos);
+    this.props.clearModifying();
   }
 
   onDelete() {
     this.props.deleteTodos(this.props.modifyingTodos);
+    this.props.clearModifying();
   }
 
   render() {
@@ -60,7 +63,7 @@ const mapStateToProps = ({ modifyingTodos }) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  archiveTodos, deleteTodos
+  archiveTodos, deleteTodos, clearModifying
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modifying);

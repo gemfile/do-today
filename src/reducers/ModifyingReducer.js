@@ -1,6 +1,6 @@
 /* @flow */
 
-import { MODIFY_TODO, DONE_MODIFY_TODO } from '../actions/ActionType';
+import { MODIFY_TODO, CLEAR_MODIFYING } from '../actions/ActionType';
 import { List } from 'immutable';
 
 const initialState = List.of();
@@ -21,7 +21,7 @@ export default (state: List<Todo> = initialState, action: Object) => {
       }
     }
 
-    case DONE_MODIFY_TODO:
+    case CLEAR_MODIFYING:
       return initialState;
 
     default:

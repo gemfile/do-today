@@ -9,7 +9,7 @@ import {
   SELECT_TODO,
   DESELECT_TODO,
   MODIFY_TODO,
-  DONE_MODIFY_TODO
+  CLEAR_MODIFYING
 } from './ActionType';
 
 const localStorage = new LocalStorage();
@@ -31,7 +31,6 @@ export const fetchTodos = () => (
     .then( () => {
       rootRef.on('value', snapshot => {
         dispatchFetchingOfTodos(dispatch, snapshot.val(), false)
-        dispatch({ type: DONE_MODIFY_TODO });
       });
     });
   }
@@ -61,6 +60,10 @@ export const deselectTodo = () => ({
 export const modifyTodo = (todo: Object, checked: boolean) => ({
   type: MODIFY_TODO,
   payload: {todo, checked}
+});
+
+export const clearModifying = () => ({
+  type: CLEAR_MODIFYING
 });
 
 export const archiveTodos = (todos: Array<Object>) => (
