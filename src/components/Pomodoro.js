@@ -1,41 +1,91 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Text, View, TouchableWithoutFeedback } from 'react-native';
-import { CardSection, TouchableWithPressEffect } from './common';
+import {
+  Text, View, Animated, Easing
+ } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { notifyExpandingPosition } from 'actions';
+import { TouchableWithPressEffect } from './common';
 import PomodoroProgress from './PomodoroProgress';
 import PomodoroButton from './PomodoroButton';
 import { secondsToMinutes } from './util/TimeFormat';
+import AnimatedValueSubscription from './util/AnimatedValueSubscription';
 
 type Props = {
   expanded: boolean,
+  notifyExpandingPosition: (position: number) => Object,
+  expandingPosition: number
 };
 type SubmenuButton = 'start' | 'stop' | 'get';
+
+const MAX_HEIGHT = 48;
 
 class Pomodoro extends Component {
   state: {
     minutesAtATime: number,
     secondsLeft: number,
     fullSeconds: number,
-    submenuButton: SubmenuButton
+    submenuButton: SubmenuButton,
+    height: Animated.Value
   };
   timer: number;
+  positionListener: AnimatedValueSubscription;
+  animatedView: Animated.View;
+  latestHeight: number;
 
   constructor(props: Props) {
     super(props);
-    
+
     const minutesAtATime = 1;
     const secondsLeft = minutesAtATime * 60;
     this.state = {
       minutesAtATime,
       secondsLeft,
       fullSeconds: secondsLeft,
-      submenuButton: 'start'
+      submenuButton: 'start',
+      height: new Animated.Value(0),
+      latestHeight: 0
     };
+  }
+
+  componentDidMount() {
+    this.positionListener = new AnimatedValueSubscription(
+      this.state.height,
+      (data: Object) => {
+        this.latestHeight = data.value;
+        this.props.notifyExpandingPosition(this.latestHeight);
+      },
+      false
+    );
   }
 
   componentWillUnmount() {
     clearInterval(this.timer);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { expanded, expandingPosition } = nextProps;
+
+    this.positionListener.enable(expanded);
+
+    if (this.props.expanded !== expanded && expanded) {
+      Animated.timing(this.state.height, {
+        toValue: MAX_HEIGHT,
+        easing: Easing.linear,
+        duration: 1000
+      }).start();
+    }
+
+    if (
+      this.props.expandingPosition !== expandingPosition &&
+      !expanded &&
+      this.latestHeight > 0
+    ) {
+      this.latestHeight = MAX_HEIGHT - expandingPosition
+      this.state.height.setValue(this.latestHeight);
+    }
   }
 
   onPress() {
@@ -69,9 +119,7 @@ class Pomodoro extends Component {
   }
 
   render() {
-    const { expanded } = this.props;
     const {
-      backgroundStyle,
       wholeContainerStyle,
       leftSideContainerStyle,
       rightSideContainerStyle,
@@ -82,37 +130,30 @@ class Pomodoro extends Component {
       (this.state.fullSeconds - this.state.secondsLeft) / this.state.fullSeconds;
     const timeLefts = secondsToMinutes(this.state.secondsLeft);
 
-    if (expanded) {
-      return (
-        <CardSection style={backgroundStyle}>
-          <TouchableWithoutFeedback>
+    return (
+      <Animated.View
+        ref={(component) => { this.animatedView = component; }}
+        style={[ wholeContainerStyle, {height: this.state.height} ]}
+      >
+        <View style={leftSideContainerStyle}>
+          <PomodoroProgress
+            ratio={ratioOfProgress}
+            style={progressStyle}
+          />
+          <Text style={progressTextStyle}>
+            {timeLefts}
+          </Text>
+        </View>
 
-            <View style={wholeContainerStyle}>
-              <View style={leftSideContainerStyle}>
-                <PomodoroProgress
-                  ratio={ratioOfProgress}
-                  style={progressStyle}
-                />
-                <Text style={progressTextStyle}>
-                  {timeLefts}
-                </Text>
-              </View>
+        <TouchableWithPressEffect
+          style={rightSideContainerStyle}
+          onPress={this.onPress.bind(this)}
+        >
+          <PomodoroButton type={this.state.submenuButton} />
 
-              <TouchableWithPressEffect
-                style={rightSideContainerStyle}
-                onPress={this.onPress.bind(this)}
-              >
-                <PomodoroButton type={this.state.submenuButton} />
-
-              </TouchableWithPressEffect>
-            </View>
-
-          </TouchableWithoutFeedback>
-        </CardSection>
-      );
-    }
-
-    return null;
+        </TouchableWithPressEffect>
+      </Animated.View>
+    );
   }
 }
 
@@ -122,7 +163,6 @@ const styles = {
   },
   wholeContainerStyle: {
     flex: 1,
-    height: 48,
     flexDirection: 'row'
   },
   leftSideContainerStyle: {
@@ -134,7 +174,7 @@ const styles = {
     flex: 1
   },
   progressTextStyle: {
-    flex: 8,
+    flex: 9,
     textAlign: 'right',
     color: '#666'
   },
@@ -147,4 +187,12 @@ const styles = {
   }
 };
 
-export default Pomodoro;
+const mapDispatchToProps = dispatch => bindActionCreators({
+  notifyExpandingPosition
+}, dispatch);
+
+const mapStateToProps = ({ expandingPosition }) => ({
+  expandingPosition,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pomodoro);

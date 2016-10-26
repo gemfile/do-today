@@ -10,6 +10,7 @@ class Input extends Component {
     secureTextEntry?: boolean,
     onChangeText: (text: string) => void,
     onSubmitEditing: () => void,
+    onEndEditing: () => void,
     onFocus: () => void
   };
   textInput: TextInput;
@@ -26,6 +27,7 @@ class Input extends Component {
       placeholder,
       secureTextEntry,
       onChangeText,
+      onEndEditing,
       onSubmitEditing,
       onFocus,
     } = this.props;
@@ -40,6 +42,7 @@ class Input extends Component {
           value={value}
           onChangeText={onChangeText}
           onFocus={onFocus}
+          onEndEditing={onEndEditing}
           onSubmitEditing={onSubmitEditing}
           ref={(component) => { this.textInput = component; }}
         />

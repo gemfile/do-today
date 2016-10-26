@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { NavigationExperimental, View, Animated } from 'react-native';
+import { NavigationExperimental, View, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateBack, navigateForward, notifyNavigatingPosition } from 'actions';
@@ -61,12 +61,20 @@ class RootNavigator extends Component {
     return scenes;
   }
 
+  configureTransition() {
+    return {
+      duration: 150,
+      easing: Easing.out(Easing.cubic),
+    }
+  }
+
   render() {
     return (
       <View style={styles.containerStyle}>
         <NavigationTransitioner
           navigationState={this.props.navigationState}
           render={this.renderScene.bind(this)}
+          configureTransition={this.configureTransition.bind(this)}
         />
       </View>
     );

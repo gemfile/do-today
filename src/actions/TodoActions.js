@@ -9,7 +9,10 @@ import {
   SELECT_TODO,
   DESELECT_TODO,
   MODIFY_TODO,
-  CLEAR_MODIFYING
+  CLEAR_MODIFYING,
+  TYPING,
+  FOCUS,
+  NOTIFY_EXPANDING_POSITION
 } from './ActionType';
 
 const localStorage = new LocalStorage();
@@ -87,3 +90,18 @@ export const deleteTodos = (todos: Array<Object>) => (
     rootRef.update(updates);
   }
 );
+
+export const typing = (text: string) => ({
+  type: TYPING,
+  payload: text
+});
+
+export const focus = (isFocused: boolean) => ({
+  type: FOCUS,
+  payload: isFocused
+});
+
+export const notifyExpandingPosition = (position: number) => ({
+  type: NOTIFY_EXPANDING_POSITION,
+  payload: position
+});

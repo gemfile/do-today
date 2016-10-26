@@ -5,7 +5,12 @@ export const DESELECT_TODO = 'deselect_todo';
 export const MODIFY_TODO = 'modify_todo';
 export const CLEAR_MODIFYING = 'clear_modifying';
 
+export const TYPING = 'typing';
+export const FOCUS = 'focus';
+
 export const NAVIGATE_BACK = 'navigate_back';
 export const NAVIGATE_FORWARD = 'navigate_forward';
 export const NAVIGATE_JUMP = 'navigate_jump';
 export const NOTIFY_NAVIGATING_POSITION = 'notify_navigating_position';
+
+export const NOTIFY_EXPANDING_POSITION = 'notify_expanding_position';

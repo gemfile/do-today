@@ -69,12 +69,15 @@ const styles = {
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
+    zIndex: 1
   },
   listingContainerStyle: {
     flex: 1,
+    zIndex: 0
   },
   modifyingContainerStyle: {
-    height: 60
+    height: 60,
+    zIndex: 2
   }
 };
 

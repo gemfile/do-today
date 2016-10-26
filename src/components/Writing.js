@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addTodo } from 'actions';
+import { addTodo, typing, focus } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import { CardSection, Input, ImageView, Color } from './common';
 import WriteImage from './img/write.png';
@@ -12,40 +12,46 @@ import WriteImage from './img/write.png';
 class Writing extends Component {
   input: Input;
   props: {
-    addTodo: (title: string) => void,
-    isModifying: boolean
-  };
-
-  state = {
-    inputIsFocused: false,
-    inputValue: ''
+    addTodo: (title: string) => () => void,
+    typing: (text: string) => Object,
+    focus: (isFocused: boolean) => Object,
+    typingState: {text: string, isFocused: boolean},
+    isModifying: boolean,
+    isExpanding: boolean
   };
 
   onFocus() {
-    this.setState({ inputIsFocused: true });
+    this.props.focus(true);
   }
 
   onChangeText(text) {
-    this.setState({ inputValue: text });
+    this.props.typing(text);
+  }
+
+  onEndEditing() {
+    this.props.focus(false);
   }
 
   onSubmitEditing() {
-    const savedValue = this.state.inputValue;
-    this.setState({
-      inputIsFocused: false,
-      inputValue: ''
-    });
+    const { focus, typing, addTodo, typingState } = this.props;
+    const latestText = typingState.text;
+
+    focus(false);
+    typing('');
     this.input.clear();
 
-    if (savedValue !== '') {
-      this.props.addTodo(savedValue);
+    if (latestText !== '') {
+      addTodo(latestText);
     }
   }
 
   renderButton() {
-    const isValueEmpty = this.state.inputValue === '';
+    const { isModifying, typingState } = this.props;
+    const { text, isFocused } = typingState;
+    const isValueEmpty = text === '';
     const buttonColor = isValueEmpty ? Color.Dim : Color.Red;
-    if ((this.state.inputIsFocused || !isValueEmpty) && !this.props.isModifying) {
+
+    if ( (isFocused || !isValueEmpty) && !isModifying ) {
       const ColoredRaisedButton = MKButton.coloredButton()
         .withBackgroundColor(buttonColor)
         .withText('Add')
@@ -70,6 +76,8 @@ class Writing extends Component {
       inputContainerStyle,
     } = styles;
 
+    const { text, isFocused } = this.props.typingState;
+
     return (
       <CardSection>
         <View style={wholeContainerStyle}>
@@ -81,9 +89,10 @@ class Writing extends Component {
                 placeholder={'What To Do'}
                 onFocus={this.onFocus.bind(this)}
                 onChangeText={this.onChangeText.bind(this)}
+                onEndEditing={this.onEndEditing.bind(this)}
                 onSubmitEditing={this.onSubmitEditing.bind(this)}
-                value={this.state.inputValue}
-                editable={this.state.inputIsFocused}
+                value={text}
+                editable={isFocused}
                 ref={(component) => { this.input = component; }}
               />
             </View>
@@ -129,6 +138,13 @@ const styles = {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   addTodo,
+  typing,
+  focus
 }, dispatch);
 
-export default connect(null, mapDispatchToProps)(Writing);
+const mapStateToProps = ({ selectedTodoId, typingState }) => {
+  const isExpanding = selectedTodoId !== null;
+  return { isExpanding, typingState: typingState.toObject() };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Writing);
