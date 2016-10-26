@@ -47,6 +47,12 @@ const styles = {
   containerStyle: {
     flex: 1,
     flexDirection: 'row',
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0
   },
   buttonStyle: {
     flex: 1

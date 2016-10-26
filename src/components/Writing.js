@@ -11,7 +11,10 @@ import WriteImage from './img/write.png';
 
 class Writing extends Component {
   input: Input;
-  props: { addTodo: (title: string) => void };
+  props: {
+    addTodo: (title: string) => void,
+    isModifying: boolean
+  };
 
   state = {
     inputIsFocused: false,
@@ -42,7 +45,7 @@ class Writing extends Component {
   renderButton() {
     const isValueEmpty = this.state.inputValue === '';
     const buttonColor = isValueEmpty ? Color.Dim : Color.Red;
-    if (this.state.inputIsFocused || !isValueEmpty) {
+    if ((this.state.inputIsFocused || !isValueEmpty) && !this.props.isModifying) {
       const ColoredRaisedButton = MKButton.coloredButton()
         .withBackgroundColor(buttonColor)
         .withText('Add')
@@ -72,9 +75,7 @@ class Writing extends Component {
         <View style={wholeContainerStyle}>
 
           <View style={upperContainerStyle}>
-            <ImageView imageStyle={imageStyle} imageSource={WriteImage}
-
-            />
+            <ImageView imageStyle={imageStyle} imageSource={WriteImage} />
             <View style={inputContainerStyle}>
               <Input
                 placeholder={'What To Do'}

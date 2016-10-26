@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native'
+import { View, LayoutAnimation, Platform, UIManager } from 'react-native'
 import { connect } from 'react-redux';
 import Writing from './Writing';
 import TodoList from './TodoList';
@@ -15,38 +15,43 @@ class SceneTodoList extends Component {
     width: 0
   };
 
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+
   render() {
     const {
       writingContainerStyle,
+      modifyingContainerStyle,
       listingContainerStyle,
       wholeContainerStyle,
-      listMenuStyle
     } = styles;
 
     const { isModifying } = this.props;
 
-    const renderModifying = (isModifying) ? (
-      <View style={[listMenuStyle, {width: this.state.width}]}>
+    const renderModifyingOrWriting = (isModifying) ? (
+      <View style={[ modifyingContainerStyle, {width: this.state.width} ]}>
         <Modifying />
       </View>
-    ) : null;
+    ) : <Writing isModifying={isModifying} />;
 
     return (
-      <View
-        style={wholeContainerStyle}
-        onLayout={ event => {
-          this.setState({ width: event.nativeEvent.layout.width });
-        }}
-      >
-        <View style={writingContainerStyle}>
-          <Writing />
+      <View style={wholeContainerStyle}>
+        <View
+          style={writingContainerStyle}
+          onLayout={ event => {
+            this.setState({ width: event.nativeEvent.layout.width });
+          }}
+        >
+          { renderModifyingOrWriting }
         </View>
 
         <View style={listingContainerStyle}>
           <TodoList />
         </View>
-
-        { renderModifying }
       </View>
     );
   }
@@ -68,12 +73,8 @@ const styles = {
   listingContainerStyle: {
     flex: 1,
   },
-  listMenuStyle: {
-    flex: 1,
-    height: 48,
-    position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    bottom: 0
+  modifyingContainerStyle: {
+    height: 60
   }
 };
 

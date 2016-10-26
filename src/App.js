@@ -17,11 +17,6 @@ import StatsImage from './components/img/stats.png';
 class App extends Component {
   componentDidMount() {
     deviceInfoLogger();
-
-    // LayoutAnimation.easeInEaseOut();
-    // if (Platform.OS === 'android') {
-      // UIManager.setLayoutAnimationEnabledExperimental(true);
-    // }
   }
 
   renderScene(sceneName: string) {

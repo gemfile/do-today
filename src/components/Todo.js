@@ -4,11 +4,8 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  LayoutAnimation,
-  UIManager,
-  TouchableHighlight,
-  Platform,
-  PixelRatio
+  PixelRatio,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -56,7 +53,7 @@ class Todo extends Component {
     }
 
     return (
-      <TouchableHighlight
+      <TouchableWithoutFeedback
         underlayColor='transparent'
         onPress={this.onPress.bind(this)}
         onLongPress={this.onLongPress.bind(this)}
@@ -78,7 +75,8 @@ class Todo extends Component {
           </CardSection>
           <Pomodoro expanded={expanded} />
         </View>
-      </TouchableHighlight>
+      </TouchableWithoutFeedback>
+
     );
   }
 }
