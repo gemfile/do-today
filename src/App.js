@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -13,6 +13,7 @@ import SceneTodoList from './components/SceneTodoList';
 import { ImageView, Color } from './components/common';
 import TodoListImage from './components/img/todo_list.png';
 import StatsImage from './components/img/stats.png';
+import CanvasView from './components/native/CanvasView';
 
 class App extends Component {
   componentDidMount() {
@@ -27,7 +28,14 @@ class App extends Component {
       case 'scene_todo':
       default:
         return (
-          <View><Text>hi</Text></View>
+          <CanvasView
+            angle={360.0 * 0.1}
+            frontColor={'#ffffff'}
+            doneColor={Color.Red}
+            strokeWidth={12}
+            height={400}
+            width={400}
+          />
         );
     }
   }

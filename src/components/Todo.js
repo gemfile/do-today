@@ -15,6 +15,8 @@ import { MKCheckbox } from 'react-native-material-kit';
 import TodoStatus from './TodoStatus';
 import Pomodoro from './Pomodoro';
 
+const pixelRatio = PixelRatio.get();
+
 class Todo extends Component {
   props: {
     todo: Object,
@@ -67,13 +69,13 @@ class Todo extends Component {
               onCheckedChange={this.onCheckedChange.bind(this)}
               checked={checked}
               name={todo.title}
+              style={{ width: 44 / pixelRatio, height: 44 / pixelRatio, borderWidth: 4 / pixelRatio }}
             />
             <Text style={titleStyle}>
               {todo.title}
             </Text>
             <TodoStatus todo={todo} />
           </CardSection>
-          <Pomodoro expanded={expanded} />
         </View>
       </TouchableWithoutFeedback>
 
@@ -81,19 +83,18 @@ class Todo extends Component {
   }
 }
 
-const pixelRatio = PixelRatio.get();
-
 const styles = {
   wholeContainerStyle: {
     borderWidth: 2 / pixelRatio,
     borderRadius: 2 / pixelRatio,
     borderColor: Color.TodoBackground,
-    marginTop: 3,
-    marginLeft: 3,
-    marginRight: 3,
+    marginTop: 3 / pixelRatio,
+    marginLeft: 3 / pixelRatio,
+    marginRight: 3 / pixelRatio,
   },
   todoStyle: {
     height: 76,
+    zIndex: 1
   },
   checkedStyle: {
     backgroundColor: Color.Background
@@ -108,7 +109,7 @@ const styles = {
   },
   titleStyle: {
     fontSize: 20,
-    marginLeft: 15,
+    marginLeft: 15 / pixelRatio,
     color: '#333',
     flex: 14,
   },

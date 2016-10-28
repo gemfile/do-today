@@ -73,8 +73,8 @@ class Pomodoro extends Component {
     if (this.props.expanded !== expanded && expanded) {
       Animated.timing(this.state.height, {
         toValue: MAX_HEIGHT,
-        easing: Easing.linear,
-        duration: 1000
+        easing: Easing.inOut(Easing.ease),
+        duration: 250
       }).start();
     }
 
