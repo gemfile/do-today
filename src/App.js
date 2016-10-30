@@ -13,7 +13,6 @@ import SceneTodoList from './components/SceneTodoList';
 import { ImageView, Color } from './components/common';
 import TodoListImage from './components/img/todo_list.png';
 import StatsImage from './components/img/stats.png';
-import CanvasView from './components/native/CanvasView';
 
 class App extends Component {
   componentDidMount() {
@@ -28,14 +27,7 @@ class App extends Component {
       case 'scene_todo':
       default:
         return (
-          <CanvasView
-            angle={360.0 * 0.1}
-            frontColor={'#ffffff'}
-            doneColor={Color.Red}
-            strokeWidth={12}
-            height={400}
-            width={400}
-          />
+          <View />
         );
     }
   }

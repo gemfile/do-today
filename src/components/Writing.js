@@ -49,7 +49,7 @@ class Writing extends Component {
     const { isModifying, typingState } = this.props;
     const { text, isFocused } = typingState;
     const isValueEmpty = text === '';
-    const buttonColor = isValueEmpty ? Color.Dim : Color.Red;
+    const buttonColor = isValueEmpty ? Color.Dim : Color.Green;
 
     if ( (isFocused || !isValueEmpty) && !isModifying ) {
       const ColoredRaisedButton = MKButton.coloredButton()
