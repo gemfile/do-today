@@ -55,13 +55,13 @@ class App extends Component {
     return (
       <Provider store={createStore(reducers, applyMiddleware(thunk))}>
         <View style={containerStyle}>
+          <RootTabs
+          style={tabsStyle}
+          renderTabIcon={this.renderTabIcon.bind(this)}
+          />
           <RootNavigator
             style={navigatorStyle}
             renderScene={this.renderScene.bind(this)}
-          />
-          <RootTabs
-            style={tabsStyle}
-            renderTabIcon={this.renderTabIcon.bind(this)}
           />
         </View>
       </Provider>

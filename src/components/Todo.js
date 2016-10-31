@@ -13,7 +13,6 @@ import { CardSection, Color } from './common';
 import { selectTodo, modifyTodo, navigateJump } from 'actions';
 import { MKCheckbox } from 'react-native-material-kit';
 import TodoStatus from './TodoStatus';
-import Pomodoro from './Pomodoro';
 
 const pixelRatio = PixelRatio.get();
 

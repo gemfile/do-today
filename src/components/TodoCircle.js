@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { MKButton } from 'react-native-material-kit';
 import { Color } from './common';
 import CanvasView from './native/CanvasView';
 
@@ -20,8 +19,6 @@ type Props = {
 type State = {
   widthOfText: number
 }
-
-const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
 
 class TodoCircle extends Component {
   props: Props;
@@ -41,7 +38,7 @@ class TodoCircle extends Component {
   }
 
   render() {
-    const { containerStyle, textStyle, fabStyle, rotate } = styles;
+    const { containerStyle, textStyle, rotate } = styles;
     const { width, height } = this.props.style;
     const halfWidthOfText = this.state.widthOfText/2;
 
@@ -80,13 +77,6 @@ class TodoCircle extends Component {
         >
           {this.props.todo.title}
         </Text>
-        <PlainFab
-          style={[
-            fabStyle,
-            rotate,
-            { bottom: width/2-24 }
-          ]}
-        />
       </View>
     );
   }
@@ -103,13 +93,6 @@ const styles = {
     position: 'absolute',
     color: 'white',
     fontSize: 20
-  },
-  fabStyle: {
-    position: 'absolute',
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    right: 24
   },
   rotate: {
     transform: [{ rotate: '-90deg' }]

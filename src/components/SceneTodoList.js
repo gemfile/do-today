@@ -5,12 +5,12 @@ import { View, ScrollView, Dimensions } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos } from 'actions';
+import { MKButton } from 'react-native-material-kit';
 import { Color } from './common';
-import Writing from './Writing';
-import Modifying from './Modifying';
 import TodoCircle from './TodoCircle';
 
 const { width } = Dimensions.get('window');
+const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
 
 class SceneTodoList extends Component {
   props: {
@@ -31,19 +31,14 @@ class SceneTodoList extends Component {
   render() {
     const {
       writingContainerStyle,
-      modifyingContainerStyle,
       listingContainerStyle,
       wholeContainerStyle,
+      buttonContainerStyle,
+      buttonStyle
     } = styles;
 
-    const { isModifying, todos } = this.props;
+    const { todos } = this.props;
     const { width, heightOfContent } = this.state;
-
-    const renderModifyingOrWriting = (isModifying) ? (
-      <View style={[ modifyingContainerStyle, {width: width} ]}>
-        <Modifying />
-      </View> ) :
-      <Writing isModifying={isModifying} />;
 
     const renderTodoCircles = todos.map( todo => (
       <TodoCircle
@@ -60,9 +55,7 @@ class SceneTodoList extends Component {
           onLayout={ event => {
             this.setState({ width: event.nativeEvent.layout.width });
           }}
-        >
-          {renderModifyingOrWriting}
-        </View>
+        />
 
         <View
           style={[
@@ -87,7 +80,10 @@ class SceneTodoList extends Component {
           >
             {renderTodoCircles}
           </ScrollView>
+        </View>
 
+        <View style={buttonContainerStyle}>
+          <PlainFab style={buttonStyle} />
         </View>
       </View>
     );
@@ -103,8 +99,6 @@ const styles = {
     backgroundColor: Color.Background,
   },
   writingContainerStyle: {
-    position: 'absolute',
-    width: width,
     borderWidth: 0,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -117,9 +111,20 @@ const styles = {
     zIndex: 0,
     flex: 1
   },
-  modifyingContainerStyle: {
+  buttonContainerStyle: {
+    position: 'absolute',
+    bottom: 0,
+    width: width,
+    height: 100,
+    zIndex: 2,
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonStyle: {
+    width: 60,
     height: 60,
-    zIndex: 2
+    borderRadius: 30,
   },
 };
 

@@ -1,12 +1,14 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateJump } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import { Color } from './common';
+
+const { width } = Dimensions.get('window');
 
 class RootTabs extends Component {
   props: {
@@ -76,11 +78,13 @@ class RootTabs extends Component {
 
 const styles = {
   tabContainerStyle:  {
-    flex: 1
+    flex: 1,
   },
   wholeContainerStyle: {
     flexDirection: 'row',
     backgroundColor: '#f8f8f8',
+    position: 'absolute',
+    width: width,
     height: 60,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
@@ -90,7 +94,8 @@ const styles = {
   selectedLineStyle: {
     height: 5,
     backgroundColor: Color.Red,
-    position: 'absolute'
+    position: 'absolute',
+    bottom: 0
   },
 };
 
