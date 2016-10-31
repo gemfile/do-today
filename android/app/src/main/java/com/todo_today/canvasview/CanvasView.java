@@ -23,6 +23,7 @@ public class CanvasView extends FrameLayout {
     float angle = 0;
     int doneColor;
     int frontColor;
+    int headColor;
     float strokeWidth;
 
     int _width = 100;
@@ -85,6 +86,17 @@ public class CanvasView extends FrameLayout {
         path = new Path();
         path.addArc(ovalBounds, -90-angle, -360+angle);
         canvas.drawPath(path, paint);
+
+        paint.setARGB(
+                Color.alpha(headColor),
+                Color.red(headColor),
+                Color.green(headColor),
+                Color.blue(headColor)
+        );
+        path = new Path();
+        path.addCircle(0, 0, 5, Path.Direction.CW);
+        canvas.drawPath(path, paint);
+
     }
 
     public void setAngle(float angle) {
@@ -109,6 +121,10 @@ public class CanvasView extends FrameLayout {
 
     public void setFrontColor(String color) {
         frontColor = Color.parseColor(color);
+    }
+
+    public void setHeadColor(String color) {
+        headColor = Color.parseColor(color);
     }
 }
 

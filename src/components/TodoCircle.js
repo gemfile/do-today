@@ -58,6 +58,7 @@ class TodoCircle extends Component {
           angle={360.0 * 0.1}
           frontColor={Color.White}
           doneColor={Color.Red}
+          headColor={Color.Green}
           strokeWidth={WIDTH_OF_STROKE}
           height={WIDTH_OF_CIRCLE}
           width={HEIGHT_OF_CIRCLE}

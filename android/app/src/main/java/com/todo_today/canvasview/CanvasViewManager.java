@@ -41,6 +41,11 @@ public class CanvasViewManager extends SimpleViewManager<CanvasView> {
         view.setDoneColor(color);
     }
 
+    @ReactProp(name = "headColor")
+    public void setHeadColor(CanvasView view, @Nullable String color) {
+        view.setHeadColor(color);
+    }
+
     @ReactProp(name = "width")
     public void setWidth(CanvasView view, @Nullable int width) {
         view.setWidth(width);
