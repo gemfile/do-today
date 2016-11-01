@@ -48,6 +48,12 @@ class SceneTodoList extends Component {
       />
     ));
 
+    const renderPagination = todos.map( todo =>
+      (todo.id % 1 == 0) ?
+        <View key={todo.id} style={dotStyle} /> :
+        <View key={todo.id} style={activeDotStyle} />
+    );
+
     return (
       <View style={wholeContainerStyle}>
         <View
@@ -77,9 +83,14 @@ class SceneTodoList extends Component {
                 height: this.state.width,
                 transform: [{ rotate: '90deg' }] }
             ]}
+            onScroll={this.onScroll.bind(this)}
           >
             {renderTodoCircles}
           </ScrollView>
+        </View>
+
+        <View style={[ paginationContainerStyle, {height: heightOfContent} ]}>
+          {renderPagination}
         </View>
 
         <View style={buttonContainerStyle}>
@@ -111,13 +122,21 @@ const styles = {
     zIndex: 0,
     flex: 1
   },
+  paginationContainerStyle: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 20,
+    zIndex: 3,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
   buttonContainerStyle: {
     position: 'absolute',
     bottom: 0,
     width: width,
     height: 100,
     zIndex: 2,
-    backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -126,6 +145,26 @@ const styles = {
     height: 60,
     borderRadius: 30,
   },
+  dotStyle: {
+    backgroundColor: Color.Green,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginLeft: 3,
+    marginRight: 3,
+    marginTop: 3,
+    marginBottom: 3
+  },
+  activeDotStyle: {
+    backgroundColor: 'rgba(0,0,0,.2)',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginLeft: 3,
+    marginRight: 3,
+    marginTop: 3,
+    marginBottom: 3
+  }
 };
 
 const mapStateToProps = ({ modifyingTodos, todos }) => {

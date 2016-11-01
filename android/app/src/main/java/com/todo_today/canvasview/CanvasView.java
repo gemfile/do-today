@@ -87,6 +87,7 @@ public class CanvasView extends FrameLayout {
         path.addArc(ovalBounds, -90-angle, -360+angle);
         canvas.drawPath(path, paint);
 
+        paint.setStyle(Paint.Style.FILL);
         paint.setARGB(
                 Color.alpha(headColor),
                 Color.red(headColor),
@@ -94,7 +95,11 @@ public class CanvasView extends FrameLayout {
                 Color.blue(headColor)
         );
         path = new Path();
-        path.addCircle(0, 0, 5, Path.Direction.CW);
+        float radius = (right - left) / 2;
+        float radian = (-90 - angle) * (float)Math.PI / 180;
+        float headX = (float)Math.cos(radian) * radius + width/2;
+        float headY = (float)Math.sin(radian) * radius + height/2;
+        path.addCircle(headX, headY, 20, Path.Direction.CW);
         canvas.drawPath(path, paint);
 
     }

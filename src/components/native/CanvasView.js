@@ -10,6 +10,7 @@ const iface = {
     angle: PropTypes.number,
     doneColor: PropTypes.string,
     frontColor: PropTypes.string,
+    headColor: PropTypes.string,
     height: PropTypes.number,
     strokeWidth: PropTypes.number,
     width: PropTypes.number
