@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, Dimensions } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTodos } from 'actions';
+import { fetchTodos, preparePomodoro } from 'actions';
 import { Color } from './common';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
@@ -15,17 +15,32 @@ const { width } = Dimensions.get('window');
 class SceneTodoList extends Component {
   props: {
     fetchTodos: () => () => void,
+    preparePomodoro: () => Object,
     todos: Array<Object>,
-    isModifying: boolean;
+    isModifying: boolean,
+    pomodoroState: {currentState: 'started' | 'stopped'},
   };
 
   state = {
     width: 0,
     heightOfContent: 0,
+    scrollEnabled: true
   };
 
   componentDidMount() {
     this.props.fetchTodos();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { pomodoroState: nextPomodoroState } = nextProps;
+
+    if (nextPomodoroState === 'started') {
+      this.setState({ scrollEnabled: false });
+    }
+  }
+
+  onPage(currentPage) {
+    this.props.preparePomodoro(currentPage);
   }
 
   renderPages() {
@@ -58,10 +73,12 @@ class SceneTodoList extends Component {
           onContentHeight={ event => {
             this.setState({ heightOfContent: event.nativeEvent.layout.height });
           }}
+          renderPages={this.renderPages.bind(this)}
+          onPage={this.onPage.bind(this)}
           todos={this.props.todos}
           width={this.state.width}
           heightOfPage={this.state.heightOfContent}
-          renderPages={this.renderPages.bind(this)}
+          scrollEnabled={this.state.scrollEnabled}
         />
 
         <View style={buttonContainerStyle}>
@@ -97,12 +114,13 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ todos }) => {
-  return todos.toObject();
+const mapStateToProps = ({ todos, pomodoroState }) => {
+  return { ...todos.toObject(), pomodoroState: pomodoroState.toObject() };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,
+  preparePomodoro
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SceneTodoList);

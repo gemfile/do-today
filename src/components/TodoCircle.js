@@ -1,9 +1,13 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Animated, Easing } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { stopPomodoro } from 'actions';
 import { Color } from './common';
 import CanvasView from './native/CanvasView';
+import AnimatedValueSubscription from './util/AnimatedValueSubscription';
 
 const WIDTH_OF_CIRCLE = 300;
 const HEIGHT_OF_CIRCLE = 300;
@@ -14,33 +18,103 @@ type Props = {
   style: {
     width: number,
     height: number,
-  }
+  },
+  pomodoroState: {currentState: 'started' | 'stopped', currentPage: number},
+  stopPomodoro: () => Object
 }
 type State = {
-  widthOfText: number
+  widthOfText: number,
+  progress: number,
 }
 
 class TodoCircle extends Component {
   props: Props;
   state: State;
+  timer: number;
+  animatedValueForProgress: Animated.Value;
+  progressListener: AnimatedValueSubscription;
+  secondsLeft: number;
+  fullSeconds: number;
 
-  state = {
-    widthOfText: 0
-  };
+  constructor(props) {
+    super(props);
+
+    const minutesAtATime = 1;
+    const secondsLeft = minutesAtATime * 60;
+    this.state = {
+      widthOfText: 0,
+      progress: 0
+    };
+
+    this.secondsLeft = secondsLeft;
+    this.fullSeconds = secondsLeft;
+    this.animatedValueForProgress = new Animated.Value(0);
+    this.progressListener = new AnimatedValueSubscription(
+      this.animatedValueForProgress,
+      (data: Object) => {
+        this.setState({ progress: data.value });
+      }
+    );
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { pomodoroState, todo } = this.props;
+    const { pomodoroState: nextPomodoroState } = nextProps;
+
+    if (
+      pomodoroState.currentPage === todo.index &&
+      pomodoroState.currentState === '' &&
+      nextPomodoroState.currentState === 'started'
+    ) {
+      this.animateProgress();
+
+      this.timer = setInterval(
+        () => {
+          const nextSecondsLeft = this.animateProgress();
+          if (nextSecondsLeft <= 0) {
+            clearInterval(this.timer);
+          }
+        },
+        1000
+      );
+    }
+  }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
-    const { widthOfText } = this.state;
-    const { widthOfText: nextWidthOfText } = nextState;
+    const { widthOfText, progress } = this.state;
+    const { widthOfText: nextWidthOfText, progress: nextProgress } = nextState;
+
     const { width, height } = this.props.style;
     const { width: nextWidth, height: nextHeight } = nextProps.style;
 
-    return ( width !== nextWidth || height !== nextHeight || widthOfText !== nextWidthOfText );
+    return (
+      width !== nextWidth ||
+      height !== nextHeight ||
+      widthOfText !== nextWidthOfText ||
+      progress !== nextProgress
+    );
+  }
+
+  animateProgress() {
+    const nextSecondsLeft = this.secondsLeft - 1;
+    this.secondsLeft = nextSecondsLeft;
+
+    const progress = (this.fullSeconds - nextSecondsLeft) / this.fullSeconds;
+    Animated.timing(this.animatedValueForProgress, {
+      toValue: progress,
+      easing: Easing.linear,
+      duration: 1000
+    }).start();
+
+    return nextSecondsLeft;
   }
 
   render() {
     const { containerStyle, textStyle, rotate } = styles;
     const { width, height } = this.props.style;
-    const halfWidthOfText = this.state.widthOfText/2;
+    const { widthOfText, progress } = this.state;
+
+    const halfWidthOfText = widthOfText / 2;
 
     return (
       <View
@@ -55,10 +129,10 @@ class TodoCircle extends Component {
           }
         ]}>
         <CanvasView
-          angle={360.0 * 0.1}
+          angle={360 * progress}
           frontColor={Color.White}
           doneColor={Color.Red}
-          headColor={Color.Green}
+          headColor={Color.Red}
           strokeWidth={WIDTH_OF_STROKE}
           height={WIDTH_OF_CIRCLE}
           width={HEIGHT_OF_CIRCLE}
@@ -68,7 +142,7 @@ class TodoCircle extends Component {
           style={[
             textStyle,
             rotate,
-            { left: -halfWidthOfText + height/2, bottom: halfWidthOfText+width/2-halfWidthOfText-13 }
+            { left: -halfWidthOfText + height/2, bottom: halfWidthOfText + width/2 - halfWidthOfText - 13 }
           ]}
           onLayout={event => {
             this.setState({
@@ -98,6 +172,14 @@ const styles = {
   rotate: {
     transform: [{ rotate: '-90deg' }]
   }
-}
+};
 
-export default TodoCircle;
+const mapStateToProps = ({ pomodoroState }) => {
+  return { pomodoroState: pomodoroState.toObject() };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  stopPomodoro,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoCircle);

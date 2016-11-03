@@ -13,15 +13,15 @@ const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
 
 class PomodoroButton extends Component {
   props: {
-    nextState: 'start' | 'stop',
+    pomodoroState: {nextState: 'start' | 'stop'},
     startPomodoro: () => Object,
     stopPomodoro: () => Object
   }
 
   onPress() {
-    const { nextState, startPomodoro, stopPomodoro } = this.props;
+    const { pomodoroState, startPomodoro, stopPomodoro } = this.props;
 
-    switch (nextState) {
+    switch (pomodoroState.nextState) {
       case 'start':
       startPomodoro();
       break;
@@ -34,7 +34,7 @@ class PomodoroButton extends Component {
 
   renderIcon() {
     const { playImageStyle, stopImageStyle } = styles;
-    switch (this.props.nextState) {
+    switch (this.props.pomodoroState.nextState) {
       case 'start':
       return <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />
 
@@ -74,7 +74,7 @@ const styles = {
 };
 
 const mapStateToProps = ({ pomodoroState }) => {
-  return pomodoroState.toObject();
+  return { pomodoroState: pomodoroState.toObject() };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({

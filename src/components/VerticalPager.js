@@ -5,10 +5,12 @@ import { ScrollView, View } from 'react-native'
 import { Color } from './common';
 
 type Props = {
-  onContentHeight: (event: Object) => void,
   width: number,
   heightOfPage: number,
-  renderPages: () => Array<React.Element<*>>
+  scrollEnabled: boolean,
+  renderPages: () => Array<React.Element<*>>,
+  onPage: (currentPage: number) => void,
+  onContentHeight: (event: Object) => void,
 };
 
 type State = {
@@ -25,10 +27,15 @@ class VerticalPager extends Component {
     pageCount: 0
   };
 
+  componentDidMount() {
+    this.props.onPage(this.state.currentPage);
+  }
+
   onScroll(offset: number, heightOfPage: number) {
     const currentPage = offset / heightOfPage;
     if (currentPage % 1 === 0) {
-      this.setState({ currentPage: currentPage })
+      this.setState({ currentPage: currentPage });
+      this.props.onPage(currentPage);
     }
   }
 
@@ -70,6 +77,7 @@ class VerticalPager extends Component {
             automaticallyAdjustContentInsets={false}
             horizontal
             removeClippedSubviews
+            scrollEnabled={this.props.scrollEnabled}
             style={[
               scrollViewStyle,
               { width: heightOfPage,

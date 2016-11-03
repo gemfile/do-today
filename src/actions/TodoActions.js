@@ -14,14 +14,15 @@ import {
   FOCUS,
   NOTIFY_EXPANDING_POSITION,
   START_POMODORO,
-  STOP_POMODORO
+  STOP_POMODORO,
+  PREPARE_POMODORO
 } from './ActionType';
 
 const localStorage = new LocalStorage();
 const firestack = new Firestack({
   debug: true,
 });
-firestack.database.setPersistence(true);
+// firestack.database.setPersistence(true);
 
 const uid = DeviceInfo.getUniqueID();
 const rootRefKey = `/users/${uid}`;
@@ -114,4 +115,9 @@ export const startPomodoro = () => ({
 
 export const stopPomodoro = () => ({
   type: STOP_POMODORO,
+});
+
+export const preparePomodoro = (currentPage: number) => ({
+  type: PREPARE_POMODORO,
+  payload: currentPage
 });
