@@ -1,7 +1,7 @@
 /* @flow */
 import { Map } from 'immutable';
 import { FETCH_TODOS, LOADING_TODO } from '../actions/ActionType';
-import LocalStorage from '../utils/LocalStorage';
+import LocalStorage from '../util/LocalStorage';
 
 const localStorage = new LocalStorage();
 const TODOS = 'todos';

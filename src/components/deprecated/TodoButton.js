@@ -1,5 +1,3 @@
-/* @flow */
-
 import React, { Component } from 'react';
 import { View, Image } from 'react-native';
 import { TouchableWithPressEffect } from './common';

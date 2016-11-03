@@ -1,57 +1,85 @@
 /* @flow */
 
-import React from 'react';
-import { Image, View } from 'react-native';
-import playImage from './img/play.png';
-import { TomatoImage } from './common';
+import React, { Component } from 'react';
+import { View } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { startPomodoro, stopPomodoro } from 'actions';
+import { MKButton } from 'react-native-material-kit';
+import { Color, ImageView } from './common';
+import PlayImage from './img/play.png';
 
-type Props = {
-  type: 'start' | 'stop' | 'get'
-};
+const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
 
-const PomodoroButton = (props: Props) => {
-  let symbol;
-  const { type } = props;
-  const { containerStyle, stopSymbolStyle, getSymbolStyle } = styles;
-
-  switch (type) {
-    case 'start':
-    default:
-    symbol = <Image source={playImage} />;
-    break;
-
-    case 'stop':
-    symbol = (
-      <View style={stopSymbolStyle} />
-    );
-    break;
-
-    case 'get':
-    symbol = <TomatoImage imageStyle={getSymbolStyle} />;
-    break;
+class PomodoroButton extends Component {
+  props: {
+    nextState: 'start' | 'stop',
+    startPomodoro: () => Object,
+    stopPomodoro: () => Object
   }
 
-  return (
-    <View style={containerStyle}>
-      {symbol}
-    </View>
-  );
-};
+  onPress() {
+    const { nextState, startPomodoro, stopPomodoro } = this.props;
 
-const styles = {
-  containerStyle: {
-    marginLeft: 4
-  },
-  stopSymbolStyle: {
-    width: 16,
-    height: 16,
-    backgroundColor: '#000',
-    borderRadius: 1
-  },
-  getSymbolStyle: {
-    width: 24,
-    height: 24
-  },
+    switch (nextState) {
+      case 'start':
+      startPomodoro();
+      break;
+
+      case 'stop':
+      stopPomodoro();
+      break;
+    }
+  }
+
+  renderIcon() {
+    const { playImageStyle, stopImageStyle } = styles;
+    switch (this.props.nextState) {
+      case 'start':
+      return <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />
+
+      case 'stop':
+      return <View style={stopImageStyle} />
+    }
+  }
+
+  render() {
+    const { buttonStyle } = styles;
+
+    return (
+      <PlainFab style={buttonStyle} onPress={this.onPress.bind(this)}>
+        { this.renderIcon() }
+      </PlainFab>
+    );
+  }
 }
 
-export default PomodoroButton;
+const styles = {
+  buttonStyle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  playImageStyle: {
+    tintColor: Color.White,
+    marginLeft: 3
+  },
+  stopImageStyle: {
+    backgroundColor: Color.White,
+    width: 16,
+    height: 16
+  }
+};
+
+const mapStateToProps = ({ pomodoroState }) => {
+  return pomodoroState.toObject();
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  startPomodoro,
+  stopPomodoro,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(PomodoroButton);

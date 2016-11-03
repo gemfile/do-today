@@ -2,7 +2,7 @@
 
 import Firestack from 'react-native-firestack';
 import DeviceInfo from 'react-native-device-info';
-import LocalStorage from '../utils/LocalStorage';
+import LocalStorage from '../util/LocalStorage';
 import {
   LOADING_TODOS,
   FETCH_TODOS,
@@ -12,7 +12,9 @@ import {
   CLEAR_MODIFYING,
   TYPING,
   FOCUS,
-  NOTIFY_EXPANDING_POSITION
+  NOTIFY_EXPANDING_POSITION,
+  START_POMODORO,
+  STOP_POMODORO
 } from './ActionType';
 
 const localStorage = new LocalStorage();
@@ -104,4 +106,12 @@ export const focus = (isFocused: boolean) => ({
 export const notifyExpandingPosition = (position: number) => ({
   type: NOTIFY_EXPANDING_POSITION,
   payload: position
+});
+
+export const startPomodoro = () => ({
+  type: START_POMODORO,
+});
+
+export const stopPomodoro = () => ({
+  type: STOP_POMODORO,
 });

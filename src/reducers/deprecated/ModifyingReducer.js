@@ -1,5 +1,3 @@
-/* @flow */
-
 import { MODIFY_TODO, CLEAR_MODIFYING } from '../actions/ActionType';
 import { List } from 'immutable';
 

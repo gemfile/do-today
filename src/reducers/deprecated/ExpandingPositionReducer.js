@@ -1,5 +1,3 @@
-/* @flow */
-
 import { NOTIFY_EXPANDING_POSITION } from '../actions/ActionType';
 
 export default (state: number = 0, action: Object) => {

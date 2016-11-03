@@ -5,7 +5,7 @@ import { NavigationExperimental, View, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateBack, navigateForward, notifyNavigatingPosition } from 'actions';
-import AnimatedValueSubscription from './util/AnimatedValueSubscription';
+import AnimatedValueSubscription from './components/util/AnimatedValueSubscription';
 
 const {
   Transitioner: NavigationTransitioner,

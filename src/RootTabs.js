@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateJump } from 'actions';
 import { MKButton } from 'react-native-material-kit';
-import { Color } from './common';
+import { Color } from './components/common';
 
 const { width } = Dimensions.get('window');
 

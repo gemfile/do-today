@@ -5,6 +5,9 @@ export const DESELECT_TODO = 'deselect_todo';
 export const MODIFY_TODO = 'modify_todo';
 export const CLEAR_MODIFYING = 'clear_modifying';
 
+export const START_POMODORO = 'start_pomodoro';
+export const STOP_POMODORO = 'stop_pomodoro'
+
 export const TYPING = 'typing';
 export const FOCUS = 'focus';
 

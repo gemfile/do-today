@@ -1,5 +1,3 @@
-/* @flow */
-
 import React, { Component } from 'react';
 import {
   Text,
@@ -9,8 +7,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { CardSection, Color } from './common';
 import { selectTodo, modifyTodo, navigateJump } from 'actions';
+import { CardSection, Color } from './common';
 import { MKCheckbox } from 'react-native-material-kit';
 import TodoStatus from './TodoStatus';
 

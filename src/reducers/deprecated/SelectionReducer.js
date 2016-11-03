@@ -1,5 +1,3 @@
-/* @flow */
-
 import { SELECT_TODO, DESELECT_TODO, FOCUS } from '../actions/ActionType';
 
 export default (state: ?number = null, action: Object) => {
@@ -10,7 +8,7 @@ export default (state: ?number = null, action: Object) => {
     case FOCUS:
     case DESELECT_TODO:
       return null;
-      
+
     default:
       return state;
   }
