@@ -12,7 +12,6 @@ const initialState = Map({
   isLoading: false
 });
 
-
 export default (state: State = initialState, action: Object) => {
   switch (action.type) {
     case FETCH_TODOS: {

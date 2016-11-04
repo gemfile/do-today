@@ -15,7 +15,8 @@ import {
   NOTIFY_EXPANDING_POSITION,
   START_POMODORO,
   STOP_POMODORO,
-  PREPARE_POMODORO
+  PREPARE_POMODORO,
+  CLEAR_POMODORO
 } from './ActionType';
 
 const localStorage = new LocalStorage();
@@ -24,6 +25,8 @@ const firestack = new Firestack({
 });
 // firestack.database.setPersistence(true);
 
+const TODOS = 'todos';
+
 const uid = DeviceInfo.getUniqueID();
 const rootRefKey = `/users/${uid}`;
 const rootRef = firestack.database.ref(rootRefKey);
@@ -31,8 +34,8 @@ const rootRef = firestack.database.ref(rootRefKey);
 type Dispatch = (action: Object) => void;
 export const fetchTodos = () => (
   (dispatch: Dispatch) => {
-    localStorage.getItem(rootRefKey, (data) => {
-      dispatchFetchingOfTodos(dispatch, data, true);
+    localStorage.getItem(`${rootRefKey}/${TODOS}`, (data) => {
+      dispatchFetchingOfTodos(dispatch, {[TODOS]: data}, true);
     })
     .then( () => {
       rootRef.on('value', snapshot => {
@@ -51,7 +54,7 @@ const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, isLocal: boo
 };
 
 export const addTodo = (title: string) => (
-  () => rootRef.child('todos').push({ title, count: 0 })
+  () => rootRef.child(`${TODOS}`).push({ title, count: 0 })
 );
 
 export const selectTodo = (todoId: string) => ({
@@ -76,7 +79,7 @@ export const archiveTodos = (todos: Array<Object>) => (
   () => {
     let updates = {};
     todos.forEach(todo => {
-      updates[`/todos/${todo.id}`] = null;
+      updates[`/${TODOS}/${todo.id}`] = null;
       updates[`/archives/${todo.id}`] = { title: todo.title, count: todo.count };
     });
     rootRef.update(updates);
@@ -87,7 +90,7 @@ export const deleteTodos = (todos: Array<Object>) => (
   () => {
     let updates = {};
     todos.forEach(todo => {
-      updates[`/todos/${todo.id}`] = null;
+      updates[`/${TODOS}/${todo.id}`] = null;
       updates[`/deletes/${todo.id}`] = { title: todo.title, count: todo.count };
     });
     rootRef.update(updates);
@@ -116,6 +119,10 @@ export const startPomodoro = () => ({
 export const stopPomodoro = () => ({
   type: STOP_POMODORO,
 });
+
+export const clearPomodoro = () => ({
+  type: CLEAR_POMODORO,
+})
 
 export const preparePomodoro = (currentPage: number) => ({
   type: PREPARE_POMODORO,

@@ -1,6 +1,11 @@
 /* @flow */
 
-import { START_POMODORO, STOP_POMODORO, PREPARE_POMODORO } from '../actions/ActionType';
+import {
+  START_POMODORO,
+  STOP_POMODORO,
+  PREPARE_POMODORO,
+  CLEAR_POMODORO
+} from '../actions/ActionType';
 import { Map } from 'immutable';
 
 type State = Map<string, any>;
@@ -18,6 +23,9 @@ export default (state: State = initialState, action: Object) => {
 
     case STOP_POMODORO:
       return state.set('nextState', 'start').set('currentState', 'stopped');
+
+    case CLEAR_POMODORO:
+      return initialState;
 
     case PREPARE_POMODORO:
       return initialState.set('currentPage', action.payload);

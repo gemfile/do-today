@@ -32,8 +32,8 @@ class VerticalPager extends Component {
   }
 
   onScroll(offset: number, heightOfPage: number) {
-    const currentPage = offset / heightOfPage;
-    if (currentPage % 1 === 0) {
+    const currentPage = Math.round(offset / heightOfPage);
+    if (this.state.currentPage !== currentPage) {
       this.setState({ currentPage: currentPage });
       this.props.onPage(currentPage);
     }

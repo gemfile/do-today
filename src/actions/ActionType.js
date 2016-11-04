@@ -7,6 +7,7 @@ export const CLEAR_MODIFYING = 'clear_modifying';
 
 export const START_POMODORO = 'start_pomodoro';
 export const STOP_POMODORO = 'stop_pomodoro';
+export const CLEAR_POMODORO = 'clear_pomodoro';
 export const PREPARE_POMODORO = 'prepare_pomodoro';
 
 export const TYPING = 'typing';

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, Text, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { stopPomodoro } from 'actions';
+import { clearPomodoro } from 'actions';
 import { Color } from './common';
 import CanvasView from './native/CanvasView';
 import AnimatedValueSubscription from './util/AnimatedValueSubscription';
@@ -19,8 +19,13 @@ type Props = {
     width: number,
     height: number,
   },
-  pomodoroState: {currentState: 'started' | 'stopped', currentPage: number},
-  stopPomodoro: () => Object
+  pomodoroState: {
+    currentState: '' | 'started' | 'stopped',
+    currentPage: number,
+    nextState: '' | 'started' | 'stopped',
+  },
+  clearPomodoro: () => Object,
+  loaded: boolean,
 }
 type State = {
   widthOfText: number,
@@ -58,25 +63,32 @@ class TodoCircle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pomodoroState, todo } = this.props;
-    const { pomodoroState: nextPomodoroState } = nextProps;
+    const started =
+      this.props.pomodoroState.currentState === '' &&
+      nextProps.pomodoroState.currentState === 'started';
+    const stopped =
+      this.props.pomodoroState.currentState === 'started' &&
+      nextProps.pomodoroState.currentState === 'stopped';
 
-    if (
-      pomodoroState.currentPage === todo.index &&
-      pomodoroState.currentState === '' &&
-      nextPomodoroState.currentState === 'started'
-    ) {
-      this.animateProgress();
+    if (nextProps.loaded) {
+      if (started) {
+        this.animateProgress(-1);
 
-      this.timer = setInterval(
-        () => {
-          const nextSecondsLeft = this.animateProgress();
-          if (nextSecondsLeft <= 0) {
-            clearInterval(this.timer);
-          }
-        },
-        1000
-      );
+        this.timer = setInterval(
+          () => {
+            const nextSecondsLeft = this.animateProgress(-1);
+            if (nextSecondsLeft <= 0) {
+              clearInterval(this.timer);
+            }
+          },
+          1000
+        );
+      }
+      if (stopped) {
+        this.animateProgress(this.fullSeconds - this.secondsLeft);
+        clearInterval(this.timer);
+        this.props.clearPomodoro();
+      }
     }
   }
 
@@ -95,8 +107,8 @@ class TodoCircle extends Component {
     );
   }
 
-  animateProgress() {
-    const nextSecondsLeft = this.secondsLeft - 1;
+  animateProgress(offset: number) {
+    const nextSecondsLeft = this.secondsLeft + offset;
     this.secondsLeft = nextSecondsLeft;
 
     const progress = (this.fullSeconds - nextSecondsLeft) / this.fullSeconds;
@@ -174,12 +186,16 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ pomodoroState }) => {
-  return { pomodoroState: pomodoroState.toObject() };
+const mapStateToProps = ({ pomodoroState }, { todo }) => {
+  const nextPomodoroState = pomodoroState.toObject();
+  return {
+    pomodoroState: nextPomodoroState,
+    loaded: nextPomodoroState.currentPage === todo.index
+  };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  stopPomodoro,
+  clearPomodoro,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoCircle);
