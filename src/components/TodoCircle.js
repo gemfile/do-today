@@ -8,6 +8,7 @@ import { clearPomodoro } from 'actions';
 import { Color } from './common';
 import CanvasView from './native/CanvasView';
 import AnimatedValueSubscription from './util/AnimatedValueSubscription';
+import { secondsToMinutes } from './util/TimeFormat';
 
 const WIDTH_OF_CIRCLE = 300;
 const HEIGHT_OF_CIRCLE = 300;
@@ -28,7 +29,10 @@ type Props = {
   loaded: boolean,
 }
 type State = {
-  widthOfText: number,
+  widthOfTitle: number,
+  heightOfTitle: number,
+  widthOfTime: number,
+  heightOfTime: number,
   progress: number,
 }
 
@@ -47,7 +51,10 @@ class TodoCircle extends Component {
     const minutesAtATime = 1;
     const secondsLeft = minutesAtATime * 60;
     this.state = {
-      widthOfText: 0,
+      widthOfTitle: 0,
+      heightOfTitle: 0,
+      widthOfTime: 0,
+      heightOfTime: 0,
       progress: 0
     };
 
@@ -93,8 +100,12 @@ class TodoCircle extends Component {
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
-    const { widthOfText, progress } = this.state;
-    const { widthOfText: nextWidthOfText, progress: nextProgress } = nextState;
+    const { widthOfTitle, widthOfTime, progress } = this.state;
+    const {
+      widthOfTitle: nextWidthOfTitle,
+      widthOfTime: nextWidthOfTime,
+      progress: nextProgress
+    } = nextState;
 
     const { width, height } = this.props.style;
     const { width: nextWidth, height: nextHeight } = nextProps.style;
@@ -102,7 +113,8 @@ class TodoCircle extends Component {
     return (
       width !== nextWidth ||
       height !== nextHeight ||
-      widthOfText !== nextWidthOfText ||
+      widthOfTitle !== nextWidthOfTitle ||
+      widthOfTime !== nextWidthOfTime ||
       progress !== nextProgress
     );
   }
@@ -122,11 +134,15 @@ class TodoCircle extends Component {
   }
 
   render() {
-    const { containerStyle, textStyle, rotate } = styles;
+    const { containerStyle, titleTextStyle, timeTextStyle, rotate } = styles;
     const { width, height } = this.props.style;
-    const { widthOfText, progress } = this.state;
-
-    const halfWidthOfText = widthOfText / 2;
+    const {
+      widthOfTitle,
+      heightOfTitle,
+      widthOfTime,
+      heightOfTime,
+      progress
+    } = this.state;
 
     return (
       <View
@@ -150,15 +166,35 @@ class TodoCircle extends Component {
           width={HEIGHT_OF_CIRCLE}
           style={rotate}
         />
+
         <Text
           style={[
-            textStyle,
+            titleTextStyle,
             rotate,
-            { left: -halfWidthOfText + height/2, bottom: halfWidthOfText + width/2 - halfWidthOfText - 13 }
+            { left: (height-widthOfTitle)/2, bottom: (width-heightOfTitle)/2 }
           ]}
           onLayout={event => {
+            const layout = event.nativeEvent.layout;
             this.setState({
-              widthOfText: event.nativeEvent.layout.width
+              widthOfTitle: layout.width,
+              heightOfTitle: layout.height
+            });
+          }}
+        >
+          {secondsToMinutes(this.secondsLeft)}
+        </Text>
+
+        <Text
+          style={[
+            timeTextStyle,
+            rotate,
+            { left: (height-widthOfTime)/2 - 60, bottom: (width-heightOfTime)/2 }
+          ]}
+          onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            this.setState({
+              widthOfTime: layout.width,
+              heightOfTime: layout.height
             });
           }}
         >
@@ -176,10 +212,17 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textStyle: {
+  titleTextStyle: {
     position: 'absolute',
     color: 'white',
-    fontSize: 20
+    fontSize: 48,
+    fontFamily: 'monospace'
+  },
+  timeTextStyle: {
+    position: 'absolute',
+    color: 'rgba(255, 255, 255, 0.5)',
+    fontSize: 20,
+    fontFamily: 'monospace'
   },
   rotate: {
     transform: [{ rotate: '-90deg' }]
