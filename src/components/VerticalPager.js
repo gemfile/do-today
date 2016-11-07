@@ -40,8 +40,9 @@ class VerticalPager extends Component {
   }
 
   onContentSizeChange(heightOfContent: number) {
+    console.log(heightOfContent, this.props.heightOfPage);
     if (heightOfContent !== 0 && this.props.heightOfPage !== 0) {
-      this.setState({ pageCount: (heightOfContent / this.props.heightOfPage) })
+      this.setState({ pageCount: Math.floor(heightOfContent / this.props.heightOfPage) })
     }
   }
 
@@ -105,7 +106,6 @@ class VerticalPager extends Component {
 
 const styles = {
   containerStyle: {
-    zIndex: 0,
     flex: 1
   },
   scrollViewStyle: {
@@ -116,7 +116,6 @@ const styles = {
     top: 0,
     right: 0,
     width: 20,
-    zIndex: 3,
     flexDirection: 'column',
     justifyContent: 'center',
   },

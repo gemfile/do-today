@@ -63,7 +63,7 @@ class RootNavigator extends Component {
 
   configureTransition() {
     return {
-      duration: 150,
+      duration: 195,
       easing: Easing.out(Easing.cubic),
     }
   }

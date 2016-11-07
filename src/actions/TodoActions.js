@@ -16,7 +16,8 @@ import {
   START_POMODORO,
   STOP_POMODORO,
   PREPARE_POMODORO,
-  CLEAR_POMODORO
+  CLEAR_POMODORO,
+  SET_VIAIBLE_OF_CONFIRM_ADDING
 } from './ActionType';
 
 const localStorage = new LocalStorage();
@@ -127,4 +128,9 @@ export const clearPomodoro = () => ({
 export const preparePomodoro = (currentPage: number) => ({
   type: PREPARE_POMODORO,
   payload: currentPage
+});
+
+export const setVislbleOfConfirmAdding = (visible: boolean) => ({
+  type: SET_VIAIBLE_OF_CONFIRM_ADDING,
+  payload: visible
 });

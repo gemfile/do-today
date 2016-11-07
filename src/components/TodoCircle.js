@@ -169,7 +169,7 @@ class TodoCircle extends Component {
 
         <Text
           style={[
-            titleTextStyle,
+            timeTextStyle,
             rotate,
             { left: (height-widthOfTitle)/2, bottom: (width-heightOfTitle)/2 }
           ]}
@@ -186,7 +186,7 @@ class TodoCircle extends Component {
 
         <Text
           style={[
-            timeTextStyle,
+            titleTextStyle,
             rotate,
             { left: (height-widthOfTime)/2 - 60, bottom: (width-heightOfTime)/2 }
           ]}
@@ -214,15 +214,15 @@ const styles = {
   },
   titleTextStyle: {
     position: 'absolute',
-    color: 'white',
-    fontSize: 48,
-    fontFamily: 'monospace'
+    color: 'rgba(255, 255, 255, 0.5)',
+    fontSize: 20,
+    fontFamily: 'sans-serif-light'
   },
   timeTextStyle: {
     position: 'absolute',
-    color: 'rgba(255, 255, 255, 0.5)',
-    fontSize: 20,
-    fontFamily: 'monospace'
+    color: 'white',
+    fontSize: 48,
+    fontFamily: 'sans-serif-light'
   },
   rotate: {
     transform: [{ rotate: '-90deg' }]

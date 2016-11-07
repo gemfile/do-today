@@ -50,17 +50,15 @@ class App extends Component {
   }
 
   render() {
-    const { navigatorStyle, tabsStyle, containerStyle } = styles;
+    const { containerStyle } = styles;
 
     return (
       <Provider store={createStore(reducers, applyMiddleware(thunk))}>
         <View style={containerStyle}>
           <RootTabs
-          style={tabsStyle}
-          renderTabIcon={this.renderTabIcon.bind(this)}
+            renderTabIcon={this.renderTabIcon.bind(this)}
           />
           <RootNavigator
-            style={navigatorStyle}
             renderScene={this.renderScene.bind(this)}
           />
         </View>
@@ -71,13 +69,8 @@ class App extends Component {
 
 const styles = {
   containerStyle: {
-    flex: 1
-  },
-  navigatorStyle: {
-    zIndex: 1
-  },
-  tabsStyle: {
-    zIndex: 0
+    flex: 1,
+    backgroundColor: Color.Background,
   },
   iconImageMap: {
     '0': TodoListImage,

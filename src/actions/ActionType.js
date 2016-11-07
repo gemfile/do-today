@@ -19,3 +19,5 @@ export const NAVIGATE_JUMP = 'navigate_jump';
 export const NOTIFY_NAVIGATING_POSITION = 'notify_navigating_position';
 
 export const NOTIFY_EXPANDING_POSITION = 'notify_expanding_position';
+
+export const SET_VIAIBLE_OF_CONFIRM_ADDING = 'set_viaible_of_confirm_adding';

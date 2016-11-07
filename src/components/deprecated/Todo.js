@@ -91,7 +91,6 @@ const styles = {
   },
   todoStyle: {
     height: 76,
-    zIndex: 1
   },
   checkedStyle: {
     backgroundColor: Color.Background

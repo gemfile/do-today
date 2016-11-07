@@ -1,16 +1,16 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Dimensions } from 'react-native'
+import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos, preparePomodoro } from 'actions';
-import { Color } from './common';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
-import PomodoroButton from './PomodoroButton';
-
-const { width } = Dimensions.get('window');
+import PomodoroButtonPlay from './PomodoroButtonPlay';
+import PomodoroButtonAdd from './PomodoroButtonAdd';
+import PomodoroButtonRemove from './PomodoroButtonRemove';
+import ConfirmAdding from './ConfirmAdding';
 
 class SceneTodoList extends Component {
   props: {
@@ -24,7 +24,8 @@ class SceneTodoList extends Component {
   state = {
     width: 0,
     heightOfContent: 0,
-    scrollEnabled: true
+    scrollEnabled: true,
+    showModal: false
   };
 
   componentDidMount() {
@@ -55,15 +56,16 @@ class SceneTodoList extends Component {
 
   render() {
     const {
-      writingContainerStyle,
+      emptyContainerStyle,
       wholeContainerStyle,
       buttonContainerStyle,
+      modalContainerStyle
     } = styles;
 
     return (
       <View style={wholeContainerStyle}>
         <View
-          style={writingContainerStyle}
+          style={emptyContainerStyle}
           onLayout={ event => {
             this.setState({ width: event.nativeEvent.layout.width });
           }}
@@ -82,7 +84,13 @@ class SceneTodoList extends Component {
         />
 
         <View style={buttonContainerStyle}>
-          <PomodoroButton />
+          <PomodoroButtonRemove />
+          <PomodoroButtonPlay />
+          <PomodoroButtonAdd />
+        </View>
+
+        <View style={modalContainerStyle}>
+          <ConfirmAdding />
         </View>
       </View>
     );
@@ -92,26 +100,29 @@ class SceneTodoList extends Component {
 const styles = {
   wholeContainerStyle: {
     flex: 1,
-    backgroundColor: Color.Background,
   },
-  writingContainerStyle: {
+  emptyContainerStyle: {
     borderWidth: 0,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
-    zIndex: 1
+    zIndex: 3
   },
   buttonContainerStyle: {
-    position: 'absolute',
     bottom: 0,
-    width: width,
     height: 100,
-    zIndex: 2,
+    zIndex: 4,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
+  modalContainerStyle: {
+    flex: 1,
+    position: 'absolute',
+    zIndex: 5
+  }
 };
 
 const mapStateToProps = ({ todos, pomodoroState }) => {

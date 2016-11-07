@@ -1,14 +1,12 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Animated, Dimensions } from 'react-native';
+import { View, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateJump } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import { Color } from './components/common';
-
-const { width } = Dimensions.get('window');
 
 class RootTabs extends Component {
   props: {
@@ -36,7 +34,7 @@ class RootTabs extends Component {
     const { navigationState, renderTabIcon } = this.props;
 
     return navigationState.routes.map((route, index) => {
-      const tabIcon = renderTabIcon(index, navigationState.index === index)
+      const tabIcon = renderTabIcon(index, navigationState.index === index);
 
       return (
         <View key={route.key} style={tabContainerStyle} onLayout={ event => {
@@ -65,8 +63,8 @@ class RootTabs extends Component {
           style={[
             selectedLineStyle,
             {
-               width: tabWidth,
-               left: navigatingPosition * tabWidth
+              width: tabWidth,
+              left: navigatingPosition * tabWidth
             }
           ]}
         />
@@ -77,22 +75,20 @@ class RootTabs extends Component {
 }
 
 const styles = {
-  tabContainerStyle:  {
+  tabContainerStyle: {
     flex: 1,
   },
   wholeContainerStyle: {
     flexDirection: 'row',
     backgroundColor: '#f8f8f8',
-    position: 'absolute',
-    width: width,
     height: 60,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.2,
-    elevation: 10,
+    elevation: 8,
   },
   selectedLineStyle: {
-    height: 5,
+    height: 3,
     backgroundColor: Color.Red,
     position: 'absolute',
     bottom: 0

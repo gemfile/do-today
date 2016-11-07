@@ -3,6 +3,9 @@
 import React, { Component } from 'react';
 import { Color, ImageView } from './common';
 import { MKButton } from 'react-native-material-kit';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { setVislbleOfConfirmAdding } from 'actions';
 import WriteImage from './img/write.png';
 
 const PlainFab = MKButton.plainFab().withBackgroundColor('argb(255, 255, 255, 0)').build();
@@ -10,14 +13,14 @@ const PlainFab = MKButton.plainFab().withBackgroundColor('argb(255, 255, 255, 0)
 class PomodoroButtonAdd extends Component
 {
   props: {
-    onAddClick: () => void
-  }
+    setVislbleOfConfirmAdding: (visible: boolean) => Object;
+  };
 
   render() {
     const { writeImageStyle, buttonStyle } = styles;
 
     return (
-      <PlainFab style={buttonStyle} onPress={this.props.onAddClick}>
+      <PlainFab style={buttonStyle} onPress={ ()=>this.props.setVislbleOfConfirmAdding(true) }>
         <ImageView imageSource={WriteImage} imageStyle={writeImageStyle} />
       </PlainFab>
     );
@@ -39,4 +42,8 @@ const styles = {
   },
 };
 
-export default PomodoroButtonAdd;
+const mapDispatchToProps = dispatch => bindActionCreators({
+  setVislbleOfConfirmAdding,
+}, dispatch);
+
+export default connect(null, mapDispatchToProps)(PomodoroButtonAdd);
