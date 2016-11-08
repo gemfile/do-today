@@ -40,7 +40,6 @@ class VerticalPager extends Component {
   }
 
   onContentSizeChange(heightOfContent: number) {
-    console.log(heightOfContent, this.props.heightOfPage);
     if (heightOfContent !== 0 && this.props.heightOfPage !== 0) {
       this.setState({ pageCount: Math.floor(heightOfContent / this.props.heightOfPage) })
     }

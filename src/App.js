@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, DeviceEventEmitter } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -13,10 +13,21 @@ import SceneTodoCircleList from './components/SceneTodoCircleList';
 import { ImageView, Color } from './components/common';
 import TodoListImage from './components/img/todo_list.png';
 import StatsImage from './components/img/stats.png';
+import PushNotificationAndroid from 'react-native-push-notification'
 
 class App extends Component {
   componentDidMount() {
     deviceInfoLogger();
+
+    // Register all the valid actions for notifications here and add the action handler for each action
+    PushNotificationAndroid.registerNotificationActions(['Stop']);
+    DeviceEventEmitter.addListener('notificationActionReceived', function(action){
+      const info = JSON.parse(action.dataJSON);
+      console.log ('Notification action received: ' + info.action);
+      if (info.action == 'Stop') {
+      } else if (info.action == 'Play') {
+      }
+    });
   }
 
   renderScene(sceneName: string) {

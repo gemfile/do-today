@@ -1,5 +1,3 @@
-/* @flow */
-
 import DeviceInfo from 'react-native-device-info';
 
 const deviceInfoLogger = () => {
