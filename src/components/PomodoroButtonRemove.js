@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Color, ImageView } from './common';
 import { MKButton } from 'react-native-material-kit';
 import DeleteImage from './img/delete.png';
+import NotificationAndroid from './native/NotificationAndroid'
 
 const PlainFab = MKButton.plainFab().withBackgroundColor('argb(255, 255, 255, 0)').build();
 
 class PomodoroButtonRemove extends Component
 {
   onPress() {
-
+    NotificationAndroid.create();
   }
 
   render() {

@@ -9,6 +9,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.todo_today.canvasview.CanvasViewPackage;
+import com.todo_today.notification.NotificationPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
               new ReactMaterialKitPackage(),
               new FirestackPackage(),
               new RNDeviceInfo(),
-              new CanvasViewPackage()
+              new CanvasViewPackage(),
+              new NotificationPackage()
       );
     }
   };
