@@ -21,6 +21,7 @@ type State = {
 class VerticalPager extends Component {
   props: Props;
   state: State;
+  scrollView: ScrollView;
 
   state = {
     currentPage: 0,
@@ -41,7 +42,34 @@ class VerticalPager extends Component {
 
   onContentSizeChange(heightOfContent: number) {
     if (heightOfContent !== 0 && this.props.heightOfPage !== 0) {
-      this.setState({ pageCount: Math.floor(heightOfContent / this.props.heightOfPage) })
+      this.setState({ pageCount: Math.round(heightOfContent / this.props.heightOfPage) })
+    }
+  }
+
+  // shouldComponentUpdate(nextProps: Props, nextState: State) {
+  //   const { currentPage, pageCount } = this.state;
+  //   const {
+  //     currentPage: nextCurrentPage,
+  //     pageCount: nextPageCount,
+  //    } = nextState;
+  //
+  //   const { width, heightOfPage } = this.props;
+  //   const {
+  //     width: nextWidth,
+  //     heightOfPage: nextHeightOfPage,
+  //   } = nextProps;
+  //
+  //   return (
+      // pageCount !== nextPageCount ||
+      // currentPage !== nextCurrentPage ||
+      // width !== nextWidth ||
+      // heightOfPage !== nextHeightOfPage
+  //   );
+  // }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (prevState.pageCount !== this.state.pageCount) {
+      this.scrollView.scrollTo({ x: 0 });
     }
   }
 
@@ -64,38 +92,38 @@ class VerticalPager extends Component {
     }
 
     return (
-      <View style={containerStyle}>
-        <View
+      <View
+        style={[
+          containerStyle,
+          { width: width, height: heightOfPage }
+        ]}
+        onLayout={onContentHeight}
+      >
+        <ScrollView
+          pagingEnabled
+          automaticallyAdjustContentInsets={false}
+          horizontal
+          removeClippedSubviews
+          ref={scrollView => this.scrollView = scrollView}
           style={[
-            containerStyle,
-            { width: width, height: heightOfPage }
+            scrollViewStyle,
+            {
+              width: heightOfPage,
+              height: width,
+              transform: [{ rotate: '90deg' }]
+            }
           ]}
-          onLayout={onContentHeight}
+          onScroll={
+            event => this.onScroll(event.nativeEvent.contentOffset.x, heightOfPage)
+          }
+          onContentSizeChange={
+            contentWidth => this.onContentSizeChange(contentWidth)
+          }
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
         >
-          <ScrollView
-            pagingEnabled
-            automaticallyAdjustContentInsets={false}
-            horizontal
-            removeClippedSubviews
-            scrollEnabled={this.props.scrollEnabled}
-            style={[
-              scrollViewStyle,
-              { width: heightOfPage,
-                height: width,
-                transform: [{ rotate: '90deg' }] }
-            ]}
-            onScroll={
-              event => this.onScroll(event.nativeEvent.contentOffset.x, heightOfPage)
-            }
-            onContentSizeChange={
-              contentWidth => this.onContentSizeChange(contentWidth)
-            }
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-          >
-            {this.props.renderPages()}
-          </ScrollView>
-        </View>
+          {this.props.renderPages()}
+        </ScrollView>
 
         <View style={[ paginationContainerStyle, {height: heightOfPage} ]}>
           {renderPagination}

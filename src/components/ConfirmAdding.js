@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Modal } from 'react-native';
+import { View, Modal } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setVislbleOfConfirmAdding } from 'actions';
@@ -24,15 +24,14 @@ class ConfirmAdding extends Component {
         animationType='fade'
         onRequestClose={() => {}}
       >
-        <KeyboardAvoidingView
+        <View
           style={containerStyle}
-          behavior='padding'
         >
           <Writing
             onAccept={ ()=>this.props.setVislbleOfConfirmAdding(false) }
             onDecline={ ()=>this.props.setVislbleOfConfirmAdding(false) }
           />
-        </KeyboardAvoidingView>
+        </View>
       </Modal>
     );
   }

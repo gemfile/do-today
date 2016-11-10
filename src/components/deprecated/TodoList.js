@@ -80,8 +80,8 @@ const styles = {
   }
 }
 
-const mapStateToProps = ({ todos }) => ({
-  ...todos.toObject()
+const mapStateToProps = ({ todosState }) => ({
+  ...todosState.toObject()
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

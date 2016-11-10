@@ -59,7 +59,7 @@ class SceneTodoList extends Component {
       emptyContainerStyle,
       wholeContainerStyle,
       buttonContainerStyle,
-      modalContainerStyle
+      modalContainerStyle,
     } = styles;
 
     return (
@@ -77,7 +77,6 @@ class SceneTodoList extends Component {
           }}
           renderPages={this.renderPages.bind(this)}
           onPage={this.onPage.bind(this)}
-          todos={this.props.todos}
           width={this.state.width}
           heightOfPage={this.state.heightOfContent}
           scrollEnabled={this.state.scrollEnabled}
@@ -118,11 +117,11 @@ const styles = {
     flex: 1,
     position: 'absolute',
     zIndex: 5
-  }
+  },
 };
 
-const mapStateToProps = ({ todos, pomodoroState }) => {
-  return { ...todos.toObject(), pomodoroState: pomodoroState.toObject() };
+const mapStateToProps = ({ todosState, pomodoroState }) => {
+  return { ...todosState.toObject(), pomodoroState: pomodoroState.toObject() };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
