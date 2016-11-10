@@ -9,3 +9,5 @@ export * from './TouchableWithPressEffect';
 export * from './TomatoImage';
 export * from './ImageView';
 export * from './Color';
+export * from './zIndex';
+export * from './Style';

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateBack, navigateForward, notifyNavigatingPosition } from 'actions';
 import AnimatedValueSubscription from './components/util/AnimatedValueSubscription';
+import { zIndex } from './components/common';
 
 const {
   Transitioner: NavigationTransitioner,
@@ -83,7 +84,13 @@ class RootNavigator extends Component {
 
 const styles = {
   containerStyle: {
-    flex: 1
+    zIndex: zIndex.RootNavigator,
+    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
   },
   sceneStyle: {
     flex: 1,

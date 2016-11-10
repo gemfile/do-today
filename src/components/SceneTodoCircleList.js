@@ -83,7 +83,7 @@ class SceneTodoList extends Component {
           scrollEnabled={this.state.scrollEnabled}
         />
 
-        <View style={buttonContainerStyle}>
+        <View style={[buttonContainerStyle, {width: this.state.width}]}>
           <PomodoroButtonRemove />
           <PomodoroButtonPlay />
           <PomodoroButtonAdd />
@@ -103,14 +103,10 @@ const styles = {
   },
   emptyContainerStyle: {
     borderWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
     zIndex: 3
   },
   buttonContainerStyle: {
+    position: 'absolute',
     bottom: 0,
     height: 100,
     zIndex: 4,

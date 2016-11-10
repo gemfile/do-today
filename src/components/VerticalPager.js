@@ -90,6 +90,8 @@ class VerticalPager extends Component {
             onContentSizeChange={
               contentWidth => this.onContentSizeChange(contentWidth)
             }
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
           >
             {this.props.renderPages()}
           </ScrollView>

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { navigateJump } from 'actions';
 import { MKButton } from 'react-native-material-kit';
-import { Color } from './components/common';
+import { Color, zIndex, Style } from './components/common';
 
 class RootTabs extends Component {
   props: {
@@ -79,13 +79,11 @@ const styles = {
     flex: 1,
   },
   wholeContainerStyle: {
+    zIndex: zIndex.RootTabs,
     flexDirection: 'row',
     backgroundColor: '#f8f8f8',
     height: 60,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.2,
-    elevation: 8,
+    ...Style.shadowStyle
   },
   selectedLineStyle: {
     height: 3,

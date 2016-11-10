@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { startPomodoro, stopPomodoro } from 'actions';
 import { MKButton } from 'react-native-material-kit';
-import { Color, ImageView } from './common';
+import { Color, ImageView, Style } from './common';
 import PlayImage from './img/play.png';
 
 const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
@@ -60,7 +60,8 @@ const styles = {
     height: 60,
     borderRadius: 30,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    ...Style.shadowStyle
   },
   playImageStyle: {
     tintColor: Color.White,
