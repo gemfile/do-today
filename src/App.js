@@ -21,9 +21,8 @@ class App extends Component {
 
     // Register all the valid actions for notifications here and add the action handler for each action
     PushNotificationAndroid.registerNotificationActions(['Stop']);
-    DeviceEventEmitter.addListener('notificationActionReceived', function(action){
+    DeviceEventEmitter.addListener('notificationActionReceived', action => {
       const info = JSON.parse(action.dataJSON);
-      console.log ('Notification action received: ' + info.action);
       if (info.action == 'Stop') {
       } else if (info.action == 'Play') {
       }

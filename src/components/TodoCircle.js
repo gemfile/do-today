@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import { View, Text, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { clearPomodoro } from 'actions';
+import { clearPomodoro, completePomodoro } from 'actions';
+import Sound from 'react-native-sound';
 import { Color } from './common';
 import CanvasView from './native/CanvasView';
 import AnimatedValueSubscription from './util/AnimatedValueSubscription';
@@ -13,6 +14,17 @@ import { secondsToMinutes } from './util/TimeFormat';
 const WIDTH_OF_CIRCLE = 300;
 const HEIGHT_OF_CIRCLE = 300;
 const WIDTH_OF_STROKE = 12;
+const tickSound = new Sound('pomodoro_tick.mp3', Sound.MAIN_BUNDLE);
+const stopSound = new Sound('pomodoro_turn.mp3', Sound.MAIN_BUNDLE);
+const ringSound = new Sound('pomodoro_ring.mp3', Sound.MAIN_BUNDLE);
+const repeatPlaying = (sound, count) => {
+  sound.play(success => {
+    count -= 1;
+    if (success && count > 0) {
+      repeatPlaying(sound, count);
+    }
+  });
+};
 
 type Props = {
   todo: Object,
@@ -26,13 +38,17 @@ type Props = {
     nextState: '' | 'started' | 'stopped',
   },
   clearPomodoro: () => Object,
+  completePomodoro: () => Object,
   loaded: boolean,
-}
+};
+
 type State = {
   widthOfTitle: number,
   heightOfTitle: number,
+  opacityOfTitle: number,
   widthOfTime: number,
   heightOfTime: number,
+  opacityOfTime: number,
   progress: number,
 }
 
@@ -44,18 +60,21 @@ class TodoCircle extends Component {
   progressListener: AnimatedValueSubscription;
   secondsLeft: number;
   fullSeconds: number;
+  updatingData: boolean;
 
   constructor(props) {
     super(props);
 
-    const minutesAtATime = 1;
+    const minutesAtATime = .1;
     const secondsLeft = minutesAtATime * 60;
     this.state = {
       widthOfTitle: 0,
       heightOfTitle: 0,
+      opacityOfTitle: 0,
       widthOfTime: 0,
       heightOfTime: 0,
-      progress: 0
+      opacityOfTime: 0,
+      progress: 0,
     };
 
     this.secondsLeft = secondsLeft;
@@ -73,26 +92,36 @@ class TodoCircle extends Component {
     const started =
       this.props.pomodoroState.currentState === '' &&
       nextProps.pomodoroState.currentState === 'started';
-    const stopped =
+    const stopped = (
       this.props.pomodoroState.currentState === 'started' &&
-      nextProps.pomodoroState.currentState === 'stopped';
+      nextProps.pomodoroState.currentState === 'stopped'
+    ) || (
+      this.props.pomodoroState.currentState === 'completed' &&
+      nextProps.pomodoroState.currentState === 'got'
+    );
 
     if (nextProps.loaded) {
       if (started) {
         this.animateProgress(-1);
+        tickSound.play();
 
         this.timer = setInterval(
           () => {
             const nextSecondsLeft = this.animateProgress(-1);
+            tickSound.play();
             if (nextSecondsLeft <= 0) {
+              setTimeout( () => ringSound.play(), 1000);
               clearInterval(this.timer);
+              this.props.completePomodoro();
             }
           },
           1000
         );
       }
       if (stopped) {
-        this.animateProgress(this.fullSeconds - this.secondsLeft);
+        this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 400);
+        repeatPlaying(stopSound, 4);
+
         clearInterval(this.timer);
         this.props.clearPomodoro();
       }
@@ -119,15 +148,15 @@ class TodoCircle extends Component {
     );
   }
 
-  animateProgress(offset: number) {
+  animateProgress(offset: number, easing: Easing = Easing.linear, duration: number = 1000) {
     const nextSecondsLeft = this.secondsLeft + offset;
     this.secondsLeft = nextSecondsLeft;
 
     const progress = (this.fullSeconds - nextSecondsLeft) / this.fullSeconds;
     Animated.timing(this.animatedValueForProgress, {
       toValue: progress,
-      easing: Easing.linear,
-      duration: 1000
+      easing,
+      duration
     }).start();
 
     return nextSecondsLeft;
@@ -139,9 +168,11 @@ class TodoCircle extends Component {
     const {
       widthOfTitle,
       heightOfTitle,
+      opacityOfTitle,
       widthOfTime,
       heightOfTime,
-      progress
+      opacityOfTime,
+      progress,
     } = this.state;
 
     return (
@@ -151,10 +182,8 @@ class TodoCircle extends Component {
           {
             width: height,
             height: width,
-            transform: [
-              {translateY: (height - width)},
-            ]
-          }
+            transform: [{ translateY: (height - width) }]
+          },
         ]}>
         <CanvasView
           angle={360 * progress}
@@ -171,13 +200,14 @@ class TodoCircle extends Component {
           style={[
             timeTextStyle,
             rotate,
-            { left: (height-widthOfTitle)/2, bottom: (width-heightOfTitle)/2 }
+            { left: (height-widthOfTitle)/2, bottom: (width-heightOfTitle)/2, opacity: opacityOfTitle }
           ]}
           onLayout={event => {
             const layout = event.nativeEvent.layout;
             this.setState({
               widthOfTitle: layout.width,
-              heightOfTitle: layout.height
+              heightOfTitle: layout.height,
+              opacityOfTitle: 1
             });
           }}
         >
@@ -188,13 +218,14 @@ class TodoCircle extends Component {
           style={[
             titleTextStyle,
             rotate,
-            { left: (height-widthOfTime)/2 - 60, bottom: (width-heightOfTime)/2 }
+            { left: (height-widthOfTime)/2 - 60, bottom: (width-heightOfTime)/2, opacity: opacityOfTime }
           ]}
           onLayout={event => {
             const layout = event.nativeEvent.layout;
             this.setState({
               widthOfTime: layout.width,
-              heightOfTime: layout.height
+              heightOfTime: layout.height,
+              opacityOfTime: 1
             });
           }}
         >
@@ -239,6 +270,7 @@ const mapStateToProps = ({ pomodoroState }, { todo }) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   clearPomodoro,
+  completePomodoro
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoCircle);

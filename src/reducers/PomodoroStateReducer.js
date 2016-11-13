@@ -4,7 +4,9 @@ import {
   START_POMODORO,
   STOP_POMODORO,
   PREPARE_POMODORO,
-  CLEAR_POMODORO
+  CLEAR_POMODORO,
+  COMPLETE_POMODORO,
+  GET_POMODORO
 } from '../actions/ActionType';
 import { Map } from 'immutable';
 
@@ -24,8 +26,18 @@ export default (state: State = initialState, action: Object) => {
     case STOP_POMODORO:
       return state.set('nextState', 'start').set('currentState', 'stopped');
 
+    case COMPLETE_POMODORO:
+      return state.set('nextState', 'get').set('currentState', 'completed');
+
+    case GET_POMODORO:
+     return state.set('nextState', 'start').set('currentState', 'got');
+
     case CLEAR_POMODORO:
-      return initialState;
+      return initialState.set(
+        'nextState', initialState.get('nextState')
+      ).set(
+        'currentState', initialState.get('currentState')
+      );
 
     case PREPARE_POMODORO:
       return initialState.set('currentPage', action.payload);

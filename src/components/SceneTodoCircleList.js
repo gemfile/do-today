@@ -20,12 +20,13 @@ class SceneTodoList extends Component {
     isModifying: boolean,
     pomodoroState: {currentState: 'started' | 'stopped'},
   };
+  isDataUpdating: boolean;
 
   state = {
     width: 0,
     heightOfContent: 0,
     scrollEnabled: true,
-    showModal: false
+    showModal: false,
   };
 
   componentDidMount() {
@@ -38,6 +39,8 @@ class SceneTodoList extends Component {
     if (nextPomodoroState === 'started') {
       this.setState({ scrollEnabled: false });
     }
+
+    this.isDataUpdating = this.props.todos !== nextProps.todos;
   }
 
   onPage(currentPage) {
@@ -62,6 +65,12 @@ class SceneTodoList extends Component {
       modalContainerStyle,
     } = styles;
 
+    const {
+      width,
+      heightOfContent,
+      scrollEnabled,
+    } = this.state;
+
     return (
       <View style={wholeContainerStyle}>
         <View
@@ -77,12 +86,12 @@ class SceneTodoList extends Component {
           }}
           renderPages={this.renderPages.bind(this)}
           onPage={this.onPage.bind(this)}
-          width={this.state.width}
-          heightOfPage={this.state.heightOfContent}
-          scrollEnabled={this.state.scrollEnabled}
+          width={width}
+          heightOfPage={heightOfContent}
+          scrollEnabled={scrollEnabled}
         />
 
-        <View style={[buttonContainerStyle, {width: this.state.width}]}>
+        <View style={[ buttonContainerStyle, {width} ]}>
           <PomodoroButtonRemove />
           <PomodoroButtonPlay />
           <PomodoroButtonAdd />

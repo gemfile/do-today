@@ -15,7 +15,7 @@ type Props = {
 
 type State = {
   currentPage: number,
-  pageCount: number
+  pageCount: number,
 };
 
 class VerticalPager extends Component {
@@ -25,7 +25,7 @@ class VerticalPager extends Component {
 
   state = {
     currentPage: 0,
-    pageCount: 0
+    pageCount: 0,
   };
 
   componentDidMount() {
@@ -82,12 +82,17 @@ class VerticalPager extends Component {
       paginationContainerStyle
     } = styles;
 
+    const {
+      pageCount,
+      currentPage,
+    } = this.state;
+
     const { onContentHeight, width, heightOfPage } = this.props;
 
     const renderPagination = [];
-    for(var i = 0; i < this.state.pageCount; i++) {
+    for(var i = 0; i < pageCount; i++) {
       renderPagination.push(
-        <View key={i} style={(this.state.currentPage === i) ? activeDotStyle : dotStyle} />
+        <View key={i} style={(currentPage === i) ? activeDotStyle : dotStyle} />
       );
     }
 
@@ -110,7 +115,7 @@ class VerticalPager extends Component {
             {
               width: heightOfPage,
               height: width,
-              transform: [{ rotate: '90deg' }]
+              transform: [{ rotate: '90deg' }],
             }
           ]}
           onScroll={

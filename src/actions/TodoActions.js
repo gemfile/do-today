@@ -12,6 +12,8 @@ import {
   STOP_POMODORO,
   PREPARE_POMODORO,
   CLEAR_POMODORO,
+  COMPLETE_POMODORO,
+  GET_POMODORO,
   SET_VIAIBLE_OF_CONFIRM_ADDING
 } from './ActionType';
 
@@ -128,7 +130,15 @@ export const stopPomodoro = () => {
 
 export const clearPomodoro = () => ({
   type: CLEAR_POMODORO,
-})
+});
+
+export const completePomodoro = () => ({
+  type: COMPLETE_POMODORO,
+});
+
+export const getPomodoro = () => ({
+  type: GET_POMODORO,
+});
 
 export const preparePomodoro = (currentPage: number) => ({
   type: PREPARE_POMODORO,

@@ -4,42 +4,48 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { startPomodoro, stopPomodoro } from 'actions';
+import { startPomodoro, stopPomodoro, getPomodoro } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import { Color, ImageView, Style } from './common';
 import PlayImage from './img/play.png';
+import CompleteImage from './img/tomato.png';
 
 const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
 
 class PomodoroButtonPlay extends Component {
   props: {
-    pomodoroState: {nextState: 'start' | 'stop'},
+    pomodoroState: {nextState: 'start' | 'stop' | 'get'},
     startPomodoro: () => Object,
-    stopPomodoro: () => Object
+    stopPomodoro: () => Object,
+    getPomodoro: () => Object,
   }
 
   onPress() {
-    const { pomodoroState, startPomodoro, stopPomodoro } = this.props;
+    const { pomodoroState, startPomodoro, stopPomodoro, getPomodoro } = this.props;
 
     switch (pomodoroState.nextState) {
       case 'start':
-      startPomodoro();
-      break;
+      return startPomodoro();
 
       case 'stop':
-      stopPomodoro();
-      break;
+      return stopPomodoro();
+
+      case 'get':
+      return getPomodoro();
     }
   }
 
   renderIcon() {
-    const { playImageStyle, stopImageStyle } = styles;
+    const { playImageStyle, stopImageStyle, getImageStyle } = styles;
     switch (this.props.pomodoroState.nextState) {
       case 'start':
       return <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />
 
       case 'stop':
       return <View style={stopImageStyle} />
+
+      case 'get':
+      return <ImageView imageSource={CompleteImage} imageStyle={getImageStyle} />
     }
   }
 
@@ -71,6 +77,10 @@ const styles = {
     backgroundColor: Color.White,
     width: 16,
     height: 16
+  },
+  getImageStyle: {
+    tintColor: Color.White,
+    marginBottom: 2
   }
 };
 
@@ -81,6 +91,7 @@ const mapStateToProps = ({ pomodoroState }) => {
 const mapDispatchToProps = dispatch => bindActionCreators({
   startPomodoro,
   stopPomodoro,
+  getPomodoro,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PomodoroButtonPlay);
