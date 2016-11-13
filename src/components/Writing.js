@@ -60,30 +60,27 @@ class Writing extends Component {
   }
 
   renderButton() {
-    const { isModifying, typingState } = this.props;
-    const { text, isFocused } = typingState;
+    const { typingState } = this.props;
+    const { text } = typingState;
     const isValueEmpty = text === '';
     const ColoredButtonAddSelected =
       isValueEmpty ? ColoredButtonAddDiabled : ColoredButtonAdd;
 
-    if ( (isFocused || !isValueEmpty) && !isModifying ) {
-
-      return (
-        <View style={styles.lowerContainerStyle}>
-          <View style={styles.buttonContainerStyle}>
-            <ColoredButtonCancel
-              onPress={this.onEndEditing.bind(this)}
-            />
-          </View>
-          <View style={styles.buttonContainerStyle}>
-            <ColoredButtonAddSelected
-              enabled={!isValueEmpty}
-              onPress={this.onSubmitEditing.bind(this)}
-            />
-          </View>
+    return (
+      <View style={styles.lowerContainerStyle}>
+        <View style={styles.buttonContainerStyle}>
+          <ColoredButtonCancel
+            onPress={this.onEndEditing.bind(this)}
+          />
         </View>
-      );
-    }
+        <View style={styles.buttonContainerStyle}>
+          <ColoredButtonAddSelected
+            enabled={!isValueEmpty}
+            onPress={this.onSubmitEditing.bind(this)}
+          />
+        </View>
+      </View>
+    );
   }
 
   render() {
@@ -111,7 +108,8 @@ class Writing extends Component {
                 onSubmitEditing={this.onSubmitEditing.bind(this)}
                 value={text}
                 editable={isFocused}
-                ref={(component) => { this.input = component; }}
+                ref={component => {this.input = component}}
+                autoFocus
               />
             </View>
           </View>

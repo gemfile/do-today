@@ -8,6 +8,7 @@ class Input extends Component {
     value: string,
     placeholder: string,
     secureTextEntry?: boolean,
+    autoFocus: Boolean,
     onChangeText: (text: string) => void,
     onSubmitEditing: () => void,
     onEndEditing: () => void,
@@ -26,6 +27,7 @@ class Input extends Component {
       value,
       placeholder,
       secureTextEntry,
+      autoFocus,
       onChangeText,
       onEndEditing,
       onSubmitEditing,
@@ -45,6 +47,7 @@ class Input extends Component {
           onEndEditing={onEndEditing}
           onSubmitEditing={onSubmitEditing}
           ref={(component) => { this.textInput = component; }}
+          autoFocus={autoFocus}
         />
       </View>
     );

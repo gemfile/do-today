@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Modal } from 'react-native';
+import { View, Modal, Keyboard } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setVislbleOfConfirmAdding } from 'actions';
@@ -12,8 +12,20 @@ class ConfirmAdding extends Component {
     visible: boolean,
     setVislbleOfConfirmAdding: (visible: boolean) => Object,
   }
+  writing: Writing;
+  keyboardDidHide: Object;
 
-  render () {
+  componentDidMount() {
+    this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', () => {
+      this.props.setVislbleOfConfirmAdding(false);
+    });
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidHide.remove();
+  }
+
+  render() {
     const { containerStyle, cardSectionStyle } = styles;
 
     return (
@@ -22,14 +34,15 @@ class ConfirmAdding extends Component {
         visible={this.props.visible}
         transparent
         animationType='fade'
-        onRequestClose={() => {}}
+        onRequestClose={() => this.props.setVislbleOfConfirmAdding(false)}
       >
         <View
           style={containerStyle}
         >
           <Writing
-            onAccept={ ()=>this.props.setVislbleOfConfirmAdding(false) }
-            onDecline={ ()=>this.props.setVislbleOfConfirmAdding(false) }
+            ref={component => {this.writing = component}}
+            onAccept={() => this.props.setVislbleOfConfirmAdding(false)}
+            onDecline={() => this.props.setVislbleOfConfirmAdding(false)}
           />
         </View>
       </Modal>
