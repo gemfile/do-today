@@ -99,7 +99,7 @@ public class CanvasView extends FrameLayout {
         float radian = (-90 - angle) * (float)Math.PI / 180;
         float headX = (float)Math.cos(radian) * radius + width/2;
         float headY = (float)Math.sin(radian) * radius + height/2;
-        path.addCircle(headX, headY, 20, Path.Direction.CW);
+        path.addCircle(headX, headY, 16, Path.Direction.CW);
         canvas.drawPath(path, paint);
 
     }
@@ -132,5 +132,3 @@ public class CanvasView extends FrameLayout {
         headColor = Color.parseColor(color);
     }
 }
-
-

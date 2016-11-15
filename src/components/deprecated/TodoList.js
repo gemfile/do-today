@@ -18,7 +18,7 @@ class TodoList extends Component {
     })
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchTodos();
   }
 

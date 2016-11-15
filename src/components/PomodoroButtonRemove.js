@@ -36,16 +36,13 @@ const styles = {
   },
   deleteImageStyle: {
     tintColor: Color.White,
-    width: 24,
-    height: 24
+    width: 28,
+    height: 28
   },
 };
 
-const mapStateToProps = ({ todosState, pomodoroState }) => {
-  const currentTodo = todosState.get('todos').find( todo =>
-    todo.index === pomodoroState.get('currentPage')
-  );
-  return { currentTodo };
+const mapStateToProps = ({ todosState }) => {
+  return { currentTodo: todosState.get('currentTodo') };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({

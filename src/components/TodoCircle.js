@@ -13,7 +13,7 @@ import { secondsToMinutes } from './util/TimeFormat';
 
 const WIDTH_OF_CIRCLE = 300;
 const HEIGHT_OF_CIRCLE = 300;
-const WIDTH_OF_STROKE = 12;
+const WIDTH_OF_STROKE = 10;
 const tickSound = new Sound('pomodoro_tick.mp3', Sound.MAIN_BUNDLE);
 const stopSound = new Sound('pomodoro_turn.mp3', Sound.MAIN_BUNDLE);
 const ringSound = new Sound('pomodoro_ring.mp3', Sound.MAIN_BUNDLE);
@@ -40,6 +40,7 @@ type Props = {
   clearPomodoro: () => Object,
   completePomodoro: () => Object,
   loaded: boolean,
+  completed: boolean,
 };
 
 type State = {
@@ -65,7 +66,7 @@ class TodoCircle extends Component {
   constructor(props) {
     super(props);
 
-    const minutesAtATime = .1;
+    const minutesAtATime = 1;
     const secondsLeft = minutesAtATime * 60;
     this.state = {
       widthOfTitle: 0,
@@ -89,15 +90,18 @@ class TodoCircle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { pomodoroState } = this.props;
+    const { pomodoroState: nextPomodoroState } = nextProps;
+
     const started =
-      this.props.pomodoroState.currentState === '' &&
-      nextProps.pomodoroState.currentState === 'started';
+      pomodoroState.currentState === '' &&
+      nextPomodoroState.currentState === 'started';
     const stopped = (
-      this.props.pomodoroState.currentState === 'started' &&
-      nextProps.pomodoroState.currentState === 'stopped'
+      pomodoroState.currentState === 'started' &&
+      nextPomodoroState.currentState === 'stopped'
     ) || (
-      this.props.pomodoroState.currentState === 'completed' &&
-      nextProps.pomodoroState.currentState === 'got'
+      pomodoroState.currentState === 'completed' &&
+      nextPomodoroState.currentState === 'got'
     );
 
     if (nextProps.loaded) {
@@ -110,9 +114,11 @@ class TodoCircle extends Component {
             const nextSecondsLeft = this.animateProgress(-1);
             tickSound.play();
             if (nextSecondsLeft <= 0) {
-              setTimeout( () => ringSound.play(), 1000);
+              setTimeout( () => {
+                ringSound.play()
+                this.props.completePomodoro();
+              }, 1000);
               clearInterval(this.timer);
-              this.props.completePomodoro();
             }
           },
           1000
@@ -174,6 +180,8 @@ class TodoCircle extends Component {
       opacityOfTime,
       progress,
     } = this.state;
+    const { completed } = this.props;
+    const timeTextColor = completed ? Color.Red : Color.White;
 
     return (
       <View
@@ -200,7 +208,12 @@ class TodoCircle extends Component {
           style={[
             timeTextStyle,
             rotate,
-            { left: (height-widthOfTitle)/2, bottom: (width-heightOfTitle)/2, opacity: opacityOfTitle }
+            {
+              left: (height-widthOfTitle)/2,
+              bottom: (width-heightOfTitle)/2,
+              opacity: opacityOfTitle,
+              color: timeTextColor
+            }
           ]}
           onLayout={event => {
             const layout = event.nativeEvent.layout;
@@ -245,13 +258,12 @@ const styles = {
   },
   titleTextStyle: {
     position: 'absolute',
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: 'rgba(0, 0, 0, 0.2)',
     fontSize: 20,
     fontFamily: 'sans-serif-light'
   },
   timeTextStyle: {
     position: 'absolute',
-    color: 'white',
     fontSize: 48,
     fontFamily: 'sans-serif-light'
   },
@@ -264,7 +276,8 @@ const mapStateToProps = ({ pomodoroState }, { todo }) => {
   const nextPomodoroState = pomodoroState.toObject();
   return {
     pomodoroState: nextPomodoroState,
-    loaded: nextPomodoroState.currentPage === todo.index
+    loaded: nextPomodoroState.currentPage === todo.index,
+    completed: nextPomodoroState.currentState === 'completed',
   };
 };
 

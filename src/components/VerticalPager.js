@@ -8,35 +8,39 @@ type Props = {
   width: number,
   heightOfPage: number,
   scrollEnabled: boolean,
+  currentPage: number,
   renderPages: () => Array<React.Element<*>>,
   onPage: (currentPage: number) => void,
   onContentHeight: (event: Object) => void,
 };
 
 type State = {
-  currentPage: number,
   pageCount: number,
+  currentPage: number,
 };
 
 class VerticalPager extends Component {
   props: Props;
   state: State;
   scrollView: ScrollView;
+  needToScroll: boolean;
+  scrollOnce: boolean;
 
-  state = {
-    currentPage: 0,
-    pageCount: 0,
-  };
+  constructor(props: Props) {
+    super(props);
 
-  componentDidMount() {
-    this.props.onPage(this.state.currentPage);
+    this.state = {
+      pageCount: 0,
+      currentPage: 0,
+    };
+    this.scrollOnce = true;
   }
 
   onScroll(offset: number, heightOfPage: number) {
     const currentPage = Math.round(offset / heightOfPage);
     if (this.state.currentPage !== currentPage) {
-      this.setState({ currentPage: currentPage });
       this.props.onPage(currentPage);
+      this.setState({ currentPage });
     }
   }
 
@@ -47,29 +51,37 @@ class VerticalPager extends Component {
   }
 
   // shouldComponentUpdate(nextProps: Props, nextState: State) {
-  //   const { currentPage, pageCount } = this.state;
-  //   const {
-  //     currentPage: nextCurrentPage,
-  //     pageCount: nextPageCount,
-  //    } = nextState;
-  //
-  //   const { width, heightOfPage } = this.props;
-  //   const {
-  //     width: nextWidth,
-  //     heightOfPage: nextHeightOfPage,
-  //   } = nextProps;
-  //
-  //   return (
-      // pageCount !== nextPageCount ||
-      // currentPage !== nextCurrentPage ||
-      // width !== nextWidth ||
-      // heightOfPage !== nextHeightOfPage
-  //   );
+    // const { currentPage, pageCount } = this.state;
+    // const {
+    //   currentPage: nextCurrentPage,
+    //   pageCount: nextPageCount,
+    //  } = nextState;
+    //
+    // const { width, heightOfPage } = this.props;
+    // const {
+    //   width: nextWidth,
+    //   heightOfPage: nextHeightOfPage,
+    // } = nextProps;
+    //
+    // return (
+    //   pageCount !== nextPageCount ||
+    //   currentPage !== nextCurrentPage ||
+    //   width !== nextWidth ||
+    //   heightOfPage !== nextHeightOfPage
+    // );
   // }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (prevState.pageCount !== this.state.pageCount) {
-      this.scrollView.scrollTo({ x: 0 });
+  componentDidUpdate(prevProps: Props) {
+    if (!this.needToScroll && prevProps.currentPage !== this.props.currentPage) {
+      this.needToScroll = true;
+    }
+
+    if (this.scrollOnce && this.needToScroll && this.state.pageCount) {
+      this.scrollView.scrollTo({
+        x: this.props.currentPage * this.props.heightOfPage,
+        animated: true
+      });
+      this.scrollOnce = false;
     }
   }
 
@@ -82,10 +94,7 @@ class VerticalPager extends Component {
       paginationContainerStyle
     } = styles;
 
-    const {
-      pageCount,
-      currentPage,
-    } = this.state;
+    const { pageCount, currentPage } = this.state;
 
     const { onContentHeight, width, heightOfPage } = this.props;
 
@@ -164,7 +173,7 @@ const styles = {
     marginBottom: 3
   },
   activeDotStyle: {
-    backgroundColor: Color.Green,
+    backgroundColor: Color.White,
     width: 8,
     height: 8,
     borderRadius: 4,

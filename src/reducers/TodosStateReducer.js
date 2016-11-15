@@ -1,6 +1,10 @@
 /* @flow */
 import { Map } from 'immutable';
-import { FETCH_TODOS, LOADING_TODO } from '../actions/ActionType';
+import {
+  FETCH_TODOS,
+  LOADING_TODO,
+  PREPARE_POMODORO
+} from '../actions/ActionType';
 import LocalStorage from '../util/LocalStorage';
 
 const localStorage = new LocalStorage();
@@ -9,8 +13,24 @@ const TODOS = 'todos';
 type State = Map<string, any>;
 const initialState = Map({
   todos: [],
-  isLoading: false
+  isLoading: false,
+  currentPage: 0,
+  currentTodo: null
 });
+
+const updateCurrentTodo = (state) => {
+  const todos = state.get('todos');
+  const currentPage = state.get('currentPage')
+
+  if (todos.length !== 0 && currentPage !== -1) {
+    return state.set(
+      'currentTodo',
+      todos.find(todo => todo.index === currentPage)
+    );
+  }
+
+  return state;
+};
 
 export default (state: State = initialState, action: Object) => {
   switch (action.type) {
@@ -31,11 +51,17 @@ export default (state: State = initialState, action: Object) => {
       }
 
       localStorage.setItem(`${keyOfStorage}/${TODOS}`, todos);
-      return state.set('todos', todos);
+      const nextState = state.set('todos', todos);
+      return updateCurrentTodo(nextState);
     }
 
     case LOADING_TODO:
       return state.set('isLoading', action.payload);
+
+    case PREPARE_POMODORO: {
+      const nextState = state.set('currentPage', action.payload);
+      return updateCurrentTodo(nextState);
+    }
 
     default:
       return state;

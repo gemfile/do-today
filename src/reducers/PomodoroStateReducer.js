@@ -6,9 +6,13 @@ import {
   PREPARE_POMODORO,
   CLEAR_POMODORO,
   COMPLETE_POMODORO,
-  GET_POMODORO
+  GET_POMODORO,
+  FETCH_POMODORO
 } from '../actions/ActionType';
 import { Map } from 'immutable';
+import LocalStorage from '../util/LocalStorage';
+
+const localStorage = new LocalStorage();
 
 type State = Map<string, any>;
 
@@ -16,28 +20,40 @@ const initialState = Map({
   currentPage: 0,
   currentState: '',
   nextState: 'start',
+  startTime: -1,
 });
 
 export default (state: State = initialState, action: Object) => {
   switch (action.type) {
-    case START_POMODORO:
-      return state.set('nextState', 'stop').set('currentState', 'started');
+    case FETCH_POMODORO: {
+      const keyOfStorage = action.payload.rootRefKey;
+      const pomodoro = action.payload.value.pomodoro;
+      if (pomodoro) {
+        localStorage.setItem(`${keyOfStorage}/pomodoro`, pomodoro);
+
+        const { nextState, currentState, startTime, currentPage } = pomodoro;
+        return state
+        .set('nextState', nextState)
+        .set('currentState', currentState)
+        .set('startTime', startTime)
+        .set('currentPage', currentPage);
+      }
+      return state;
+    }
 
     case STOP_POMODORO:
-      return state.set('nextState', 'start').set('currentState', 'stopped');
-
+    case START_POMODORO:
     case COMPLETE_POMODORO:
-      return state.set('nextState', 'get').set('currentState', 'completed');
-
     case GET_POMODORO:
-     return state.set('nextState', 'start').set('currentState', 'got');
+      const { nextState, currentState } = action.payload;
+      return state
+        .set('nextState', nextState)
+        .set('currentState', currentState);
 
     case CLEAR_POMODORO:
-      return initialState.set(
-        'nextState', initialState.get('nextState')
-      ).set(
-        'currentState', initialState.get('currentState')
-      );
+      return initialState
+        .set('nextState', initialState.get('nextState'))
+        .set('currentState', initialState.get('currentState'));
 
     case PREPARE_POMODORO:
       return initialState.set('currentPage', action.payload);

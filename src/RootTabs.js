@@ -81,13 +81,13 @@ const styles = {
   wholeContainerStyle: {
     zIndex: zIndex.RootTabs,
     flexDirection: 'row',
-    backgroundColor: '#f8f8f8',
+    backgroundColor: Color.Background,
     height: 60,
     ...Style.shadowStyle
   },
   selectedLineStyle: {
     height: 3,
-    backgroundColor: Color.Red,
+    backgroundColor: Color.White,
     position: 'absolute',
     bottom: 0
   },

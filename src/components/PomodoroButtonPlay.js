@@ -18,20 +18,27 @@ class PomodoroButtonPlay extends Component {
     startPomodoro: () => Object,
     stopPomodoro: () => Object,
     getPomodoro: () => Object,
+    currentTodo: Object
   }
 
   onPress() {
-    const { pomodoroState, startPomodoro, stopPomodoro, getPomodoro } = this.props;
+    const {
+      pomodoroState,
+      startPomodoro,
+      stopPomodoro,
+      getPomodoro,
+      currentTodo
+    } = this.props;
 
     switch (pomodoroState.nextState) {
       case 'start':
-      return startPomodoro();
+      return startPomodoro(currentTodo);
 
       case 'stop':
-      return stopPomodoro();
+      return stopPomodoro(currentTodo);
 
       case 'get':
-      return getPomodoro();
+      return getPomodoro(currentTodo);
     }
   }
 
@@ -84,8 +91,11 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ pomodoroState }) => {
-  return { pomodoroState: pomodoroState.toObject() };
+const mapStateToProps = ({ todosState, pomodoroState }) => {
+  return {
+    pomodoroState: pomodoroState.toObject(),
+    currentTodo: todosState.get('currentTodo')
+  };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({

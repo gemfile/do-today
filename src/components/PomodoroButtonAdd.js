@@ -37,8 +37,9 @@ const styles = {
   },
   writeImageStyle: {
     tintColor: Color.White,
-    width: 22,
-    height: 22
+    width: 26,
+    height: 26,
+    marginTop: 2,
   },
 };
 

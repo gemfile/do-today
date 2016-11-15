@@ -87,12 +87,12 @@ const styles = {
     '1': StatsImage
   },
   iconStyle: {
-    width: 24,
-    height: 24,
-    tintColor: Color.Clickable
+    width: 22,
+    height: 22,
+    tintColor: 'rgba(0,0,0,.2)',
   },
   highlightingStyle: {
-    tintColor: Color.Red
+    tintColor: Color.White
   }
 };
 

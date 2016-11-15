@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTodos, preparePomodoro } from 'actions';
+import { fetchTodos, fetchPomodoro, preparePomodoro } from 'actions';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
 import PomodoroButtonPlay from './PomodoroButtonPlay';
@@ -15,10 +15,11 @@ import ConfirmAdding from './ConfirmAdding';
 class SceneTodoList extends Component {
   props: {
     fetchTodos: () => () => void,
+    fetchPomodoro: () => () => void,
     preparePomodoro: () => Object,
     todos: Array<Object>,
     isModifying: boolean,
-    pomodoroState: {currentState: 'started' | 'stopped'},
+    pomodoroState: {currentState: 'started' | 'stopped', currentPage: number},
   };
   isDataUpdating: boolean;
 
@@ -31,6 +32,7 @@ class SceneTodoList extends Component {
 
   componentDidMount() {
     this.props.fetchTodos();
+    this.props.fetchPomodoro();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,7 +46,7 @@ class SceneTodoList extends Component {
   }
 
   onPage(currentPage) {
-    this.props.preparePomodoro(currentPage);
+    this.props.preparePomodoro(currentPage, this.props.pomodoroState);
   }
 
   renderPages() {
@@ -71,6 +73,8 @@ class SceneTodoList extends Component {
       scrollEnabled,
     } = this.state;
 
+    const { currentPage } = this.props.pomodoroState;
+
     return (
       <View style={wholeContainerStyle}>
         <View
@@ -89,6 +93,7 @@ class SceneTodoList extends Component {
           width={width}
           heightOfPage={heightOfContent}
           scrollEnabled={scrollEnabled}
+          currentPage={currentPage}
         />
 
         <View style={[ buttonContainerStyle, {width} ]}>
@@ -135,6 +140,7 @@ const mapStateToProps = ({ todosState, pomodoroState }) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,
+  fetchPomodoro,
   preparePomodoro
 }, dispatch);
 

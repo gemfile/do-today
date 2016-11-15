@@ -8,6 +8,8 @@ import {
   FETCH_TODOS,
   TYPING,
   FOCUS,
+  LOADING_POMODORO,
+  FETCH_POMODORO,
   START_POMODORO,
   STOP_POMODORO,
   PREPARE_POMODORO,
@@ -64,8 +66,8 @@ export const fetchTodos = () => (
       dispatchFetchingOfTodos(dispatch, {[TODOS]: data}, true);
     })
     .then( () => {
-      rootRef.on('value', snapshot => {
-        dispatchFetchingOfTodos(dispatch, snapshot.val(), false)
+      rootRef.child(`${TODOS}`).on('value', snapshot => {
+        dispatchFetchingOfTodos(dispatch, {[TODOS]: snapshot.val()}, false);
       });
     });
   }
@@ -85,16 +87,18 @@ export const addTodo = (title: string) => () => {
 
 export const deleteTodo = (todo: Object) => () => {
   let updates = {};
-  updates[`/${TODOS}/${todo.id}`] = null;
-  updates[`/deletes/${todo.id}`] = { title: todo.title, count: todo.count };
+  const { id, title, count } = todo;
+  updates[`/${TODOS}/${id}`] = null;
+  updates[`/deletes/${id}`] = { title, count };
   rootRef.update(updates);
 }
 
 export const archiveTodos = (todos: Array<Object>) => () => {
   let updates = {};
   todos.forEach(todo => {
-    updates[`/${TODOS}/${todo.id}`] = null;
-    updates[`/archives/${todo.id}`] = { title: todo.title, count: todo.count };
+    const { id, title, count } = todo;
+    updates[`/${TODOS}/${id}`] = null;
+    updates[`/archives/${id}`] = { title, count };
   });
   rootRef.update(updates);
 };
@@ -102,8 +106,9 @@ export const archiveTodos = (todos: Array<Object>) => () => {
 export const deleteTodos = (todos: Array<Object>) => () => {
   let updates = {};
   todos.forEach(todo => {
-    updates[`/${TODOS}/${todo.id}`] = null;
-    updates[`/deletes/${todo.id}`] = { title: todo.title, count: todo.count };
+    const { id, title, count } = todo;
+    updates[`/${TODOS}/${id}`] = null;
+    updates[`/deletes/${id}`] = { title, count };
   });
   rootRef.update(updates);
 };
@@ -118,32 +123,95 @@ export const focus = (isFocused: boolean) => ({
   payload: isFocused
 });
 
-export const startPomodoro = () => {
-  notifyTickOfPomodoro();
-  return { type: START_POMODORO };
+export const fetchPomodoro = () => (
+  (dispatch: Dispatch) => {
+    localStorage.getItem(`${rootRefKey}/pomodoro`, (data) => {
+      dispatchFetchingOfPomodoro(dispatch, {pomodoro: data}, true);
+    })
+    .then( () => {
+      rootRef.child('pomodoro').on('value', snapshot => {
+        dispatchFetchingOfPomodoro(dispatch, {pomodoro: snapshot.val()}, false);
+      });
+    });
+  }
+);
+
+const dispatchFetchingOfPomodoro = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
+  dispatch({ type: LOADING_POMODORO, payload: isLocal });
+
+  if (value !== null) {
+    dispatch({ type: FETCH_POMODORO, payload: {rootRefKey, value} });
+  }
+};
+
+export const startPomodoro = (todo: Object) => {
+  const payload = {
+    nextState: 'stop',
+    currentState: 'started'
+  };
+
+  updatePomodoro(todo, payload, new Date().getTime());
+
+  // notifyTickOfPomodoro();
+  return { type: START_POMODORO, payload };
 }
 
-export const stopPomodoro = () => {
-  PushNotification.cancelAllLocalNotifications();
-  return { type: STOP_POMODORO }
+export const stopPomodoro = (todo: Object) => {
+  const payload = {
+    nextState: 'start',
+    currentState: 'stopped'
+  };
+
+  updatePomodoro(todo, payload);
+
+  // PushNotification.cancelAllLocalNotifications();
+  return { type: STOP_POMODORO, payload };
 };
 
 export const clearPomodoro = () => ({
   type: CLEAR_POMODORO,
 });
 
-export const completePomodoro = () => ({
-  type: COMPLETE_POMODORO,
-});
+export const completePomodoro = (todo: Object) => {
+  const payload = {
+    nextState: 'get',
+    currentState: 'completed'
+  };
+  updatePomodoro(todo, payload);
 
-export const getPomodoro = () => ({
-  type: GET_POMODORO,
-});
+  return { type: COMPLETE_POMODORO, payload };
+};
 
-export const preparePomodoro = (currentPage: number) => ({
-  type: PREPARE_POMODORO,
-  payload: currentPage
-});
+export const getPomodoro = (todo: Object) => {
+  const payload = {
+    nextState: 'start',
+    currentState: 'got'
+  };
+  updatePomodoro(todo, payload);
+
+  return { type: GET_POMODORO, payload };
+};
+
+const updatePomodoro = (todo, payload, startTime = -1) => {
+    let updates = {};
+    updates[`/pomodoro`] = {
+      startTime,
+      currentPage: todo.index,
+      ...payload
+    };
+    rootRef.update(updates);
+};
+
+export const preparePomodoro = (currentPage: number, pomodoroState: Object) => {
+  let updates = {};
+  updates['/pomodoro'] = {
+    ...pomodoroState,
+    currentPage,
+  };
+  rootRef.update(updates);
+
+  return { type: PREPARE_POMODORO, payload: currentPage };
+};
 
 export const setVislbleOfConfirmAdding = (visible: boolean) => ({
   type: SET_VIAIBLE_OF_CONFIRM_ADDING,
