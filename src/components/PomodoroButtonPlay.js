@@ -8,13 +8,12 @@ import { startPomodoro, stopPomodoro, getPomodoro } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import { Color, ImageView, Style } from './common';
 import PlayImage from './img/play.png';
-import CompleteImage from './img/tomato.png';
+import CompleteImage from './img/tomato2.png';
 
 const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
 
 class PomodoroButtonPlay extends Component {
   props: {
-    pomodoroState: {nextState: 'start' | 'stop' | 'get'},
     startPomodoro: () => Object,
     stopPomodoro: () => Object,
     getPomodoro: () => Object,
@@ -23,36 +22,40 @@ class PomodoroButtonPlay extends Component {
 
   onPress() {
     const {
-      pomodoroState,
       startPomodoro,
       stopPomodoro,
       getPomodoro,
       currentTodo
     } = this.props;
 
-    switch (pomodoroState.nextState) {
-      case 'start':
-      return startPomodoro(currentTodo);
+    if (currentTodo) {
+      switch (currentTodo.pomodoro.nextState) {
+        case 'start':
+        return startPomodoro(currentTodo);
 
-      case 'stop':
-      return stopPomodoro(currentTodo);
+        case 'stop':
+        return stopPomodoro(currentTodo);
 
-      case 'get':
-      return getPomodoro(currentTodo);
+        case 'get':
+        return getPomodoro(currentTodo);
+      }
     }
   }
 
   renderIcon() {
     const { playImageStyle, stopImageStyle, getImageStyle } = styles;
-    switch (this.props.pomodoroState.nextState) {
-      case 'start':
-      return <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />
+    const { currentTodo } = this.props;
+    if (currentTodo) {
+      switch (currentTodo.pomodoro.nextState) {
+        case 'start':
+        return <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />
 
-      case 'stop':
-      return <View style={stopImageStyle} />
+        case 'stop':
+        return <View style={stopImageStyle} />
 
-      case 'get':
-      return <ImageView imageSource={CompleteImage} imageStyle={getImageStyle} />
+        case 'get':
+        return <ImageView imageSource={CompleteImage} imageStyle={getImageStyle} />
+      }
     }
   }
 
@@ -87,13 +90,14 @@ const styles = {
   },
   getImageStyle: {
     tintColor: Color.White,
-    marginBottom: 2
+    marginBottom: 2,
+    width: 24,
+    height: 24
   }
 };
 
-const mapStateToProps = ({ todosState, pomodoroState }) => {
+const mapStateToProps = ({ todosState }) => {
   return {
-    pomodoroState: pomodoroState.toObject(),
     currentTodo: todosState.get('currentTodo')
   };
 };

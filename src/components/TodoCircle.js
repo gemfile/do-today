@@ -32,13 +32,8 @@ type Props = {
     width: number,
     height: number,
   },
-  pomodoroState: {
-    currentState: '' | 'started' | 'stopped',
-    currentPage: number,
-    nextState: '' | 'started' | 'stopped',
-  },
   clearPomodoro: () => Object,
-  completePomodoro: () => Object,
+  completePomodoro: (todo: Object) => Object,
   loaded: boolean,
   completed: boolean,
 };
@@ -66,7 +61,7 @@ class TodoCircle extends Component {
   constructor(props) {
     super(props);
 
-    const minutesAtATime = 1;
+    const minutesAtATime = .1;
     const secondsLeft = minutesAtATime * 60;
     this.state = {
       widthOfTitle: 0,
@@ -90,46 +85,50 @@ class TodoCircle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pomodoroState } = this.props;
-    const { pomodoroState: nextPomodoroState } = nextProps;
+    const { todo, completePomodoro, clearPomodoro, loaded } = this.props;
+    const { pomodoro: currentPomodoro } = todo;
+    const { pomodoro: nextPomodoro } = nextProps.todo;
 
-    const started =
-      pomodoroState.currentState === '' &&
-      nextPomodoroState.currentState === 'started';
-    const stopped = (
-      pomodoroState.currentState === 'started' &&
-      nextPomodoroState.currentState === 'stopped'
-    ) || (
-      pomodoroState.currentState === 'completed' &&
-      nextPomodoroState.currentState === 'got'
-    );
+    console.log('go', currentPomodoro, nextPomodoro);
+    if (currentPomodoro && nextPomodoro) {
+      const started =
+        (currentPomodoro.currentState === '' || currentPomodoro.currentState === 'stopped' || currentPomodoro.currentState === 'got') &&
+        nextPomodoro.currentState === 'started';
+      const stopped = (
+        currentPomodoro.currentState === 'started' &&
+        nextPomodoro.currentState === 'stopped'
+      ) || (
+        currentPomodoro.currentState === 'completed' &&
+        nextPomodoro.currentState === 'got'
+      );
 
-    if (nextProps.loaded) {
-      if (started) {
-        this.animateProgress(-1);
-        tickSound.play();
+      if (loaded) {
+        if (started) {
+          this.animateProgress(-1);
+          tickSound.play();
 
-        this.timer = setInterval(
-          () => {
-            const nextSecondsLeft = this.animateProgress(-1);
-            tickSound.play();
-            if (nextSecondsLeft <= 0) {
-              setTimeout( () => {
-                ringSound.play()
-                this.props.completePomodoro();
-              }, 1000);
-              clearInterval(this.timer);
-            }
-          },
-          1000
-        );
-      }
-      if (stopped) {
-        this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 400);
-        repeatPlaying(stopSound, 4);
+          this.timer = setInterval(
+            () => {
+              const nextSecondsLeft = this.animateProgress(-1);
+              tickSound.play();
+              if (nextSecondsLeft <= 0) {
+                setTimeout( () => {
+                  ringSound.play()
+                  completePomodoro(todo);
+                }, 1000);
+                clearInterval(this.timer);
+              }
+            },
+            1000
+          );
+        }
+        if (stopped) {
+          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 400);
+          repeatPlaying(stopSound, 4);
 
-        clearInterval(this.timer);
-        this.props.clearPomodoro();
+          clearInterval(this.timer);
+          clearPomodoro();
+        }
       }
     }
   }
@@ -180,7 +179,7 @@ class TodoCircle extends Component {
       opacityOfTime,
       progress,
     } = this.state;
-    const { completed } = this.props;
+    const completed = this.props.todo.pomodoro.currentState === 'completed';
     const timeTextColor = completed ? Color.Red : Color.White;
 
     return (
@@ -272,12 +271,10 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ pomodoroState }, { todo }) => {
+const mapStateToProps = ({ todosState, pomodoroState }, { todo }) => {
   const nextPomodoroState = pomodoroState.toObject();
   return {
-    pomodoroState: nextPomodoroState,
     loaded: nextPomodoroState.currentPage === todo.index,
-    completed: nextPomodoroState.currentState === 'completed',
   };
 };
 

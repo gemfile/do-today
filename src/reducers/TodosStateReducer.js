@@ -45,7 +45,8 @@ export default (state: State = initialState, action: Object) => {
             title: data.title,
             count: data.count,
             id: itemKey,
-            index: todos.length
+            index: todos.length,
+            pomodoro: data.pomodoro
           });
         }
       }

@@ -11,6 +11,14 @@ class LocalStorage {
     }
   }
 
+  async clear() {
+    try {
+      await AsyncStorage.clear();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async getItem(key: string, onGetItem: (item: any) => void) {
     try {
       const value = await AsyncStorage.getItem(key);

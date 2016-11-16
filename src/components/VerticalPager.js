@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react';
 import { ScrollView, View } from 'react-native'
-import { Color } from './common';
+import { Color, ImageView } from './common';
+import LockImage from './img/lock_close.png';
 
 type Props = {
   width: number,
@@ -90,18 +91,29 @@ class VerticalPager extends Component {
       containerStyle,
       scrollViewStyle,
       dotStyle,
+      dotContainerStyle,
       activeDotStyle,
-      paginationContainerStyle
+      paginationContainerStyle,
+      lockImageStyle,
     } = styles;
 
     const { pageCount, currentPage } = this.state;
-
-    const { onContentHeight, width, heightOfPage } = this.props;
+    const { onContentHeight, width, heightOfPage, scrollEnabled } = this.props;
 
     const renderPagination = [];
     for(var i = 0; i < pageCount; i++) {
+      const activated = i === currentPage;
       renderPagination.push(
-        <View key={i} style={(currentPage === i) ? activeDotStyle : dotStyle} />
+        <View key={i} style={dotContainerStyle}>
+          <View style={activated ? activeDotStyle : dotStyle} />
+          {
+            activated && !scrollEnabled ?
+              <View>
+                <ImageView imageSource={LockImage} imageStyle={lockImageStyle} />
+              </View> :
+            null
+          }
+        </View>
       );
     }
 
@@ -114,6 +126,7 @@ class VerticalPager extends Component {
         onLayout={onContentHeight}
       >
         <ScrollView
+          scrollEnabled={scrollEnabled}
           pagingEnabled
           automaticallyAdjustContentInsets={false}
           horizontal
@@ -143,7 +156,7 @@ class VerticalPager extends Component {
           {renderPagination}
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -158,9 +171,13 @@ const styles = {
     position: 'absolute',
     top: 0,
     right: 0,
-    width: 20,
+    width: 16,
     flexDirection: 'column',
     justifyContent: 'center',
+
+  },
+  dotContainerStyle: {
+    margin: 0
   },
   dotStyle: {
     backgroundColor: 'rgba(0,0,0,.2)',
@@ -181,7 +198,14 @@ const styles = {
     marginRight: 3,
     marginTop: 3,
     marginBottom: 3
-  }
+  },
+  lockImageStyle: {
+    width: 14,
+    height: 20,
+    marginBottom: 20,
+    marginRight: 2,
+    tintColor: Color.White,
+  },
 };
 
 export default VerticalPager;

@@ -38,9 +38,7 @@ class SceneTodoList extends Component {
   componentWillReceiveProps(nextProps) {
     const { pomodoroState: nextPomodoroState } = nextProps;
 
-    if (nextPomodoroState === 'started') {
-      this.setState({ scrollEnabled: false });
-    }
+    this.setState({ scrollEnabled: nextPomodoroState.currentState !== 'started' });
 
     this.isDataUpdating = this.props.todos !== nextProps.todos;
   }

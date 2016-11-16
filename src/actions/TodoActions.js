@@ -82,23 +82,30 @@ const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, isLocal: boo
 };
 
 export const addTodo = (title: string) => () => {
-  rootRef.child(`${TODOS}`).push({ title, count: 0 })
+  rootRef.child(`${TODOS}`).push({
+    title,
+    count: 0,
+    pomodoro: {
+      currentState: '',
+      nextState: 'start',
+    }
+  });
 };
 
 export const deleteTodo = (todo: Object) => () => {
   let updates = {};
-  const { id, title, count } = todo;
+  const { id, title, count, pomodoro } = todo;
   updates[`/${TODOS}/${id}`] = null;
-  updates[`/deletes/${id}`] = { title, count };
+  updates[`/deletes/${id}`] = { title, count, pomodoro };
   rootRef.update(updates);
 }
 
 export const archiveTodos = (todos: Array<Object>) => () => {
   let updates = {};
   todos.forEach(todo => {
-    const { id, title, count } = todo;
+    const { id, title, count, pomodoro } = todo;
     updates[`/${TODOS}/${id}`] = null;
-    updates[`/archives/${id}`] = { title, count };
+    updates[`/archives/${id}`] = { title, count, pomodoro };
   });
   rootRef.update(updates);
 };
@@ -106,9 +113,9 @@ export const archiveTodos = (todos: Array<Object>) => () => {
 export const deleteTodos = (todos: Array<Object>) => () => {
   let updates = {};
   todos.forEach(todo => {
-    const { id, title, count } = todo;
+    const { id, title, count, pomodoro } = todo;
     updates[`/${TODOS}/${id}`] = null;
-    updates[`/deletes/${id}`] = { title, count };
+    updates[`/deletes/${id}`] = { title, count, pomodoro };
   });
   rootRef.update(updates);
 };
@@ -193,12 +200,17 @@ export const getPomodoro = (todo: Object) => {
 };
 
 const updatePomodoro = (todo, payload, startTime = -1) => {
-    let updates = {};
-    updates[`/pomodoro`] = {
+    const { index, id } = todo;
+
+    const pomodoro = {
       startTime,
-      currentPage: todo.index,
+      currentPage: index,
       ...payload
     };
+
+    let updates = {};
+    updates[`/pomodoro`] = pomodoro
+    updates[`/${TODOS}/${id}/pomodoro`] = pomodoro;
     rootRef.update(updates);
 };
 
