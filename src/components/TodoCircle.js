@@ -89,10 +89,12 @@ class TodoCircle extends Component {
     const { pomodoro: currentPomodoro } = todo;
     const { pomodoro: nextPomodoro } = nextProps.todo;
 
-    console.log('go', currentPomodoro, nextPomodoro);
     if (currentPomodoro && nextPomodoro) {
-      const started =
-        (currentPomodoro.currentState === '' || currentPomodoro.currentState === 'stopped' || currentPomodoro.currentState === 'got') &&
+      const started = (
+          currentPomodoro.currentState === '' ||
+          currentPomodoro.currentState === 'stopped' ||
+          currentPomodoro.currentState === 'got'
+        ) &&
         nextPomodoro.currentState === 'started';
       const stopped = (
         currentPomodoro.currentState === 'started' &&
@@ -257,7 +259,7 @@ const styles = {
   },
   titleTextStyle: {
     position: 'absolute',
-    color: 'rgba(0, 0, 0, 0.2)',
+    color: Color.Deactivated,
     fontSize: 20,
     fontFamily: 'sans-serif-light'
   },

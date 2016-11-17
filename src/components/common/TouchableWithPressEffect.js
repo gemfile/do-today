@@ -58,7 +58,7 @@ class TouchableWithPressEffect extends Component {
       >
         <Animated.View
           style={{ ...this.props.style,
-                   transform: [{ scale: this.state.bounceValue }] }}
+            transform: [{ scale: this.state.bounceValue }] }}
         >
           { this.props.children }
         </Animated.View>
