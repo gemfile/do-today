@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, Text, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { clearPomodoro, completePomodoro } from 'actions';
+import { clearPomodoro, completePomodoro, tickPomodoro } from 'actions';
 import Sound from 'react-native-sound';
 import { Color } from './common';
 import CanvasView from './native/CanvasView';
@@ -34,6 +34,7 @@ type Props = {
   },
   clearPomodoro: () => Object,
   completePomodoro: (todo: Object) => Object,
+  tickPomodoro: (todo:Object, secondsLeft: number) => Object,
   loaded: boolean,
   completed: boolean,
 };
@@ -71,6 +72,7 @@ class TodoCircle extends Component {
       heightOfTime: 0,
       opacityOfTime: 0,
       progress: 0,
+      colorOfTitle: Color.White,
     };
 
     this.secondsLeft = secondsLeft;
@@ -85,7 +87,7 @@ class TodoCircle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { todo, completePomodoro, clearPomodoro, loaded } = this.props;
+    const { todo, completePomodoro, clearPomodoro, tickPomodoro, loaded } = this.props;
     const { pomodoro: currentPomodoro } = todo;
     const { pomodoro: nextPomodoro } = nextProps.todo;
 
@@ -93,29 +95,40 @@ class TodoCircle extends Component {
       const started = (
           currentPomodoro.currentState === '' ||
           currentPomodoro.currentState === 'stopped' ||
-          currentPomodoro.currentState === 'got'
+          currentPomodoro.currentState === 'get'
         ) &&
         nextPomodoro.currentState === 'started';
-      const stopped = (
+
+      const stopped =
         currentPomodoro.currentState === 'started' &&
-        nextPomodoro.currentState === 'stopped'
-      ) || (
+        nextPomodoro.currentState === 'stopped';
+
+      const completed =
+        currentPomodoro.currentState === 'started' &&
+        nextPomodoro.currentState === 'completed';
+
+      const get =
         currentPomodoro.currentState === 'completed' &&
-        nextPomodoro.currentState === 'got'
-      );
+        nextPomodoro.currentState === 'get';
+
+      if (nextPomodoro.currentState === 'completed') {
+        this.setState({ progress: 1 });
+      }
 
       if (loaded) {
         if (started) {
-          this.animateProgress(-1);
           tickSound.play();
+          this.animateProgress(-1);
 
           this.timer = setInterval(
             () => {
-              const nextSecondsLeft = this.animateProgress(-1);
               tickSound.play();
+              const nextSecondsLeft = this.animateProgress(-1);
+              tickPomodoro(todo, nextSecondsLeft);
+
               if (nextSecondsLeft <= 0) {
                 setTimeout( () => {
-                  ringSound.play()
+                  ringSound.play();
                   completePomodoro(todo);
                 }, 1000);
                 clearInterval(this.timer);
@@ -124,7 +137,7 @@ class TodoCircle extends Component {
             1000
           );
         }
-        if (stopped) {
+        if (stopped || get) {
           this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 400);
           repeatPlaying(stopSound, 4);
 
@@ -132,6 +145,7 @@ class TodoCircle extends Component {
           clearPomodoro();
         }
       }
+
     }
   }
 
@@ -171,7 +185,8 @@ class TodoCircle extends Component {
 
   render() {
     const { containerStyle, titleTextStyle, timeTextStyle, rotate } = styles;
-    const { width, height } = this.props.style;
+    const { style: styleProps } = this.props;
+    const { width, height } = styleProps;
     const {
       widthOfTitle,
       heightOfTitle,
@@ -181,8 +196,7 @@ class TodoCircle extends Component {
       opacityOfTime,
       progress,
     } = this.state;
-    const completed = this.props.todo.pomodoro.currentState === 'completed';
-    const timeTextColor = completed ? Color.Red : Color.White;
+    const timeTextColor = this.state.progress === 1 ? Color.Red : Color.White;
 
     return (
       <View
@@ -273,16 +287,16 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ todosState, pomodoroState }, { todo }) => {
-  const nextPomodoroState = pomodoroState.toObject();
+const mapStateToProps = ({ pomodoroState }, { todo }) => {
   return {
-    loaded: nextPomodoroState.currentPage === todo.index,
+    loaded: pomodoroState.toObject().currentPage === todo.index,
   };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   clearPomodoro,
-  completePomodoro
+  completePomodoro,
+  tickPomodoro
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoCircle);

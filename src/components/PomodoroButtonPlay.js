@@ -19,12 +19,14 @@ class PomodoroButtonPlay extends Component {
     getPomodoro: () => Object,
     currentTodo: Object
   }
+  aniCount: number;
 
   state = {
     bounceValue: new Animated.Value(1),
     renderingIcon: '',
     isAnimating: false,
   };
+  aniCount = 0;
 
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
@@ -35,7 +37,10 @@ class PomodoroButtonPlay extends Component {
         currentTodo.pomodoro.nextState !== nextTodo.pomodoro.nextState ||
         currentTodo.id !== nextTodo.id
       ) {
-        this.setState({ isAnimating: true });
+        if (this.aniCount === 0) {
+          this.setState({ isAnimating: true });
+        }
+        this.aniCount++;
         this.state.bounceValue.setValue(1);
         Animated.timing(this.state.bounceValue, {
           toValue: 0,
@@ -43,10 +48,16 @@ class PomodoroButtonPlay extends Component {
           duration: 100
         }).start( () => {
           this.setState({ renderingIcon: nextTodo.pomodoro.nextState });
-          Animated.spring(this.state.bounceValue, {
+          Animated.timing(this.state.bounceValue, {
             toValue: 1,
-            friction: 8,
-          }).start( () => this.setState({ isAnimating: false }) );
+            easing: Easing.elastic(1), // Springy
+            duration: 295
+          }).start( () => {
+            this.aniCount--;
+            if (this.aniCount === 0) {
+              this.setState({ isAnimating: false })
+            }
+          });
         });
       }
     }
@@ -107,7 +118,6 @@ class PomodoroButtonPlay extends Component {
         >
           { this.renderIcon(this.state.renderingIcon) }
         </Animated.View>
-
         <PlainFab
           style={[
             buttonStyle,

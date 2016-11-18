@@ -9,6 +9,7 @@ export const CLEAR_POMODORO = 'clear_pomodoro';
 export const PREPARE_POMODORO = 'prepare_pomodoro';
 export const COMPLETE_POMODORO = 'complete_pomodoro';
 export const GET_POMODORO = 'get_pomodoro';
+export const TICK_POMODORO = 'tick_pomodoro';
 
 export const TYPING = 'typing';
 export const FOCUS = 'focus';
