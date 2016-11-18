@@ -14,10 +14,11 @@ const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
 
 class PomodoroButtonPlay extends Component {
   props: {
-    startPomodoro: () => Object,
-    stopPomodoro: () => Object,
-    getPomodoro: () => Object,
-    currentTodo: Object
+    startPomodoro: (todo: Object, minutesAtATime: number) => Object,
+    stopPomodoro: (todo: Object) => Object,
+    getPomodoro: (todo: Object) => Object,
+    currentTodo: Object,
+    minutesAtATime: number
   }
   aniCount: number;
 
@@ -74,7 +75,7 @@ class PomodoroButtonPlay extends Component {
     if (currentTodo) {
       switch (currentTodo.pomodoro.nextState) {
         case 'start':
-        return startPomodoro(currentTodo);
+        return startPomodoro(currentTodo, this.props.minutesAtATime);
 
         case 'stop':
         return stopPomodoro(currentTodo);
@@ -171,9 +172,10 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ todosState }) => {
+const mapStateToProps = ({ todosState, pomodoroState }) => {
   return {
-    currentTodo: todosState.get('currentTodo')
+    currentTodo: todosState.get('currentTodo'),
+    minutesAtATime: pomodoroState.get('minutesAtATime')
   };
 };
 

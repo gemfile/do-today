@@ -37,6 +37,7 @@ type Props = {
   tickPomodoro: (todo:Object, secondsLeft: number) => Object,
   loaded: boolean,
   completed: boolean,
+  minutesAtATime: number
 };
 
 type State = {
@@ -62,8 +63,7 @@ class TodoCircle extends Component {
   constructor(props) {
     super(props);
 
-    const minutesAtATime = .1;
-    const secondsLeft = minutesAtATime * 60;
+    const secondsLeft = this.props.minutesAtATime * 60;
     this.state = {
       widthOfTitle: 0,
       heightOfTitle: 0,
@@ -288,8 +288,11 @@ const styles = {
 };
 
 const mapStateToProps = ({ pomodoroState }, { todo }) => {
+  const nextPomodoroState = pomodoroState.toObject();
+
   return {
-    loaded: pomodoroState.toObject().currentPage === todo.index,
+    loaded: nextPomodoroState.currentPage === todo.index,
+    minutesAtATime: nextPomodoroState.minutesAtATime
   };
 };
 

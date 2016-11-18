@@ -21,6 +21,7 @@ const initialState = Map({
   currentState: '',
   nextState: 'start',
   startTime: -1,
+  minutesAtATime: 1
 });
 
 export default (state: State = initialState, action: Object) => {
@@ -33,10 +34,10 @@ export default (state: State = initialState, action: Object) => {
 
         const { nextState, currentState, startTime, currentPage } = pomodoro;
         return state
-        .set('nextState', nextState)
-        .set('currentState', currentState)
-        .set('startTime', startTime)
-        .set('currentPage', currentPage);
+          .set('nextState', nextState)
+          .set('currentState', currentState)
+          .set('startTime', startTime)
+          .set('currentPage', currentPage);
       }
       return state;
     }

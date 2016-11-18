@@ -15,6 +15,7 @@ import com.todo_today.canvasview.CanvasViewPackage;
 import java.util.Arrays;
 import java.util.List;
 
+import ca.jaysoo.activityandroid.ActivityAndroidPackage;
 import io.fullstack.firestack.FirestackPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -29,7 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
-            new RNSoundPackage(),
+              new ActivityAndroidPackage(),
+              new RNSoundPackage(),
               new ReactNativePushNotificationPackage(),
               new ReactMaterialKitPackage(),
               new FirestackPackage(),
