@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { ScrollView, View } from 'react-native'
 import { Color, ImageView } from './common';
-import LockImage from './img/lock_close.png';
+import LockImage from './img/lock_circle_close.png';
 
 type Props = {
   width: number,
@@ -95,6 +95,7 @@ class VerticalPager extends Component {
       activeDotStyle,
       paginationContainerStyle,
       lockImageStyle,
+      lockImageContainerStyle,
     } = styles;
 
     const { pageCount, currentPage } = this.state;
@@ -105,13 +106,12 @@ class VerticalPager extends Component {
       const activated = i === currentPage;
       renderPagination.push(
         <View key={i} style={dotContainerStyle}>
-          <View style={activated ? activeDotStyle : dotStyle} />
           {
             activated && !scrollEnabled ?
-              <View>
-                <ImageView imageSource={LockImage} imageStyle={lockImageStyle} />
-              </View> :
-            null
+            <View style={lockImageContainerStyle}>
+              <ImageView imageSource={LockImage} imageStyle={lockImageStyle} />
+            </View>  :
+            <View style={activated ? activeDotStyle : dotStyle} />
           }
         </View>
       );
@@ -202,10 +202,14 @@ const styles = {
   lockImageStyle: {
     width: 14,
     height: 20,
-    marginBottom: 20,
     marginRight: 2,
     tintColor: Color.White,
   },
+  lockImageContainerStyle: {
+    height: 20,
+    marginTop: -6,
+    marginBottom: 0
+  }
 };
 
 export default VerticalPager;

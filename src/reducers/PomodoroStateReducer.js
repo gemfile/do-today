@@ -21,6 +21,7 @@ const initialState = Map({
   currentState: '',
   nextState: 'start',
   startTime: -1,
+  endTime: -1,
   minutesAtATime: 1
 });
 

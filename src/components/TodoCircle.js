@@ -122,14 +122,25 @@ class TodoCircle extends Component {
 
           this.timer = setInterval(
             () => {
-              tickSound.play();
-              const nextSecondsLeft = this.animateProgress(-1);
+              const currentTime = new Date().getTime();
+              const elapsedTime = (currentTime - nextPomodoro.startTime) / 1000;
+              const nextTargetTime = Math.max(this.fullSeconds - elapsedTime - 1, 0);
 
+              const { nextSecondsLeft, nextTimeOffset }
+                = this.animateProgress(nextTargetTime - this.secondsLeft);
+
+              if (nextSecondsLeft > 0) {
+                tickSound.play();
+              }
+              
               if (nextSecondsLeft <= 0) {
-                setTimeout( () => {
-                  ringSound.play();
-                  completePomodoro(todo);
-                }, 1000);
+                setTimeout(
+                  () => {
+                    ringSound.play();
+                    completePomodoro(todo);
+                  },
+                  nextTimeOffset
+                );
                 clearInterval(this.timer);
               }
             },
@@ -138,7 +149,7 @@ class TodoCircle extends Component {
         }
         if (stopped || get) {
           repeatPlaying(stopSound, 4);
-          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 400);
+          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 395);
 
           clearInterval(this.timer);
           clearPomodoro();
@@ -170,6 +181,9 @@ class TodoCircle extends Component {
 
   animateProgress(offset: number, easing: Easing = Easing.linear, duration: number = 1000) {
     const nextSecondsLeft = this.secondsLeft + offset;
+    if (nextSecondsLeft === 0) {
+      duration = Math.abs(offset) * 1000;
+    }
     this.secondsLeft = nextSecondsLeft;
 
     const progress = (this.fullSeconds - nextSecondsLeft) / this.fullSeconds;
@@ -179,7 +193,7 @@ class TodoCircle extends Component {
       duration
     }).start();
 
-    return nextSecondsLeft;
+    return {nextSecondsLeft, nextTimeOffset: duration};
   }
 
   render() {

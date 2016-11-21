@@ -7,11 +7,14 @@ import {
   FETCH_TODOS,
   LOADING_TODO,
   START_POMODORO,
+  COMPLETE_POMODORO,
+  STOP_POMODORO,
   PREPARE_POMODORO
 } from '../actions/ActionType';
 import LocalStorage from 'utils/LocalStorage';
-import { Color } from '../components/common';
+import { secondsToMinutes } from 'utils/TimeFormat';
 import TaskTickingModule from 'natives/TaskTickingModule';
+import { Color } from '../components/common';
 
 const localStorage = new LocalStorage();
 const TODOS = 'todos';
@@ -26,31 +29,31 @@ const initialState = Map({
 
 let isBackground = false;
 
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 const TaskTicking = async () => {
   let count = 0;
 
+  // secondsToMinutes
+  if (currentTodo) {
+    console.log(currentTodo.pomodoro.endTime - currentTodo.pomodoro.startTime);
+  }
+
   while (isBackground) {
     notifyTick(undefined, count.toString());
+    if (currentTodo) {
+      const elapsedTime = new Date().getTime() - currentTodo.pomodoro.startTime;
+      console.log(elapsedTime);
+    }
+
     count++;
     await timeout(1000);
+  }
+
+  function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 };
 
 AppRegistry.registerHeadlessTask('task_ticking', () => TaskTicking);
-
-const onActivityPause = () => {
-  isBackground = true;
-  TaskTickingModule.startService();
-};
-
-const onActivityResume = () => {
-  isBackground = false;
-  TaskTickingModule.stopService();
-};
 
 const notifyTick = (id:string = '0', message: string = '') => {
   PushNotification.localNotification({
@@ -76,19 +79,32 @@ const notifyTick = (id:string = '0', message: string = '') => {
   });
 };
 
+let currentTodo;
 const updateCurrentTodo = (state) => {
   const todos = state.get('todos');
   const currentPage = state.get('currentPage')
 
   if (todos.length !== 0 && currentPage !== -1) {
-    return state.set(
-      'currentTodo',
-      todos.find(todo => todo.index === currentPage)
-    );
+    currentTodo = todos.find(todo => todo.index === currentPage);
+    return state.set('currentTodo', currentTodo);
   }
 
   return state;
 };
+
+const onActivityPause = () => {
+  if (!isBackground) {
+    isBackground = true;
+    TaskTickingModule.startService();
+  }
+}
+
+const onActivityResume = () => {
+  if (isBackground) {
+    isBackground = false;
+    TaskTickingModule.stopService();
+  }
+}
 
 export default (state: State = initialState, action: Object) => {
   switch (action.type) {
@@ -110,21 +126,24 @@ export default (state: State = initialState, action: Object) => {
       }
 
       localStorage.setItem(`${keyOfStorage}/${TODOS}`, todos);
-      const nextState = state.set('todos', todos);
-      return updateCurrentTodo(nextState);
+      return updateCurrentTodo( state.set('todos', todos) );
     }
 
     case LOADING_TODO:
       return state.set('isLoading', action.payload);
 
-    case PREPARE_POMODORO: {
-      const nextState = state.set('currentPage', action.payload);
-      return updateCurrentTodo(nextState);
-    }
+    case PREPARE_POMODORO:
+      return updateCurrentTodo( state.set('currentPage', action.payload) );
 
     case START_POMODORO:
       ActivityAndroid.addEventListener('activityPause', onActivityPause);
       ActivityAndroid.addEventListener('activityResume', onActivityResume);
+      return state;
+
+    case COMPLETE_POMODORO:
+    case STOP_POMODORO:
+      ActivityAndroid.removeEventListener('activityPause', onActivityPause);
+      ActivityAndroid.removeEventListener('activityResume', onActivityResume);
       return state;
 
     default:

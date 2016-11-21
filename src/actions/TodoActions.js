@@ -154,12 +154,13 @@ const dispatchFetchingOfPomodoro = (dispatch: Dispatch, value: Object, isLocal: 
 };
 
 export const startPomodoro = (todo: Object, minutesAtATime: number) => {
-  makeSchedule( todo.index.toString(), 'complete!', new Date(Date.now() + (minutesAtATime * 60 * 1000)) );
+  const endTime = new Date(Date.now() + (minutesAtATime * 60 * 1000));
+  makeSchedule( todo.index.toString(), 'complete!', endTime );
   const payload = {
     nextState: 'stop',
     currentState: 'started'
   };
-  updatePomodoro(todo, payload, new Date().getTime());
+  updatePomodoro( todo, payload, new Date().getTime(), endTime.getTime() );
 
   return { type: START_POMODORO, payload };
 }
@@ -206,11 +207,12 @@ export const getPomodoro = (todo: Object) => {
   return { type: GET_POMODORO, payload };
 };
 
-const updatePomodoro = (todo, payload, startTime = -1) => {
+const updatePomodoro = (todo, payload, nextStartTime = -1, nextEndTime = -1) => {
   const { index, id } = todo;
 
   const pomodoro = {
-    startTime,
+    startTime: nextStartTime,
+    endTime: nextEndTime,
     currentPage: index,
     ...payload
   };

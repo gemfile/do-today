@@ -21,7 +21,6 @@ class SceneTodoList extends Component {
     isModifying: boolean,
     pomodoroState: {currentState: 'started' | 'stopped', currentPage: number},
   };
-  isDataUpdating: boolean;
 
   state = {
     width: 0,
@@ -39,8 +38,6 @@ class SceneTodoList extends Component {
     const { pomodoroState: nextPomodoroState } = nextProps;
 
     this.setState({ scrollEnabled: nextPomodoroState.currentState !== 'started' });
-
-    this.isDataUpdating = this.props.todos !== nextProps.todos;
   }
 
   onPage(currentPage) {

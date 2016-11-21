@@ -2,7 +2,7 @@
 
 const secondsToMinutes = (seconds: number) => {
   const minute = Math.floor(seconds / 60);
-  const second = seconds % 60;
+  const second = Math.floor(seconds % 60);
   return `${minute}:${twoDigit(second)}`;
 };
 
