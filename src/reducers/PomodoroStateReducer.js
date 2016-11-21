@@ -10,7 +10,7 @@ import {
   FETCH_POMODORO
 } from '../actions/ActionType';
 import { Map } from 'immutable';
-import LocalStorage from '../util/LocalStorage';
+import LocalStorage from 'utils/LocalStorage';
 
 const localStorage = new LocalStorage();
 
@@ -23,6 +23,13 @@ const initialState = Map({
   startTime: -1,
   minutesAtATime: 1
 });
+
+const updateState = (state, payload) => {
+  const { nextState, currentState } = payload;
+  return state
+    .set('nextState', nextState)
+    .set('currentState', currentState);
+}
 
 export default (state: State = initialState, action: Object) => {
   switch (action.type) {
@@ -43,13 +50,16 @@ export default (state: State = initialState, action: Object) => {
     }
 
     case STOP_POMODORO:
+      return updateState(state, action.payload);
+
     case START_POMODORO:
+      return updateState(state, action.payload);
+
     case COMPLETE_POMODORO:
+      return updateState(state, action.payload);
+
     case GET_POMODORO:
-      const { nextState, currentState } = action.payload;
-      return state
-        .set('nextState', nextState)
-        .set('currentState', currentState);
+      return updateState(state, action.payload);
 
     case CLEAR_POMODORO:
       return initialState

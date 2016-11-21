@@ -72,6 +72,9 @@
             <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
           </intent-filter>
         </service>
+
+        <service android:name=".taskticking.TaskTickingService" android:exported="false"/>
+
     </application>
 
 </manifest>

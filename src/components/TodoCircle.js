@@ -7,9 +7,9 @@ import { bindActionCreators } from 'redux';
 import { clearPomodoro, completePomodoro, tickPomodoro } from 'actions';
 import Sound from 'react-native-sound';
 import { Color } from './common';
-import CanvasView from './native/CanvasView';
-import AnimatedValueSubscription from './util/AnimatedValueSubscription';
-import { secondsToMinutes } from './util/TimeFormat';
+import CanvasView from 'natives/CanvasView';
+import AnimatedValueSubscription from 'utils/AnimatedValueSubscription';
+import { secondsToMinutes } from 'utils/TimeFormat';
 
 const WIDTH_OF_CIRCLE = 300;
 const HEIGHT_OF_CIRCLE = 300;
@@ -87,7 +87,7 @@ class TodoCircle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { todo, completePomodoro, clearPomodoro, tickPomodoro, loaded } = this.props;
+    const { todo, completePomodoro, clearPomodoro, loaded } = this.props;
     const { pomodoro: currentPomodoro } = todo;
     const { pomodoro: nextPomodoro } = nextProps.todo;
 
@@ -124,7 +124,6 @@ class TodoCircle extends Component {
             () => {
               tickSound.play();
               const nextSecondsLeft = this.animateProgress(-1);
-              tickPomodoro(todo, nextSecondsLeft);
 
               if (nextSecondsLeft <= 0) {
                 setTimeout( () => {
@@ -138,8 +137,8 @@ class TodoCircle extends Component {
           );
         }
         if (stopped || get) {
-          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 400);
           repeatPlaying(stopSound, 4);
+          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 400);
 
           clearInterval(this.timer);
           clearPomodoro();

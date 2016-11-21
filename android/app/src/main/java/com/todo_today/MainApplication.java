@@ -3,6 +3,7 @@ package com.todo_today;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.todo_today.taskticking.TaskTickingPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactNativeHost;
@@ -36,7 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
               new ReactMaterialKitPackage(),
               new FirestackPackage(),
               new RNDeviceInfo(),
-              new CanvasViewPackage()
+              new CanvasViewPackage(),
+              new TaskTickingPackage()
       );
     }
   };

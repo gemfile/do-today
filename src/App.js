@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducers from './reducers';
-import { deviceInfoLogger } from './components/util/DeviceInfoLogger';
+import { deviceInfoLogger } from 'utils/DeviceInfoLogger';
 import RootNavigator from './RootNavigator';
 import RootTabs from './RootTabs';
 import SceneTodoCircleList from './components/SceneTodoCircleList';
