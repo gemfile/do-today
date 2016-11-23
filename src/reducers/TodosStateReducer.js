@@ -6,15 +6,13 @@ import { Map } from 'immutable';
 import {
   FETCH_TODOS,
   LOADING_TODO,
-  START_POMODORO,
-  COMPLETE_POMODORO,
-  STOP_POMODORO,
   PREPARE_POMODORO
 } from '../actions/ActionType';
 import LocalStorage from 'utils/LocalStorage';
 import { secondsToMinutes } from 'utils/TimeFormat';
 import TaskTickingModule from 'natives/TaskTickingModule';
 import { Color } from '../components/common';
+import SoundPlayer from 'utils/SoundPlayer';
 
 const localStorage = new LocalStorage();
 const TODOS = 'todos';
@@ -28,32 +26,25 @@ const initialState = Map({
 });
 
 let isBackground = false;
-
 const TaskTicking = async () => {
-  let count = 0;
+  let timesUp = false;
 
-  // secondsToMinutes
   if (currentTodo) {
-    console.log(currentTodo.pomodoro.endTime - currentTodo.pomodoro.startTime);
-  }
+    const { endTime } = currentTodo.pomodoro;
+    let secondsLeft;
+    while (isBackground && !timesUp) {
+      secondsLeft = (endTime - new Date().getTime()) / 1000;
+      notifyTick(currentTodo.index.toString(), secondsToMinutes(secondsLeft));
+      await timeout(1000);
 
-  while (isBackground) {
-    notifyTick(undefined, count.toString());
-    if (currentTodo) {
-      const elapsedTime = new Date().getTime() - currentTodo.pomodoro.startTime;
-      console.log(elapsedTime);
+      timesUp = new Date().getTime() > endTime;
     }
-
-    count++;
-    await timeout(1000);
   }
 
   function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 };
-
-AppRegistry.registerHeadlessTask('task_ticking', () => TaskTicking);
 
 const notifyTick = (id:string = '0', message: string = '') => {
   PushNotification.localNotification({
@@ -95,14 +86,22 @@ const updateCurrentTodo = (state) => {
 const onActivityPause = () => {
   if (!isBackground) {
     isBackground = true;
-    TaskTickingModule.startService();
+    SoundPlayer.setVolume(0);
+
+    if(currentTodo && currentTodo.pomodoro.currentState === "started") {
+      TaskTickingModule.startService();
+    }
   }
 }
 
 const onActivityResume = () => {
   if (isBackground) {
     isBackground = false;
-    TaskTickingModule.stopService();
+    SoundPlayer.setVolume(1);
+
+    if(currentTodo && currentTodo.pomodoro.currentState === "started") {
+      TaskTickingModule.stopService();
+    }
   }
 }
 
@@ -135,18 +134,11 @@ export default (state: State = initialState, action: Object) => {
     case PREPARE_POMODORO:
       return updateCurrentTodo( state.set('currentPage', action.payload) );
 
-    case START_POMODORO:
-      ActivityAndroid.addEventListener('activityPause', onActivityPause);
-      ActivityAndroid.addEventListener('activityResume', onActivityResume);
-      return state;
-
-    case COMPLETE_POMODORO:
-    case STOP_POMODORO:
-      ActivityAndroid.removeEventListener('activityPause', onActivityPause);
-      ActivityAndroid.removeEventListener('activityResume', onActivityResume);
-      return state;
-
     default:
       return state;
   }
 };
+
+AppRegistry.registerHeadlessTask('task_ticking', () => TaskTicking);
+ActivityAndroid.addEventListener('activityPause', onActivityPause);
+ActivityAndroid.addEventListener('activityResume', onActivityResume);

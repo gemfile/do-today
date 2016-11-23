@@ -5,26 +5,15 @@ import { View, Text, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearPomodoro, completePomodoro, tickPomodoro } from 'actions';
-import Sound from 'react-native-sound';
 import { Color } from './common';
 import CanvasView from 'natives/CanvasView';
 import AnimatedValueSubscription from 'utils/AnimatedValueSubscription';
 import { secondsToMinutes } from 'utils/TimeFormat';
+import SoundPlayer from 'utils/SoundPlayer';
 
 const WIDTH_OF_CIRCLE = 300;
 const HEIGHT_OF_CIRCLE = 300;
 const WIDTH_OF_STROKE = 10;
-const tickSound = new Sound('pomodoro_tick.mp3', Sound.MAIN_BUNDLE);
-const stopSound = new Sound('pomodoro_turn.mp3', Sound.MAIN_BUNDLE);
-const ringSound = new Sound('pomodoro_ring.mp3', Sound.MAIN_BUNDLE);
-const repeatPlaying = (sound, count) => {
-  sound.play(success => {
-    count -= 1;
-    if (success && count > 0) {
-      repeatPlaying(sound, count);
-    }
-  });
-};
 
 type Props = {
   todo: Object,
@@ -117,7 +106,7 @@ class TodoCircle extends Component {
 
       if (loaded) {
         if (started) {
-          tickSound.play();
+          SoundPlayer.play('tick');
           this.animateProgress(-1);
 
           this.timer = setInterval(
@@ -130,13 +119,13 @@ class TodoCircle extends Component {
                 = this.animateProgress(nextTargetTime - this.secondsLeft);
 
               if (nextSecondsLeft > 0) {
-                tickSound.play();
+                SoundPlayer.play('tick');
               }
-              
+
               if (nextSecondsLeft <= 0) {
                 setTimeout(
                   () => {
-                    ringSound.play();
+                    SoundPlayer.play('ring');
                     completePomodoro(todo);
                   },
                   nextTimeOffset
@@ -148,7 +137,7 @@ class TodoCircle extends Component {
           );
         }
         if (stopped || get) {
-          repeatPlaying(stopSound, 4);
+          SoundPlayer.play('stop', 4);
           this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 395);
 
           clearInterval(this.timer);
