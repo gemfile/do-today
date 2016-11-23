@@ -36,8 +36,8 @@ const styles = {
   },
   deleteImageStyle: {
     tintColor: Color.White,
-    width: 28,
-    height: 28
+    width: 24,
+    height: 24
   },
 };
 

@@ -11,6 +11,7 @@ import PomodoroButtonPlay from './PomodoroButtonPlay';
 import PomodoroButtonAdd from './PomodoroButtonAdd';
 import PomodoroButtonRemove from './PomodoroButtonRemove';
 import ConfirmAdding from './ConfirmAdding';
+import Tomatoes from './Tomatoes';
 
 class SceneTodoList extends Component {
   props: {
@@ -60,6 +61,7 @@ class SceneTodoList extends Component {
       wholeContainerStyle,
       buttonContainerStyle,
       modalContainerStyle,
+      modifyingContainerStyle,
     } = styles;
 
     const {
@@ -78,6 +80,10 @@ class SceneTodoList extends Component {
             this.setState({ width: event.nativeEvent.layout.width });
           }}
         />
+
+        <View style={[ modifyingContainerStyle, {width} ]}>
+          <Tomatoes />
+        </View>
 
         <VerticalPager
           onContentHeight={ event => {
@@ -111,16 +117,22 @@ const styles = {
   },
   emptyContainerStyle: {
     borderWidth: 0,
-    zIndex: 3
+    zIndex: 3,
+  },
+  modifyingContainerStyle: {
+    position: 'absolute',
+    top: 60,
+    height: 60,
+    zIndex: 6,
   },
   buttonContainerStyle: {
     position: 'absolute',
     bottom: 0,
     height: 100,
-    zIndex: 4,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    zIndex: 4,
   },
   modalContainerStyle: {
     flex: 1,

@@ -1,10 +1,11 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Modal, Keyboard } from 'react-native';
+import { View, Modal, Keyboard, LayoutAnimation } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setVislbleOfConfirmAdding } from 'actions';
+import { Color } from './common';
 import Writing from './Writing';
 
 class ConfirmAdding extends Component {
@@ -21,29 +22,33 @@ class ConfirmAdding extends Component {
     });
   }
 
+  componentWillUpdate() {
+    LayoutAnimation.spring();
+  }
+
   componentWillUnmount() {
     this.keyboardDidHide.remove();
   }
 
   render() {
-    const { containerStyle, cardSectionStyle } = styles;
+    const { wholeContainerStyle, writingContainerStyle, modalStyle } = styles;
 
     return (
       <Modal
-        style={cardSectionStyle}
+        style={modalStyle}
         visible={this.props.visible}
-        transparent
         animationType='fade'
         onRequestClose={() => this.props.setVislbleOfConfirmAdding(false)}
+        transparent
       >
-        <View
-          style={containerStyle}
-        >
-          <Writing
-            ref={component => {this.writing = component}}
-            onAccept={() => this.props.setVislbleOfConfirmAdding(false)}
-            onDecline={() => this.props.setVislbleOfConfirmAdding(false)}
-          />
+        <View style={wholeContainerStyle}>
+          <View style={writingContainerStyle}>
+            <Writing
+              ref={component => {this.writing = component}}
+              onAccept={() => this.props.setVislbleOfConfirmAdding(false)}
+              onDecline={() => this.props.setVislbleOfConfirmAdding(false)}
+            />
+          </View>
         </View>
       </Modal>
     );
@@ -51,14 +56,16 @@ class ConfirmAdding extends Component {
 }
 
 const styles = {
-  cardSectionStyle: {
+  modalStyle: {
     flex: 1,
   },
-  containerStyle: {
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  wholeContainerStyle: {
+    backgroundColor: Color.Deactivated,
     flex: 1,
     position: 'relative',
-    justifyContent: 'center'
+  },
+  writingContainerStyle: {
+    top: 60
   }
 };
 

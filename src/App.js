@@ -92,7 +92,7 @@ const styles = {
     tintColor: 'rgba(0,0,0,.2)',
   },
   highlightingStyle: {
-    tintColor: Color.White
+    tintColor: Color.Red
   }
 };
 
