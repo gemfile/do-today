@@ -48,6 +48,7 @@ class TodoCircle extends Component {
   secondsLeft: number;
   fullSeconds: number;
   updatingData: boolean;
+  startOnce: boolean;
 
   constructor(props) {
     super(props);
@@ -73,77 +74,82 @@ class TodoCircle extends Component {
         this.setState({ progress: data.value });
       }
     );
+    this.startOnce = true;
   }
 
   componentWillReceiveProps(nextProps) {
-    const { todo, completePomodoro, clearPomodoro, loaded } = this.props;
+    const { todo, clearPomodoro, loaded } = this.props;
     const { pomodoro: currentPomodoro } = todo;
     const { pomodoro: nextPomodoro } = nextProps.todo;
 
     if (currentPomodoro && nextPomodoro) {
-      const started = (
+      const started = ((
           currentPomodoro.currentState === '' ||
           currentPomodoro.currentState === 'stopped' ||
           currentPomodoro.currentState === 'get'
-        ) &&
+        ) || (
+          currentPomodoro.currentState === 'started' &&
+          this.startOnce &&
+          nextPomodoro.endTime > new Date().getTime()
+        )) &&
         nextPomodoro.currentState === 'started';
 
       const stopped =
         currentPomodoro.currentState === 'started' &&
         nextPomodoro.currentState === 'stopped';
 
-      const completed =
-        currentPomodoro.currentState === 'started' &&
-        nextPomodoro.currentState === 'completed';
+      const notYetCompleted =
+        nextPomodoro.currentState === 'started' &&
+        nextPomodoro.endTime < new Date().getTime();
+
+      const completed = nextPomodoro.currentState === 'completed';
 
       const get =
         currentPomodoro.currentState === 'completed' &&
         nextPomodoro.currentState === 'get';
 
-      if (nextPomodoro.currentState === 'completed') {
-        this.setState({ progress: 1 });
+      if (completed) {
+        this.animatedValueForProgress.setValue(1);
+        this.secondsLeft = 0;
       }
 
       if (loaded) {
-        if (started) {
-          SoundPlayer.play('tick');
-          this.animateProgress(-1);
-
-          this.timer = setInterval(
-            () => {
-              const currentTime = new Date().getTime();
-              const elapsedTime = (currentTime - nextPomodoro.startTime) / 1000;
-              const nextTargetTime = Math.max(this.fullSeconds - elapsedTime - 1, 0);
-
-              const { nextSecondsLeft, nextTimeOffset }
-                = this.animateProgress(nextTargetTime - this.secondsLeft);
-
-              if (nextSecondsLeft > 0) {
-                SoundPlayer.play('tick');
-              }
-
-              if (nextSecondsLeft <= 0) {
-                setTimeout(
-                  () => {
-                    completePomodoro(todo);
-                  },
-                  nextTimeOffset
-                );
-                clearInterval(this.timer);
-              }
-            },
-            1000
-          );
+        if (notYetCompleted) {
+          completePomodoro(todo);
         }
+
+        if (started) {
+          this.startOnce = false;
+          this.ticking(nextPomodoro.startTime);
+        }
+
         if (stopped || get) {
           SoundPlayer.play('stop', 4);
           this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 395);
 
-          clearInterval(this.timer);
           clearPomodoro();
         }
       }
+    }
+  }
 
+  ticking(startTime) {
+    const { todo, completePomodoro } = this.props;
+    const currentTime = new Date().getTime();
+    const elapsedTime = (currentTime - startTime) / 1000;
+    const nextTargetTime = Math.max(this.fullSeconds - elapsedTime - 1, 0);
+
+    const { nextSecondsLeft, nextTimeOffset }
+    = this.animateProgress(nextTargetTime - this.secondsLeft);
+
+    if (nextSecondsLeft > 0) {
+      SoundPlayer.play('tick');
+      setTimeout(
+        ()=>{ if (this.props.todo.pomodoro.currentState === 'started') this.ticking(startTime) },
+        1000
+      );
+    } else {
+      setTimeout( ()=>completePomodoro(todo), nextTimeOffset );
     }
   }
 

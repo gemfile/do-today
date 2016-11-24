@@ -3,8 +3,8 @@ import { MKButton } from 'react-native-material-kit';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { deleteTodo } from 'actions';
-import { View, Animated, Easing } from 'react-native';
-import { Color, ImageView } from './common';
+import { View, Animated, Easing, Image } from 'react-native';
+import { Color } from './common';
 import DeleteImage from './img/delete.png';
 import ArchiveImage from './img/inbox_done.png';
 
@@ -65,7 +65,7 @@ class PomodoroButtonRemove extends Component
     const { archiveImageStyle } = styles;
     const imageSource = count > 0 ? ArchiveImage : DeleteImage;
     return (
-      <ImageView imageSource={imageSource} imageStyle={archiveImageStyle} />
+      <Image source={imageSource} style={archiveImageStyle} />
     );
   }
 
@@ -123,8 +123,7 @@ const styles = {
   },
   archiveImageStyle: {
     tintColor: Color.White,
-    width: 24,
-    height: 24
+    transform: [{ scale: .7 }],
   },
 };
 

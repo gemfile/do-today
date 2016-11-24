@@ -34,6 +34,7 @@ class PomodoroButtonPlay extends Component {
     const { currentTodo: nextTodo } = nextProps;
 
     const needUpdate =
+      ( !currentTodo && nextTodo ) ||
       currentTodo &&
       nextTodo &&
       ( currentTodo.pomodoro.nextState !== nextTodo.pomodoro.nextState ||

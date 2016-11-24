@@ -19,10 +19,11 @@ class Tomatoes extends Component {
     const { currentTodo: nextTodo } = nextProps;
 
     const needUpdate =
+      ( !currentTodo && nextTodo ) ||
       currentTodo &&
       nextTodo &&
-      ( currentTodo.pomodoro.nextState !== nextTodo.pomodoro.nextState ||
-        currentTodo.id !== nextTodo.id );
+      (currentTodo.id !== nextTodo.id ||
+      currentTodo.pomodoro.count !== nextTodo.pomodoro.count);
 
     if (needUpdate) {
       this.aniCount++;
