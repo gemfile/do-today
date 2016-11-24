@@ -125,7 +125,6 @@ class TodoCircle extends Component {
               if (nextSecondsLeft <= 0) {
                 setTimeout(
                   () => {
-                    SoundPlayer.play('ring');
                     completePomodoro(todo);
                   },
                   nextTimeOffset
@@ -289,12 +288,11 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ pomodoroState }, { todo }) => {
-  const nextPomodoroState = pomodoroState.toObject();
-
+const mapStateToProps = ({ todosState }, { todo }) => {
+  const { currentPage, minutesAtATime } = todosState.toObject();
   return {
-    loaded: nextPomodoroState.currentPage === todo.index,
-    minutesAtATime: nextPomodoroState.minutesAtATime
+    loaded: currentPage === todo.index,
+    minutesAtATime: minutesAtATime
   };
 };
 

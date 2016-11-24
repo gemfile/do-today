@@ -2,16 +2,16 @@ package com.todo_today;
 
 import android.app.Application;
 
-import com.facebook.react.ReactApplication;
-import com.todo_today.taskticking.TaskTickingPackage;
-import com.zmxv.RNSound.RNSoundPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.todo_today.canvasview.CanvasViewPackage;
+import com.todo_today.taskticking.TaskTickingPackage;
+import com.zmxv.RNSound.RNSoundPackage;
 
 import java.util.Arrays;
 import java.util.List;

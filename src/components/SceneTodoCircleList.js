@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTodos, fetchPomodoro, preparePomodoro } from 'actions';
+import { fetchTodos, preparePomodoro } from 'actions';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
 import PomodoroButtonPlay from './PomodoroButtonPlay';
@@ -16,11 +16,11 @@ import Tomatoes from './Tomatoes';
 class SceneTodoList extends Component {
   props: {
     fetchTodos: () => () => void,
-    fetchPomodoro: () => () => void,
     preparePomodoro: () => Object,
     todos: Array<Object>,
+    currentTodo: Object,
     isModifying: boolean,
-    pomodoroState: {currentState: 'started' | 'stopped', currentPage: number},
+    currentPage: number
   };
 
   state = {
@@ -32,17 +32,16 @@ class SceneTodoList extends Component {
 
   componentDidMount() {
     this.props.fetchTodos();
-    this.props.fetchPomodoro();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pomodoroState: nextPomodoroState } = nextProps;
+    const { currentState } = nextProps.currentTodo.pomodoro;
 
-    this.setState({ scrollEnabled: nextPomodoroState.currentState !== 'started' });
+    this.setState({ scrollEnabled: currentState !== 'started' });
   }
 
   onPage(currentPage) {
-    this.props.preparePomodoro(currentPage, this.props.pomodoroState);
+    this.props.preparePomodoro(currentPage);
   }
 
   renderPages() {
@@ -70,7 +69,7 @@ class SceneTodoList extends Component {
       scrollEnabled,
     } = this.state;
 
-    const { currentPage } = this.props.pomodoroState;
+    const { currentPage } = this.props;
 
     return (
       <View style={wholeContainerStyle}>
@@ -141,13 +140,12 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ todosState, pomodoroState }) => {
-  return { ...todosState.toObject(), pomodoroState: pomodoroState.toObject() };
+const mapStateToProps = ({ todosState }) => {
+  return { ...todosState.toObject() };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,
-  fetchPomodoro,
   preparePomodoro
 }, dispatch);
 

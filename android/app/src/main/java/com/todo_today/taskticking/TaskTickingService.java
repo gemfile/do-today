@@ -14,7 +14,6 @@ import com.facebook.react.jstasks.HeadlessJsTaskConfig;
 import javax.annotation.Nullable;
 
 public class TaskTickingService extends HeadlessJsTaskService {
-
     @Override
     protected @Nullable HeadlessJsTaskConfig getTaskConfig(Intent intent) {
         Bundle extras = intent.getExtras();

@@ -172,10 +172,10 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ todosState, pomodoroState }) => {
+const mapStateToProps = ({ todosState }) => {
   return {
     currentTodo: todosState.get('currentTodo'),
-    minutesAtATime: pomodoroState.get('minutesAtATime')
+    minutesAtATime: todosState.get('minutesAtATime')
   };
 };
 
