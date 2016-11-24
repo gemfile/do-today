@@ -3,8 +3,10 @@ import { MKButton } from 'react-native-material-kit';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { deleteTodo } from 'actions';
+import { View, Animated, Easing } from 'react-native';
 import { Color, ImageView } from './common';
 import DeleteImage from './img/delete.png';
+import ArchiveImage from './img/inbox_done.png';
 
 const PlainFab = MKButton.plainFab().withBackgroundColor('argb(255, 255, 255, 0)').build();
 
@@ -14,14 +16,90 @@ class PomodoroButtonRemove extends Component
     deleteTodo: () => () => void,
     currentTodo: Object
   }
+  aniCount: number;
+
+  state = {
+    bounceValue: new Animated.Value(1),
+    count: 0,
+    isAnimating: false,
+  };
+  aniCount = 0;
+
+  componentWillReceiveProps(nextProps) {
+    const { currentTodo } = this.props;
+    const { currentTodo: nextTodo } = nextProps;
+
+    const needUpdate =
+      currentTodo &&
+      nextTodo &&
+      ((currentTodo.pomodoro.count === 0 && nextTodo.pomodoro.count !== 0) ||
+      (currentTodo.pomodoro.count !== 0 && nextTodo.pomodoro.count === 0));
+
+    if (needUpdate) {
+      if (this.aniCount === 0) {
+        this.setState({ isAnimating: true });
+      }
+      this.aniCount++;
+      this.state.bounceValue.setValue(1);
+      Animated.timing(this.state.bounceValue, {
+        toValue: 0,
+        easing: Easing.quad,
+        duration: 100
+      }).start( () => {
+        this.setState({ count: nextTodo.pomodoro.count });
+        Animated.timing(this.state.bounceValue, {
+          toValue: 1,
+          easing: Easing.elastic(1), // Springy
+          duration: 295
+        }).start( () => {
+          this.aniCount--;
+          if (this.aniCount === 0) {
+            this.setState({ isAnimating: false })
+          }
+        });
+      });
+    }
+  }
+
+  renderIcon(count) {
+    const { archiveImageStyle } = styles;
+    const imageSource = count > 0 ? ArchiveImage : DeleteImage;
+    return (
+      <ImageView imageSource={imageSource} imageStyle={archiveImageStyle} />
+    );
+  }
 
   render() {
-    const { deleteImageStyle, buttonStyle } = styles;
+    const { buttonStyle, animationStyle } = styles;
+    const { count } = this.state;
 
+    const buttonOpacity = this.state.isAnimating ? 0 : 1;
+    const animationOpacity = this.state.isAnimating ? 1 : 0;
     return (
-      <PlainFab style={buttonStyle} onPress={ ()=>this.props.deleteTodo(this.props.currentTodo) }>
-        <ImageView imageSource={DeleteImage} imageStyle={deleteImageStyle} />
-      </PlainFab>
+      <View>
+        <Animated.View
+          style={[
+            animationStyle,
+            {
+              transform: [{ scale: this.state.bounceValue }],
+              opacity: animationOpacity
+            }
+          ]}
+        >
+          { this.renderIcon(count) }
+        </Animated.View>
+        <PlainFab
+          style={[
+            buttonStyle,
+            {
+              opacity: buttonOpacity
+            }
+          ]}
+          onPress={ ()=>this.props.deleteTodo(this.props.currentTodo) }
+        >
+          { this.renderIcon(count) }
+        </PlainFab>
+      </View>
     );
   }
 }
@@ -34,7 +112,16 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center'
   },
-  deleteImageStyle: {
+  animationStyle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+  },
+  archiveImageStyle: {
     tintColor: Color.White,
     width: 24,
     height: 24

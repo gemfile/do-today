@@ -33,34 +33,35 @@ class PomodoroButtonPlay extends Component {
     const { currentTodo } = this.props;
     const { currentTodo: nextTodo } = nextProps;
 
-    if (currentTodo && nextTodo) {
-      if (
-        currentTodo.pomodoro.nextState !== nextTodo.pomodoro.nextState ||
-        currentTodo.id !== nextTodo.id
-      ) {
-        if (this.aniCount === 0) {
-          this.setState({ isAnimating: true });
-        }
-        this.aniCount++;
-        this.state.bounceValue.setValue(1);
-        Animated.timing(this.state.bounceValue, {
-          toValue: 0,
-          easing: Easing.quad,
-          duration: 100
-        }).start( () => {
-          this.setState({ renderingIcon: nextTodo.pomodoro.nextState });
-          Animated.timing(this.state.bounceValue, {
-            toValue: 1,
-            easing: Easing.elastic(1), // Springy
-            duration: 295
-          }).start( () => {
-            this.aniCount--;
-            if (this.aniCount === 0) {
-              this.setState({ isAnimating: false })
-            }
-          });
-        });
+    const needUpdate =
+      currentTodo &&
+      nextTodo &&
+      ( currentTodo.pomodoro.nextState !== nextTodo.pomodoro.nextState ||
+        currentTodo.id !== nextTodo.id );
+
+    if (needUpdate) {
+      if (this.aniCount === 0) {
+        this.setState({ isAnimating: true });
       }
+      this.aniCount++;
+      this.state.bounceValue.setValue(1);
+      Animated.timing(this.state.bounceValue, {
+        toValue: 0,
+        easing: Easing.quad,
+        duration: 100
+      }).start( () => {
+        this.setState({ renderingIcon: nextTodo.pomodoro.nextState });
+        Animated.timing(this.state.bounceValue, {
+          toValue: 1,
+          easing: Easing.elastic(1), // Springy
+          duration: 295
+        }).start( () => {
+          this.aniCount--;
+          if (this.aniCount === 0) {
+            this.setState({ isAnimating: false })
+          }
+        });
+      });
     }
   }
 
@@ -103,6 +104,7 @@ class PomodoroButtonPlay extends Component {
 
   render() {
     const { buttonStyle, animationStyle } = styles;
+    const { renderingIcon } = this.state;
 
     const buttonOpacity = this.state.isAnimating ? 0 : 1;
     const animationOpacity = this.state.isAnimating ? 1 : 0;
@@ -117,7 +119,7 @@ class PomodoroButtonPlay extends Component {
             }
           ]}
         >
-          { this.renderIcon(this.state.renderingIcon) }
+          { this.renderIcon(renderingIcon) }
         </Animated.View>
         <PlainFab
           style={[
@@ -128,7 +130,7 @@ class PomodoroButtonPlay extends Component {
           ]}
           onPress={this.onPress.bind(this)}
         >
-          { this.renderIcon(this.state.renderingIcon) }
+          { this.renderIcon(renderingIcon) }
         </PlainFab>
       </View>
     );
