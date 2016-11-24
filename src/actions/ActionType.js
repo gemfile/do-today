@@ -1,8 +1,8 @@
-export const LOADING_TODOS = 'loading_todos';
+export const LOAD_TODOS = 'loading_todos';
 export const FETCH_TODOS = 'fetch_todos';
+export const LOAD_CURRENT_PAGE = 'load_current_page';
+export const FETCH_CURRENT_PAGE = 'fetch_current_page';
 
-export const LOADING_POMODORO = 'loading_pomodoro';
-export const FETCH_POMODORO = 'fetch_pomodoro';
 export const START_POMODORO = 'start_pomodoro';
 export const STOP_POMODORO = 'stop_pomodoro';
 export const CLEAR_POMODORO = 'clear_pomodoro';

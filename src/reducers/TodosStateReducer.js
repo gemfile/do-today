@@ -50,7 +50,7 @@ const onActivityPause = () => {
     isBackground = true;
 
     if (currentTodo && currentTodo.pomodoro.currentState === "started") {
-      notifyTick(currentTodo.pomodoro.index, 'Your pomodoro is running!', 'Stay Focused');
+      notifyTick(currentTodo.index.toString(), 'Your pomodoro is running!', 'Stay Focused');
     }
   }
 }
@@ -58,6 +58,7 @@ const onActivityPause = () => {
 const onActivityResume = () => {
   if (isBackground) {
     isBackground = false;
+    PushNotification.cancelAllLocalNotifications();
   }
 }
 

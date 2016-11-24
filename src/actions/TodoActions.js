@@ -5,8 +5,10 @@ import PushNotification from 'react-native-push-notification';
 // import LocalStorage from '../utils/LocalStorage';
 import { Color } from '../components/common';
 import {
-  LOADING_TODOS,
+  LOAD_TODOS,
   FETCH_TODOS,
+  LOAD_CURRENT_PAGE,
+  FETCH_CURRENT_PAGE,
   TYPING,
   FOCUS,
   START_POMODORO,
@@ -25,34 +27,6 @@ const firestack = new Firestack({
 });
 
 // firestack.database.setPersistence(true);
-PushNotification.configure({
-  // (optional) Called when Token is generated (iOS and Android)
-    onRegister: (token) => {
-      console.log( 'TOKEN:', token );
-    },
-    // (required) Called when a remote or local notification is opened or received
-    onNotification: (notification) => {
-        console.log( 'NOTIFICATION:', notification );
-    },
-    // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
-    senderID: "806030056707",
-    // IOS ONLY (optional): default: all - Permissions to register.
-    permissions: {
-        alert: true,
-        badge: true,
-        sound: true
-    },
-    // Should the initial notification be popped automatically
-    // default: true
-    popInitialNotification: true,
-    /**
-      * (optional) default: true
-      * - Specified if permissions (ios) and token (android and ios) will requested or not,
-      * - if not, you must call PushNotificationsHandler.requestPermissions() later
-      */
-    requestPermissions: true,
-});
-
 const TODOS = 'todos';
 
 const uid = DeviceInfo.getUniqueID();
@@ -76,10 +50,31 @@ export const fetchTodos = () => (
 );
 
 const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
-  dispatch({ type: LOADING_TODOS, payload: isLocal });
+  dispatch({ type: LOAD_TODOS, payload: isLocal });
 
   if (value !== null) {
     dispatch({ type: FETCH_TODOS, payload: {rootRefKey, value} });
+  }
+};
+
+export const fetchCurrentPage = () => (
+  (dispatch: Dispatch) => {
+    // localStorage.getItem(`${rootRefKey}/currentPage`, (data) => {
+    //   dispatchFetchingOfPomodoro(dispatch, {currentPage: data}, true);
+    // })
+    // .then( () => {
+      rootRef.child('currentPage').on('value', snapshot => {
+        dispatchFetchingOfPomodoro(dispatch, {currentPage: snapshot.val()}, false);
+      });
+    // });
+  }
+);
+
+const dispatchFetchingOfPomodoro = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
+  dispatch({ type: LOAD_CURRENT_PAGE, payload: isLocal });
+
+  if (value !== null) {
+    dispatch({ type: FETCH_CURRENT_PAGE, payload: {rootRefKey, value} });
   }
 };
 
@@ -203,6 +198,10 @@ const updatePomodoro = (todo, payload, nextStartTime = -1, nextEndTime = -1, cou
 };
 
 export const preparePomodoro = (currentPage: number) => {
+  let updates = {};
+  updates['/currentPage'] = currentPage;
+  rootRef.update(updates);
+
   return { type: PREPARE_POMODORO, payload: currentPage };
 };
 

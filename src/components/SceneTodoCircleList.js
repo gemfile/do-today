@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTodos, preparePomodoro } from 'actions';
+import { fetchTodos, fetchCurrentPage, preparePomodoro } from 'actions';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
 import PomodoroButtonPlay from './PomodoroButtonPlay';
@@ -16,6 +16,7 @@ import Tomatoes from './Tomatoes';
 class SceneTodoList extends Component {
   props: {
     fetchTodos: () => () => void,
+    fetchCurrentPage: () => () => void,
     preparePomodoro: () => Object,
     todos: Array<Object>,
     currentTodo: Object,
@@ -32,12 +33,14 @@ class SceneTodoList extends Component {
 
   componentDidMount() {
     this.props.fetchTodos();
+    this.props.fetchCurrentPage();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentState } = nextProps.currentTodo.pomodoro;
-
-    this.setState({ scrollEnabled: currentState !== 'started' });
+    const { currentTodo } = nextProps;
+    if (currentTodo) {
+      this.setState({ scrollEnabled: currentTodo.pomodoro.currentState !== 'started' });
+    }
   }
 
   onPage(currentPage) {
@@ -140,12 +143,13 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ todosState }) => {
-  return { ...todosState.toObject() };
+const mapStateToProps = ({ todosState, currentPage }) => {
+  return { ...todosState.toObject(), currentPage };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,
+  fetchCurrentPage,
   preparePomodoro
 }, dispatch);
 
