@@ -13,6 +13,7 @@ import { ImageView, Color } from './components/common';
 import TodoListImage from './components/img/todo_list.png';
 import StatsImage from './components/img/stats.png';
 import PushNotification from 'react-native-push-notification'
+import SplashScreen from 'react-native-splash-screen'
 
 const initPushNotification = () => {
   PushNotification.configure({
@@ -57,6 +58,7 @@ const initPushNotification = () => {
 class App extends Component {
   componentDidMount() {
     initPushNotification();
+    SplashScreen.hide();
   }
 
   renderScene(sceneName: string) {
