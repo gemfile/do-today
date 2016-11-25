@@ -13,6 +13,10 @@ import PomodoroButtonRemove from './PomodoroButtonRemove';
 import ConfirmAdding from './ConfirmAdding';
 import Tomatoes from './Tomatoes';
 
+const jsonEqual = (a, b) => {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 class SceneTodoList extends Component {
   props: {
     fetchTodos: () => () => void,
@@ -28,7 +32,6 @@ class SceneTodoList extends Component {
     width: 0,
     heightOfContent: 0,
     scrollEnabled: true,
-    showModal: false,
   };
 
   componentDidMount() {
@@ -37,11 +40,37 @@ class SceneTodoList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentTodo } = nextProps;
+    const { todos, currentPage } = this.props;
+    const { currentTodo, todos: nextTodos, currentPage: nextCurrentPage } = nextProps;
+
+    // if (todos.length !== 0 && nextTodos.length > todos.length) {
+    //   this.props.preparePomodoro(0);
+    // }
+    // else if (nextTodos.length >= currentPage) {
+    //   this.props.preparePomodoro(currentPage-1);
+    // }
+
     if (currentTodo) {
       this.setState({ scrollEnabled: currentTodo.pomodoro.currentState !== 'started' });
     }
   }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   const { todos, currentPage, currentTodo } = this.props;
+  //   const { todos: nextTodos, currentPage: nextCurrentPage, currentTodo: nextCurrentTodo } = nextProps;
+  //
+  //   const { width, heightOfContent, scrollEnabled } = this.state;
+  //   const { width: nextWidth, heightOfContent: nextHeightOfContent, scrollEnabled: nextScrollEnabled } = nextState;
+  //
+  //   return (
+  //     !jsonEqual(todos, nextTodos) ||
+  //     currentPage !== nextCurrentPage ||
+  //     currentTodo !== nextCurrentTodo ||
+  //     width !== nextWidth ||
+  //     heightOfContent !== nextHeightOfContent ||
+  //     scrollEnabled !== nextScrollEnabled
+  //   );
+  // }
 
   onPage(currentPage) {
     this.props.preparePomodoro(currentPage);
@@ -139,7 +168,7 @@ const styles = {
   modalContainerStyle: {
     flex: 1,
     position: 'absolute',
-    zIndex: 5
+    zIndex: 10
   },
 };
 

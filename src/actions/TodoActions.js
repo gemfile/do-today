@@ -2,7 +2,7 @@
 import Firestack from 'react-native-firestack';
 import DeviceInfo from 'react-native-device-info';
 import PushNotification from 'react-native-push-notification';
-// import LocalStorage from '../utils/LocalStorage';
+import LocalStorage from '../utils/LocalStorage';
 import { Color } from '../components/common';
 import {
   LOAD_TODOS,
@@ -21,7 +21,6 @@ import {
   SET_VIAIBLE_OF_CONFIRM_ADDING
 } from './ActionType';
 
-// const localStorage = new LocalStorage();
 const firestack = new Firestack({
   debug: true,
 });
@@ -36,16 +35,15 @@ const rootRef = firestack.database.ref(rootRefKey);
 type Dispatch = (action: Object) => void;
 export const fetchTodos = () => (
   (dispatch: Dispatch) => {
-    // localStorage.getItem(`${rootRefKey}/${TODOS}`, (data) => {
-    //   dispatchFetchingOfTodos(dispatch, {[TODOS]: data}, true);
-    // })
-    // .then(
-      // () => {
+    LocalStorage.getItem(`${rootRefKey}/${TODOS}`, (data) => {
+      dispatchFetchingOfTodos(dispatch, {[TODOS]: data}, true);
+    }).then(
+      () => {
         rootRef.child(`${TODOS}`).on('value', snapshot => {
           dispatchFetchingOfTodos(dispatch, {[TODOS]: snapshot.val()}, false);
         });
-      // }
-    // );
+      }
+    );
   }
 );
 
@@ -59,14 +57,14 @@ const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, isLocal: boo
 
 export const fetchCurrentPage = () => (
   (dispatch: Dispatch) => {
-    // localStorage.getItem(`${rootRefKey}/currentPage`, (data) => {
-    //   dispatchFetchingOfPomodoro(dispatch, {currentPage: data}, true);
-    // })
-    // .then( () => {
+    LocalStorage.getItem(`${rootRefKey}/currentPage`, (data) => {
+      dispatchFetchingOfPomodoro(dispatch, {currentPage: data}, true);
+    })
+    .then( () => {
       rootRef.child('currentPage').on('value', snapshot => {
         dispatchFetchingOfPomodoro(dispatch, {currentPage: snapshot.val()}, false);
       });
-    // });
+    });
   }
 );
 
@@ -89,11 +87,11 @@ export const addTodo = (title: string) => () => {
   });
 };
 
-export const deleteTodo = (todo: Object) => () => {
+export const archiveTodo = (todo: Object) => () => {
   let updates = {};
   const { id, title, pomodoro } = todo;
   updates[`/${TODOS}/${id}`] = null;
-  updates[`/deletes/${id}`] = { title, pomodoro };
+  updates[`/archives/${id}`] = { title, pomodoro };
   rootRef.update(updates);
 }
 
@@ -106,6 +104,14 @@ export const archiveTodos = (todos: Array<Object>) => () => {
   });
   rootRef.update(updates);
 };
+
+export const deleteTodo = (todo: Object) => () => {
+  let updates = {};
+  const { id, title, pomodoro } = todo;
+  updates[`/${TODOS}/${id}`] = null;
+  updates[`/deletes/${id}`] = { title, pomodoro };
+  rootRef.update(updates);
+}
 
 export const deleteTodos = (todos: Array<Object>) => () => {
   let updates = {};
@@ -170,8 +176,6 @@ export const completePomodoro = (todo: Object) => {
 };
 
 export const getPomodoro = (todo: Object) => {
-  PushNotification.cancelAllLocalNotifications();
-
   const payload = {
     nextState: 'start',
     currentState: 'get',
@@ -226,6 +230,6 @@ const makeSchedule = (id:string = '0', title: string = '', message: string = '',
     playSound: true, // (optional) default: true
     soundName: 'pomodoro_ring.mp3', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
     // number: '10', // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
-    actions: '["Get"]',  // (Android only) See the doc for notification actions to know more
+    // actions: '["Get"]',  // (Android only) See the doc for notification actions to know more
   });
 };

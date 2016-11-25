@@ -13,17 +13,16 @@ import { ImageView, Color } from './components/common';
 import TodoListImage from './components/img/todo_list.png';
 import StatsImage from './components/img/stats.png';
 import PushNotification from 'react-native-push-notification'
-import SplashScreen from 'react-native-splash-screen'
 
 const initPushNotification = () => {
   PushNotification.configure({
-    // (optional) Called when Token is generated (iOS and Android)
+      // (optional) Called when Token is generated (iOS and Android)
       onRegister: (token) => {
-        console.log( 'TOKEN:', token );
+        // console.log( 'TOKEN:', token );
       },
       // (required) Called when a remote or local notification is opened or received
       onNotification: (notification) => {
-          console.log( 'NOTIFICATION:', notification );
+          // console.log( 'NOTIFICATION:', notification );
       },
       // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
       senderID: "806030056707",
@@ -58,7 +57,6 @@ const initPushNotification = () => {
 class App extends Component {
   componentDidMount() {
     initPushNotification();
-    SplashScreen.hide();
   }
 
   renderScene(sceneName: string) {
@@ -82,7 +80,7 @@ class App extends Component {
       (isSelected) ?
         <ImageView
           imageSource={iconImage}
-          imageStyle={{...iconStyle, ...highlightingStyle}}
+          imageStyle={{ ...iconStyle, ...highlightingStyle }}
         /> :
         <ImageView
           imageSource={iconImage}
@@ -95,7 +93,7 @@ class App extends Component {
     const { containerStyle } = styles;
 
     return (
-      <Provider store={createStore(reducers, applyMiddleware(thunk))}>
+      <Provider store={ createStore(reducers, applyMiddleware(thunk)) }>
         <View style={containerStyle}>
           <RootTabs
             renderTabIcon={this.renderTabIcon.bind(this)}
@@ -124,7 +122,7 @@ const styles = {
     tintColor: 'rgba(0,0,0,.2)',
   },
   highlightingStyle: {
-    tintColor: Color.Red
+    tintColor: Color.White
   }
 };
 

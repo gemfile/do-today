@@ -87,7 +87,7 @@ const styles = {
   },
   selectedLineStyle: {
     height: 3,
-    backgroundColor: Color.Red,
+    backgroundColor: Color.White,
     position: 'absolute',
     bottom: 0
   },

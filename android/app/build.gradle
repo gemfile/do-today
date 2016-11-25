@@ -134,7 +134,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-splash-screen')
     compile project(':react-native-activity-android')
     compile project(':react-native-sound')
     compile project(':react-native-push-notification')

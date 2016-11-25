@@ -1,4 +1,4 @@
-export const LOAD_TODOS = 'loading_todos';
+export const LOAD_TODOS = 'load_todos';
 export const FETCH_TODOS = 'fetch_todos';
 export const LOAD_CURRENT_PAGE = 'load_current_page';
 export const FETCH_CURRENT_PAGE = 'fetch_current_page';

@@ -2,16 +2,18 @@
 import ActivityAndroid from 'react-native-activity-android';
 import PushNotification from 'react-native-push-notification';
 import { Map } from 'immutable';
+import LocalStorage from '../utils/LocalStorage';
 import { Color } from '../components/common';
 import {
   FETCH_TODOS,
-  LOADING_TODO,
+  LOAD_TODOS,
   PREPARE_POMODORO
 } from '../actions/ActionType';
 
 const TODOS = 'todos';
 
 type State = Map<string, any>;
+
 const initialState = Map({
   todos: [],
   isLoading: false,
@@ -40,7 +42,7 @@ const notifyTick = (id:string = '0', title: string = '', message: string = '') =
     playSound: false, // (optional) default: true
     // soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
     // number: '10', // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
-    actions: '["Abandone"]',  // (Android only) See the doc for notification actions to know more
+    // actions: '["Abandone"]',  // (Android only) See the doc for notification actions to know more
   });
 };
 
@@ -58,7 +60,6 @@ const onActivityPause = () => {
 const onActivityResume = () => {
   if (isBackground) {
     isBackground = false;
-    PushNotification.cancelAllLocalNotifications();
   }
 }
 
@@ -78,7 +79,7 @@ const updateCurrentTodo = (state) => {
 export default (state: State = initialState, action: Object) => {
   switch (action.type) {
     case FETCH_TODOS: {
-      // const keyOfStorage = action.payload.rootRefKey;
+      const keyOfStorage = action.payload.rootRefKey;
       const datas = action.payload.value[TODOS];
       const todos = [];
       if (datas) {
@@ -86,19 +87,18 @@ export default (state: State = initialState, action: Object) => {
           const data = datas[itemKey];
           todos.push({
             title: data.title,
-            minutesAtATime: data.minutesAtATime,
-            id: itemKey,
+            id: (data.id) ? data.id : itemKey,
             index: todos.length,
-            pomodoro: data.pomodoro
+            pomodoro: { ...data.pomodoro }
           });
         }
       }
 
-      // localStorage.setItem(`${keyOfStorage}/${TODOS}`, todos);
+      LocalStorage.setItem(`${keyOfStorage}/${TODOS}`, todos);
       return updateCurrentTodo( state.set('todos', todos) );
     }
 
-    case LOADING_TODO:
+    case LOAD_TODOS:
       return state.set('isLoading', action.payload);
 
     case PREPARE_POMODORO:

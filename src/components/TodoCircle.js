@@ -62,7 +62,6 @@ class TodoCircle extends Component {
       heightOfTime: 0,
       opacityOfTime: 0,
       progress: 0,
-      colorOfTitle: Color.White,
     };
 
     this.secondsLeft = secondsLeft;

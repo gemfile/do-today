@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { MKButton } from 'react-native-material-kit';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { deleteTodo } from 'actions';
+import { deleteTodo, archiveTodo } from 'actions';
 import { View, Animated, Easing, Image } from 'react-native';
 import { Color } from './common';
 import DeleteImage from './img/delete.png';
@@ -14,6 +14,7 @@ class PomodoroButtonRemove extends Component
 {
   props: {
     deleteTodo: () => () => void,
+    archiveTodo: () => () => void,
     currentTodo: Object
   }
   aniCount: number;
@@ -28,6 +29,7 @@ class PomodoroButtonRemove extends Component
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
     const { currentTodo: nextTodo } = nextProps;
+    const { bounceValue } = this.state;
 
     const needUpdate =
       currentTodo &&
@@ -40,14 +42,14 @@ class PomodoroButtonRemove extends Component
         this.setState({ isAnimating: true });
       }
       this.aniCount++;
-      this.state.bounceValue.setValue(1);
-      Animated.timing(this.state.bounceValue, {
+      bounceValue.setValue(1);
+      Animated.timing(bounceValue, {
         toValue: 0,
         easing: Easing.quad,
         duration: 100
       }).start( () => {
         this.setState({ count: nextTodo.pomodoro.count });
-        Animated.timing(this.state.bounceValue, {
+        Animated.timing(bounceValue, {
           toValue: 1,
           easing: Easing.elastic(1), // Springy
           duration: 295
@@ -69,19 +71,27 @@ class PomodoroButtonRemove extends Component
     );
   }
 
+  onPress() {
+    if (this.state.count > 0) {
+      this.props.archiveTodo(this.props.currentTodo);
+    } else {
+      this.props.deleteTodo(this.props.currentTodo);
+    }
+  }
+
   render() {
     const { buttonStyle, animationStyle } = styles;
-    const { count } = this.state;
+    const { count, isAnimating, bounceValue } = this.state;
 
-    const buttonOpacity = this.state.isAnimating ? 0 : 1;
-    const animationOpacity = this.state.isAnimating ? 1 : 0;
+    const buttonOpacity = isAnimating ? 0 : 1;
+    const animationOpacity = isAnimating ? 1 : 0;
     return (
       <View>
         <Animated.View
           style={[
             animationStyle,
             {
-              transform: [{ scale: this.state.bounceValue }],
+              transform: [{ scale: bounceValue }],
               opacity: animationOpacity
             }
           ]}
@@ -95,7 +105,7 @@ class PomodoroButtonRemove extends Component
               opacity: buttonOpacity
             }
           ]}
-          onPress={ ()=>this.props.deleteTodo(this.props.currentTodo) }
+          onPress={this.onPress.bind(this)}
         >
           { this.renderIcon(count) }
         </PlainFab>
@@ -132,7 +142,7 @@ const mapStateToProps = ({ todosState }) => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  deleteTodo,
+  deleteTodo, archiveTodo
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PomodoroButtonRemove);

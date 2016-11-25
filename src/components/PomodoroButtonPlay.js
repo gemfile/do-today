@@ -32,6 +32,7 @@ class PomodoroButtonPlay extends Component {
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
     const { currentTodo: nextTodo } = nextProps;
+    const { bounceValue } = this.state;
 
     const needUpdate =
       ( !currentTodo && nextTodo ) ||
@@ -45,14 +46,14 @@ class PomodoroButtonPlay extends Component {
         this.setState({ isAnimating: true });
       }
       this.aniCount++;
-      this.state.bounceValue.setValue(1);
-      Animated.timing(this.state.bounceValue, {
+      bounceValue.setValue(1);
+      Animated.timing(bounceValue, {
         toValue: 0,
         easing: Easing.quad,
         duration: 100
       }).start( () => {
         this.setState({ renderingIcon: nextTodo.pomodoro.nextState });
-        Animated.timing(this.state.bounceValue, {
+        Animated.timing(bounceValue, {
           toValue: 1,
           easing: Easing.elastic(1), // Springy
           duration: 295

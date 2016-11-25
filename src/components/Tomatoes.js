@@ -17,6 +17,7 @@ class Tomatoes extends Component {
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
     const { currentTodo: nextTodo } = nextProps;
+    const { height } = this.state;
 
     const needUpdate =
       ( !currentTodo && nextTodo ) ||
@@ -28,7 +29,7 @@ class Tomatoes extends Component {
     if (needUpdate) {
       this.aniCount++;
       Animated.timing(
-        this.state.height,
+        height,
         {
           toValue: 0,
           easing: Easing.quad,
@@ -39,7 +40,7 @@ class Tomatoes extends Component {
           if (nextTodo.pomodoro.count > 0) {
             this.setState({ count: nextTodo.pomodoro.count });
             Animated.timing(
-              this.state.height,
+              height,
               {
                 toValue: 60,
                 easing: Easing.elastic(1), // Springy
