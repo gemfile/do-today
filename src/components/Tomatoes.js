@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Animated, Easing, Image } from 'react-native';
 import { connect } from 'react-redux';
+import type { ReducersState } from '../FlowType';
 import TomatoImage from './img/tomato_color.png';
 
 class Tomatoes extends Component {
@@ -94,7 +95,7 @@ const styles = {
   }
 }
 
-const mapStateToProps = ({ todosState }) => ({
+const mapStateToProps = ({ todosState }: ReducersState) => ({
   currentTodo: todosState.get('currentTodo'),
 });
 

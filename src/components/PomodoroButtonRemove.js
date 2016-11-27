@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { deleteTodo, archiveTodo } from 'actions';
 import { View, Animated, Easing, Image } from 'react-native';
+import type { ReducersState } from '../FlowType';
 import { Color } from './common';
 import DeleteImage from './img/delete.png';
 import ArchiveImage from './img/inbox_done.png';
@@ -137,7 +138,7 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ todosState }) => {
+const mapStateToProps = ({ todosState }: ReducersState) => {
   return { currentTodo: todosState.get('currentTodo') };
 };
 

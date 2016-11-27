@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos, fetchCurrentPage, preparePomodoro } from 'actions';
+import type { ReducersState } from '../FlowType';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
 import PomodoroButtonPlay from './PomodoroButtonPlay';
@@ -24,7 +25,6 @@ class SceneTodoList extends Component {
     preparePomodoro: () => Object,
     todos: Array<Object>,
     currentTodo: Object,
-    isModifying: boolean,
     currentPage: number
   };
 
@@ -172,7 +172,7 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ todosState, currentPage }) => {
+const mapStateToProps = ({ todosState, currentPage }: ReducersState) => {
   return { ...todosState.toObject(), currentPage };
 };
 

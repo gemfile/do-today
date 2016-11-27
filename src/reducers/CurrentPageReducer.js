@@ -2,8 +2,13 @@
 
 import LocalStorage from '../utils/LocalStorage';
 import { PREPARE_POMODORO, FETCH_CURRENT_PAGE } from '../actions/ActionType';
+import type { CurrentPageState, Action } from '../FlowType';
+type CurrentPageAction = Action<{
+  rootRefKey: string,
+  value: {currentPage: number}
+}>;
 
-export default (state: number = 0, action: Object) => {
+export default (state: CurrentPageState = 0, action: CurrentPageAction) => {
   switch (action.type) {
     case FETCH_CURRENT_PAGE: {
       const keyOfStorage = action.payload.rootRefKey;

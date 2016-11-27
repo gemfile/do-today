@@ -2,13 +2,9 @@
 
 import { NavigationExperimental } from 'react-native';
 import { NAVIGATE_BACK, NAVIGATE_FORWARD, NAVIGATE_JUMP } from '../actions/ActionType';
+import type { NavigationState, Action } from '../FlowType';
 
 const { StateUtils: NavigationStateUtils } = NavigationExperimental;
-
-type State = {
-  index: number,
-  routes: Array<{key: string, title?: string}>
-};
 
 const initialState = {
   index: 0,
@@ -18,7 +14,7 @@ const initialState = {
   ],
 };
 
-export default (state: State = initialState, action: Object) => {
+export default (state: NavigationState = initialState, action: Action<string>) => {
   switch (action.type) {
     case NAVIGATE_BACK:
       return NavigationStateUtils.back(state);

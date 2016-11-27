@@ -1,13 +1,13 @@
 import { Map } from 'immutable';
 import { TYPING, FOCUS } from '../actions/ActionType';
+import type { TypingState, Action } from '../FlowType';
 
-type State = Map<string, any>;
 const initialState = Map({
   text: '',
   isFocused: false
 });
 
-export default (state: State = initialState, action: Object) => {
+export default (state: TypingState = initialState, action: Action<string|boolean>) => {
   switch (action.type) {
     case TYPING:
       return state.set('text', action.payload);

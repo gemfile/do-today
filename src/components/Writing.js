@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addTodo, typing, focus } from 'actions';
 import { MKButton } from 'react-native-material-kit';
+import type { ReducersState } from '../FlowType';
 import { CardSection, Input, ImageView, Color } from './common';
 import WriteImage from './img/write.png';
 
@@ -26,8 +27,6 @@ class Writing extends Component {
     typing: (text: string) => Object,
     focus: (isFocused: boolean) => Object,
     typingState: {text: string, isFocused: boolean},
-    isModifying: boolean,
-    isExpanding: boolean,
     onDecline: () => void,
     onAccept: () => void
   };
@@ -162,9 +161,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   focus
 }, dispatch);
 
-const mapStateToProps = ({ selectedTodoId, typingState }) => {
-  const isExpanding = selectedTodoId !== null;
-  return { isExpanding, typingState: typingState.toObject() };
+const mapStateToProps = ({ typingState }: ReducersState) => {
+  return { typingState: typingState.toObject() };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Writing);

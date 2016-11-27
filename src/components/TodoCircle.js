@@ -5,6 +5,7 @@ import { View, Text, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearPomodoro, completePomodoro, tickPomodoro } from 'actions';
+import type { ReducersState } from '../FlowType';
 import { Color } from './common';
 import CanvasView from 'natives/CanvasView';
 import AnimatedValueSubscription from 'utils/AnimatedValueSubscription';
@@ -293,7 +294,7 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ todosState }, { todo }) => {
+const mapStateToProps = ({ todosState }: ReducersState, { todo }: Props) => {
   const { currentPage, minutesAtATime } = todosState.toObject();
   return {
     loaded: currentPage === todo.index,

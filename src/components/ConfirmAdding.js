@@ -5,6 +5,7 @@ import { View, Modal, Keyboard, LayoutAnimation } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setVislbleOfConfirmAdding } from 'actions';
+import type { ReducersState } from '../FlowType';
 import { Color } from './common';
 import Writing from './Writing';
 
@@ -69,7 +70,7 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ modalVisible }) => {
+const mapStateToProps = ({ modalVisible }: ReducersState) => {
   const { confirmAdding: visible } = modalVisible;
   return { visible };
 };

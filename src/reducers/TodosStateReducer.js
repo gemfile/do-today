@@ -9,18 +9,14 @@ import {
   LOAD_TODOS,
   PREPARE_POMODORO
 } from '../actions/ActionType';
+import type { TodosState, Action } from '../FlowType';
+type Todo = { title: string, id: string, pomodoro: Object };
+type TodoStateAction = Action<{
+  rootRefKey: string,
+  value: { todos: {todoId: Todo} }
+}>;
 
 const TODOS = 'todos';
-
-type State = Map<string, any>;
-
-const initialState = Map({
-  todos: [],
-  isLoading: false,
-  currentPage: 0,
-  currentTodo: null,
-  minutesAtATime: 1
-});
 
 const notifyTick = (id:string = '0', title: string = '', message: string = '') => {
   PushNotification.localNotification({
@@ -76,7 +72,15 @@ const updateCurrentTodo = (state) => {
   return state;
 };
 
-export default (state: State = initialState, action: Object) => {
+const initialState = Map({
+  todos: [],
+  isLoading: false,
+  currentPage: 0,
+  currentTodo: null,
+  minutesAtATime: 1
+});
+
+export default (state: TodosState = initialState, action: TodoStateAction) => {
   switch (action.type) {
     case FETCH_TODOS: {
       const keyOfStorage = action.payload.rootRefKey;

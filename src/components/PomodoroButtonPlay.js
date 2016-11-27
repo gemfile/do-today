@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { startPomodoro, stopPomodoro, getPomodoro } from 'actions';
 import { MKButton } from 'react-native-material-kit';
+import type { ReducersState } from '../FlowType';
 import { Color, ImageView, Style } from './common';
 import PlayImage from './img/play.png';
 import CompleteImage from './img/tomato.png';
@@ -176,7 +177,7 @@ const styles = {
   }
 };
 
-const mapStateToProps = ({ todosState }) => {
+const mapStateToProps = ({ todosState }: ReducersState) => {
   return {
     currentTodo: todosState.get('currentTodo'),
     minutesAtATime: todosState.get('minutesAtATime')
