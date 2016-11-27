@@ -72,9 +72,10 @@ class VerticalPager extends Component {
     // );
   // }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props, prevState) {
     const { currentPage, heightOfPage } = this.props;
     const { pageCount } = this.state;
+    const { pageCount: prevPageCount } = prevState;
 
     if (!this.needToScroll && prevProps.currentPage !== currentPage) {
       this.needToScroll = true;
@@ -90,6 +91,10 @@ class VerticalPager extends Component {
 
     if (currentPage >= pageCount) {
       this.scrollView.scrollTo({ x: (currentPage-1) * heightOfPage, animated: false });
+    }
+
+    if (pageCount !== 0 && prevPageCount !== 0 && pageCount > prevPageCount) {
+      this.scrollView.scrollTo({ x: 0, animated: false });
     }
   }
 

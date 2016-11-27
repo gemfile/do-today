@@ -87,7 +87,8 @@ export default (state: TodosState = initialState, action: TodoStateAction) => {
       const datas = action.payload.value[TODOS];
       const todos = [];
       if (datas) {
-        for (const itemKey of Object.keys(datas)) {
+        const orderedDatas = Object.keys(datas).sort().reverse();
+        for (const itemKey of orderedDatas) {
           const data = datas[itemKey];
           todos.push({
             title: data.title,
