@@ -16,7 +16,8 @@ class PomodoroButtonRemove extends Component
   props: {
     deleteTodo: () => () => void,
     archiveTodo: () => () => void,
-    currentTodo: Object
+    currentTodo: Object,
+    buttonEnabled: boolean
   }
   aniCount: number;
 
@@ -83,35 +84,41 @@ class PomodoroButtonRemove extends Component
   render() {
     const { buttonStyle, animationStyle } = styles;
     const { count, isAnimating, bounceValue } = this.state;
+    const { buttonEnabled } = this.props;
 
     const buttonOpacity = isAnimating ? 0 : 1;
     const animationOpacity = isAnimating ? 1 : 0;
-    return (
-      <View>
-        <Animated.View
-          style={[
-            animationStyle,
-            {
-              transform: [{ scale: bounceValue }],
-              opacity: animationOpacity
-            }
-          ]}
-        >
-          { this.renderIcon(count) }
-        </Animated.View>
-        <PlainFab
-          style={[
-            buttonStyle,
-            {
-              opacity: buttonOpacity
-            }
-          ]}
-          onPress={this.onPress.bind(this)}
-        >
-          { this.renderIcon(count) }
-        </PlainFab>
-      </View>
-    );
+
+    if (buttonEnabled) {
+      return (
+        <View>
+          <Animated.View
+            style={[
+              animationStyle,
+              {
+                transform: [{ scale: bounceValue }],
+                opacity: animationOpacity
+              }
+            ]}
+          >
+            { this.renderIcon(count) }
+          </Animated.View>
+          <PlainFab
+            style={[
+              buttonStyle,
+              {
+                opacity: buttonOpacity
+              }
+            ]}
+            onPress={this.onPress.bind(this)}
+          >
+            { this.renderIcon(count) }
+          </PlainFab>
+        </View>
+      );
+    } else {
+      return null;
+    }
   }
 }
 

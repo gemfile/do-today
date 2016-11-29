@@ -14,17 +14,23 @@ const PlainFab = MKButton.plainFab().withBackgroundColor('rgba(255, 255, 255, 0)
 class PomodoroButtonAdd extends Component
 {
   props: {
-    setVislbleOfConfirmAdding: (visible: boolean) => Object;
+    setVislbleOfConfirmAdding: (visible: boolean) => Object,
+    buttonEnabled: boolean
   };
 
   render() {
     const { writeImageStyle, buttonStyle } = styles;
+    const { buttonEnabled } = this.props;
 
-    return (
-      <PlainFab style={buttonStyle} onPress={ ()=>this.props.setVislbleOfConfirmAdding(true) }>
-        <Image source={WriteImage} style={writeImageStyle} />
-      </PlainFab>
-    );
+    if (buttonEnabled) {
+      return (
+        <PlainFab style={buttonStyle} onPress={ ()=>this.props.setVislbleOfConfirmAdding(true) }>
+          <Image source={WriteImage} style={writeImageStyle} />
+        </PlainFab>
+      );
+    } else {
+      return null;
+    }
   }
 }
 

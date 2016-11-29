@@ -39,7 +39,14 @@ class SceneTodoList extends Component {
     const { currentTodo } = nextProps;
 
     if (currentTodo) {
-      this.setState({ scrollEnabled: currentTodo.pomodoro.currentState !== 'started' });
+      console.log('hoi', currentTodo.pomodoro.currentState);
+
+      this.setState({
+        scrollEnabled: (
+          currentTodo.pomodoro.currentState !== 'started' &&
+          currentTodo.pomodoro.currentState !== 'taken'
+        )
+      });
     }
   }
 
@@ -117,9 +124,9 @@ class SceneTodoList extends Component {
         />
 
         <View style={[ buttonContainerStyle, {width} ]}>
-          <PomodoroButtonRemove />
+          <PomodoroButtonRemove buttonEnabled={scrollEnabled} />
           <PomodoroButtonPlay />
-          <PomodoroButtonAdd />
+          <PomodoroButtonAdd buttonEnabled={scrollEnabled} />
         </View>
 
         <View style={modalContainerStyle}>

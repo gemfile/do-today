@@ -134,9 +134,9 @@ class TodoCircle extends Component {
       const finished =
         nextPomodoro.currentState === 'finished';
 
-      console.log('1', currentPomodoro.currentState, nextPomodoro.currentState);
-      console.log('2', started, taken, stopped, notYetCompleted, completed, got, skipped, notYetFinished, finished);
-      console.log('3', nextPomodoro.endTime, now);
+      // console.log('1', currentPomodoro.currentState, nextPomodoro.currentState);
+      // console.log('2', started, taken, stopped, notYetCompleted, completed, got, skipped, notYetFinished, finished);
+      // console.log('3', nextPomodoro.endTime, now);
 
       if (completed) {
         this.animatedValueForProgress.setValue(1);

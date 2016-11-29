@@ -1,8 +1,8 @@
 /* @flow */
-import Firestack from 'react-native-firestack';
 import DeviceInfo from 'react-native-device-info';
 import PushNotification from 'react-native-push-notification';
 import LocalStorage from '../utils/LocalStorage';
+import FirestackReader from '../utils/FirestackReader';
 import { Color } from '../components/common';
 import {
   LOAD_TODOS,
@@ -20,15 +20,11 @@ import {
   FINISH_REST,
 } from './ActionType';
 
-const firestack = new Firestack({
-  debug: true,
-});
-firestack.database.setPersistence(true);
 const TODOS = 'todos';
-
 const uid = DeviceInfo.getUniqueID();
 const rootRefKey = `/users/${uid}`;
-const rootRef = firestack.database.ref(rootRefKey);
+let rootRef;
+FirestackReader.listenToReady( firestack => {rootRef = firestack.database.ref(rootRefKey)} );
 
 type Dispatch = (action: Object) => void;
 export const fetchTodos = () => (
