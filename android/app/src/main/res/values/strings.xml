@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">todo_today</string>
+    <string name="app_name">dotoday</string>
     <string name="collapsed_image">A single Android robot waving. Symbolises a collapsed
         notification.
     </string>
