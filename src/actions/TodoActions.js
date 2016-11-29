@@ -9,23 +9,21 @@ import {
   FETCH_TODOS,
   LOAD_CURRENT_PAGE,
   FETCH_CURRENT_PAGE,
-  TYPING,
-  FOCUS,
   START_POMODORO,
   STOP_POMODORO,
   PREPARE_POMODORO,
   CLEAR_POMODORO,
   COMPLETE_POMODORO,
   GET_POMODORO,
-  TICK_POMODORO,
-  SET_VIAIBLE_OF_CONFIRM_ADDING
+  TAKE_REST,
+  SKIP_REST,
+  FINISH_REST,
 } from './ActionType';
 
 const firestack = new Firestack({
   debug: true,
 });
-
-// firestack.database.setPersistence(true);
+firestack.database.setPersistence(true);
 const TODOS = 'todos';
 
 const uid = DeviceInfo.getUniqueID();
@@ -123,19 +121,9 @@ export const deleteTodos = (todos: Array<Object>) => () => {
   rootRef.update(updates);
 };
 
-export const typing = (text: string) => ({
-  type: TYPING,
-  payload: text
-});
-
-export const focus = (isFocused: boolean) => ({
-  type: FOCUS,
-  payload: isFocused
-});
-
 export const startPomodoro = (todo: Object, minutesAtATime: number) => {
   const endTime = new Date(Date.now() + (minutesAtATime * 60 * 1000));
-  makeSchedule( todo.index.toString(), 'Your pomodoro has finished!', 'Take a Break', endTime );
+  makeSchedule( '0', 'Your pomodoro has finished!', 'Take a Break', endTime );
   const payload = {
     nextState: 'stop',
     currentState: 'started'
@@ -157,13 +145,23 @@ export const stopPomodoro = (todo: Object) => {
   return { type: STOP_POMODORO, payload };
 };
 
-export const clearPomodoro = () => ({
-  type: CLEAR_POMODORO,
-});
+export const skipRest = (todo: Object) => {
+  PushNotification.cancelAllLocalNotifications();
 
-export const tickPomodoro = (todo: Object, secondsLeft: number) => {
-  return { type: TICK_POMODORO, payload: secondsLeft };
+  const payload = {
+    nextState: 'start',
+    currentState: 'skipped'
+  };
+  updatePomodoro(todo, payload);
+
+  return { type: SKIP_REST, payload };
 };
+
+export const clearPomodoro = () => {
+  PushNotification.cancelAllLocalNotifications();
+
+  return { type: CLEAR_POMODORO };
+}
 
 export const completePomodoro = (todo: Object) => {
   const payload = {
@@ -175,10 +173,32 @@ export const completePomodoro = (todo: Object) => {
   return { type: COMPLETE_POMODORO, payload };
 };
 
-export const getPomodoro = (todo: Object) => {
+export const finishRest = (todo: Object) => {
   const payload = {
     nextState: 'start',
-    currentState: 'get',
+    currentState: 'finished'
+  };
+  updatePomodoro(todo, payload);
+
+  return { type: FINISH_REST, payload };
+}
+
+export const takeRest = (todo: Object, minutesAtATime: number) => {
+  const endTime = new Date(Date.now() + (minutesAtATime * 60 * 1000));
+  makeSchedule( '0', "Time's up!", 'Ready to start', endTime );
+  const payload = {
+    nextState: 'skip',
+    currentState: 'taken'
+  }
+  updatePomodoro( todo, payload, new Date().getTime(), endTime.getTime() );
+
+  return { type: TAKE_REST, payload };
+};
+
+export const getPomodoro = (todo: Object) => {
+  const payload = {
+    nextState: 'take',
+    currentState: 'got',
   };
   updatePomodoro(todo, payload, -1, -1, 1);
 
@@ -208,11 +228,6 @@ export const preparePomodoro = (currentPage: number) => {
 
   return { type: PREPARE_POMODORO, payload: currentPage };
 };
-
-export const setVislbleOfConfirmAdding = (visible: boolean) => ({
-  type: SET_VIAIBLE_OF_CONFIRM_ADDING,
-  payload: visible
-});
 
 const makeSchedule = (id:string = '0', title: string = '', message: string = '', date: Date = new Date()) => {
   PushNotification.localNotificationSchedule({

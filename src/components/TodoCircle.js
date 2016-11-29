@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, Text, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { clearPomodoro, completePomodoro, tickPomodoro } from 'actions';
+import { clearPomodoro, completePomodoro, finishRest } from 'actions';
 import type { ReducersState } from '../FlowType';
 import { Color } from './common';
 import CanvasView from 'natives/CanvasView';
@@ -24,10 +24,10 @@ type Props = {
   },
   clearPomodoro: () => Object,
   completePomodoro: (todo: Object) => Object,
-  tickPomodoro: (todo:Object, secondsLeft: number) => Object,
+  finishRest: (todo: Object) => Object,
   loaded: boolean,
   completed: boolean,
-  minutesAtATime: number
+  minutesAtATime: number,
 };
 
 type State = {
@@ -38,6 +38,7 @@ type State = {
   heightOfTime: number,
   opacityOfTime: number,
   progress: number,
+  color: string,
 }
 
 class TodoCircle extends Component {
@@ -63,6 +64,7 @@ class TodoCircle extends Component {
       heightOfTime: 0,
       opacityOfTime: 0,
       progress: 0,
+      color: Color.Dim
     };
 
     this.secondsLeft = secondsLeft;
@@ -78,21 +80,33 @@ class TodoCircle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { todo, clearPomodoro, loaded } = this.props;
+    const { todo, clearPomodoro, loaded, completePomodoro, finishRest } = this.props;
     const { pomodoro: currentPomodoro } = todo;
     const { pomodoro: nextPomodoro } = nextProps.todo;
 
     if (currentPomodoro && nextPomodoro) {
+      const now = new Date().getTime();
+
       const started = ((
           currentPomodoro.currentState === '' ||
           currentPomodoro.currentState === 'stopped' ||
-          currentPomodoro.currentState === 'get'
+          currentPomodoro.currentState === 'skipped' ||
+          currentPomodoro.currentState === 'finished'
         ) || (
           currentPomodoro.currentState === 'started' &&
           this.startOnce &&
-          nextPomodoro.endTime > new Date().getTime()
+          nextPomodoro.endTime > now
         )) &&
         nextPomodoro.currentState === 'started';
+
+      const taken = ((
+          currentPomodoro.currentState === 'got'
+        ) || (
+          currentPomodoro.currentState === 'taken' &&
+          this.startOnce &&
+          nextPomodoro.endTime > now
+        )) &&
+        nextPomodoro.currentState === 'taken';
 
       const stopped =
         currentPomodoro.currentState === 'started' &&
@@ -100,13 +114,29 @@ class TodoCircle extends Component {
 
       const notYetCompleted =
         nextPomodoro.currentState === 'started' &&
-        nextPomodoro.endTime < new Date().getTime();
+        nextPomodoro.endTime < now;
 
-      const completed = nextPomodoro.currentState === 'completed';
+      const completed =
+        nextPomodoro.currentState === 'completed';
 
-      const get =
+      const got =
         currentPomodoro.currentState === 'completed' &&
-        nextPomodoro.currentState === 'get';
+        nextPomodoro.currentState === 'got';
+
+      const skipped =
+        currentPomodoro.currentState === 'taken' &&
+        nextPomodoro.currentState === 'skipped';
+
+      const notYetFinished =
+        nextPomodoro.currentState === 'taken' &&
+        nextPomodoro.endTime < now;
+
+      const finished =
+        nextPomodoro.currentState === 'finished';
+
+      console.log('1', currentPomodoro.currentState, nextPomodoro.currentState);
+      console.log('2', started, taken, stopped, notYetCompleted, completed, got, skipped, notYetFinished, finished);
+      console.log('3', nextPomodoro.endTime, now);
 
       if (completed) {
         this.animatedValueForProgress.setValue(1);
@@ -117,39 +147,48 @@ class TodoCircle extends Component {
         if (notYetCompleted) {
           completePomodoro(todo);
         }
-
         if (started) {
-          this.startOnce = false;
-          this.ticking(nextPomodoro.startTime);
+          this.ticking( nextPomodoro.startTime, ()=>completePomodoro(todo) );
         }
 
-        if (stopped || get) {
+        if (notYetFinished) {
+          finishRest(todo);
+        }
+        if (taken) {
+          this.ticking( nextPomodoro.startTime, ()=>finishRest(todo) );
+        }
+
+        if (stopped || got || skipped || finished ) {
           SoundPlayer.play('stop', 4);
-          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 395);
+          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 395 );
 
           clearPomodoro();
         }
       }
+
+      this.startOnce = false;
     }
   }
 
-  ticking(startTime) {
-    const { todo, completePomodoro } = this.props;
+  ticking(startTime, onComplete) {
     const currentTime = new Date().getTime();
     const elapsedTime = (currentTime - startTime) / 1000;
     const nextTargetTime = Math.max(this.fullSeconds - elapsedTime - 1, 0);
 
     const { nextSecondsLeft, nextTimeOffset }
-    = this.animateProgress(nextTargetTime - this.secondsLeft);
+      = this.animateProgress(nextTargetTime - this.secondsLeft);
 
     if (nextSecondsLeft > 0) {
       SoundPlayer.play('tick');
       setTimeout(
-        ()=>{ if (this.props.todo.pomodoro.currentState === 'started') this.ticking(startTime) },
+        ()=>{
+          const { currentState } = this.props.todo.pomodoro;
+          if (currentState === 'started' || currentState === 'taken' ) this.ticking(startTime, onComplete)
+        },
         1000
       );
     } else {
-      setTimeout( ()=>completePomodoro(todo), nextTimeOffset );
+      setTimeout( onComplete, nextTimeOffset );
     }
   }
 
@@ -173,10 +212,10 @@ class TodoCircle extends Component {
     );
   }
 
-  animateProgress(offset: number, easing: Easing = Easing.linear, duration: number = 1000) {
+  animateProgress(offset: number, easing: Easing = Easing.linear, duration: number = 1000, callback = null) {
     const nextSecondsLeft = this.secondsLeft + offset;
     if (nextSecondsLeft === 0) {
-      duration = Math.abs(offset) * 1000;
+      duration = 0;
     }
     this.secondsLeft = nextSecondsLeft;
 
@@ -185,7 +224,7 @@ class TodoCircle extends Component {
       toValue: progress,
       easing,
       duration
-    }).start();
+    }).start( callback );
 
     return {nextSecondsLeft, nextTimeOffset: duration};
   }
@@ -202,8 +241,9 @@ class TodoCircle extends Component {
       heightOfTime,
       opacityOfTime,
       progress,
+      color
     } = this.state;
-    const timeTextColor = this.state.progress === 1 ? Color.Red : Color.White;
+    const timeTextColor = progress === 1 ? color : Color.White;
 
     return (
       <View
@@ -218,8 +258,8 @@ class TodoCircle extends Component {
         <CanvasView
           angle={360 * progress}
           frontColor={Color.White}
-          doneColor={Color.Red}
-          headColor={Color.Red}
+          doneColor={color}
+          headColor={color}
           strokeWidth={WIDTH_OF_STROKE}
           height={WIDTH_OF_CIRCLE}
           width={HEIGHT_OF_CIRCLE}
@@ -305,7 +345,7 @@ const mapStateToProps = ({ todosState }: ReducersState, { todo }: Props) => {
 const mapDispatchToProps = dispatch => bindActionCreators({
   clearPomodoro,
   completePomodoro,
-  tickPomodoro
+  finishRest
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoCircle);

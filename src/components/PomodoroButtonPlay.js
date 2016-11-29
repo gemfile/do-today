@@ -4,31 +4,73 @@ import React, { Component } from 'react';
 import { View, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { startPomodoro, stopPomodoro, getPomodoro } from 'actions';
+import { startPomodoro, stopPomodoro, getPomodoro, takeRest, skipRest } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import type { ReducersState } from '../FlowType';
 import { Color, ImageView, Style } from './common';
 import PlayImage from './img/play.png';
 import CompleteImage from './img/tomato.png';
+import RestImage from './img/coffee.png';
 
-const PlainFab = MKButton.plainFab().withBackgroundColor(Color.Red).build();
+const PlainFabRed = MKButton.plainFab().withBackgroundColor(Color.Red).build();
+const PlainFabDim = MKButton.plainFab().withBackgroundColor(Color.Dim).build();
+const PlainFabGreen = MKButton.plainFab().withBackgroundColor(Color.Green).build();
 
 class PomodoroButtonPlay extends Component {
   props: {
     startPomodoro: (todo: Object, minutesAtATime: number) => Object,
     stopPomodoro: (todo: Object) => Object,
     getPomodoro: (todo: Object) => Object,
+    takeRest: (todo: Object) => Object,
     currentTodo: Object,
     minutesAtATime: number
   }
   aniCount: number;
-
-  state = {
-    bounceValue: new Animated.Value(1),
-    renderingIcon: '',
-    isAnimating: false,
+  buttonMap: { [name: string]: MKButton };
+  buttonColorMap: { [name: string]: string };
+  iconMap: { [name: string]: View };
+  state: {
+    bounceValue: Animated.Value,
+    renderingIcon: string,
+    isAnimating: boolean
   };
-  aniCount = 0;
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      bounceValue: new Animated.Value(1),
+      renderingIcon: '',
+      isAnimating: false,
+    };
+    this.aniCount = 0;
+    this.buttonMap = {
+      start: PlainFabRed,
+      stop: PlainFabRed,
+      get: PlainFabRed,
+      take: PlainFabGreen,
+      skip: PlainFabGreen,
+      ['']: PlainFabDim,
+    };
+    this.buttonColorMap = {
+      start: Color.Red,
+      stop: Color.Red,
+      get: Color.Red,
+      take: Color.Green,
+      skip: Color.Green,
+      ['']: Color.Dim,
+    };
+
+    const { playImageStyle, stopImageStyle, getImageStyle, takeImageStyle } = styles;
+    this.iconMap = {
+      start: <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />,
+      stop: <View style={stopImageStyle} />,
+      get: <ImageView imageSource={CompleteImage} imageStyle={getImageStyle} />,
+      take: <ImageView imageSource={RestImage} imageStyle={takeImageStyle}/>,
+      skip: <View style={stopImageStyle} />,
+      ['']: null,
+    };
+  }
 
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
@@ -73,6 +115,7 @@ class PomodoroButtonPlay extends Component {
       startPomodoro,
       stopPomodoro,
       getPomodoro,
+      takeRest,
       currentTodo
     } = this.props;
 
@@ -86,22 +129,13 @@ class PomodoroButtonPlay extends Component {
 
         case 'get':
         return getPomodoro(currentTodo);
+
+        case 'take':
+        return takeRest(currentTodo, this.props.minutesAtATime);
+
+        case 'skip':
+        return skipRest(currentTodo);
       }
-    }
-  }
-
-
-  renderIcon(renderingIcon) {
-    const { playImageStyle, stopImageStyle, getImageStyle } = styles;
-    switch (renderingIcon) {
-      case 'start':
-      return <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />
-
-      case 'stop':
-      return <View style={stopImageStyle} />
-
-      case 'get':
-      return <ImageView imageSource={CompleteImage} imageStyle={getImageStyle} />
     }
   }
 
@@ -111,20 +145,24 @@ class PomodoroButtonPlay extends Component {
 
     const buttonOpacity = this.state.isAnimating ? 0 : 1;
     const animationOpacity = this.state.isAnimating ? 1 : 0;
+    const buttonColor = this.buttonColorMap[renderingIcon];
+    const Button = this.buttonMap[renderingIcon];
+    const Icon = this.iconMap[renderingIcon];
     return (
       <View>
         <Animated.View
           style={[
             animationStyle,
             {
+              backgroundColor: buttonColor,
               transform: [{ scale: this.state.bounceValue }],
               opacity: animationOpacity
             }
           ]}
         >
-          { this.renderIcon(renderingIcon) }
+          { Icon }
         </Animated.View>
-        <PlainFab
+        <Button
           style={[
             buttonStyle,
             {
@@ -133,8 +171,8 @@ class PomodoroButtonPlay extends Component {
           ]}
           onPress={this.onPress.bind(this)}
         >
-          { this.renderIcon(renderingIcon) }
-        </PlainFab>
+          { Icon }
+        </Button>
       </View>
     );
   }
@@ -174,6 +212,12 @@ const styles = {
     marginBottom: 2,
     width: 26,
     height: 26
+  },
+  takeImageStyle: {
+    tintColor: Color.White,
+    marginLeft: 7,
+    width: 26,
+    height: 26
   }
 };
 
@@ -188,6 +232,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   startPomodoro,
   stopPomodoro,
   getPomodoro,
+  takeRest,
+  skipRest
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PomodoroButtonPlay);

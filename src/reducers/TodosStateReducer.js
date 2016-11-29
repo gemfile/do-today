@@ -48,7 +48,7 @@ const onActivityPause = () => {
     isBackground = true;
 
     if (currentTodo && currentTodo.pomodoro.currentState === "started") {
-      notifyTick(currentTodo.index.toString(), 'Your pomodoro is running!', 'Stay Focused');
+      notifyTick('0', 'Your pomodoro is running!', 'Stay Focused');
     }
   }
 }
@@ -62,7 +62,7 @@ const onActivityResume = () => {
 let currentTodo;
 const updateCurrentTodo = (state) => {
   const todos = state.get('todos');
-  const currentPage = state.get('currentPage')
+  const currentPage = state.get('currentPage');
 
   if (todos.length !== 0 && currentPage !== -1) {
     currentTodo = todos.find(todo => todo.index === currentPage);
@@ -77,7 +77,7 @@ const initialState = Map({
   isLoading: false,
   currentPage: 0,
   currentTodo: null,
-  minutesAtATime: 1
+  minutesAtATime: .5
 });
 
 export default (state: TodosState = initialState, action: TodoStateAction) => {
