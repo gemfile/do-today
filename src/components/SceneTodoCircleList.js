@@ -14,10 +14,6 @@ import PomodoroButtonRemove from './PomodoroButtonRemove';
 import ConfirmAdding from './ConfirmAdding';
 import Tomatoes from './Tomatoes';
 
-const jsonEqual = (a, b) => {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
-
 class SceneTodoList extends Component {
   props: {
     fetchTodos: () => () => void,
@@ -40,15 +36,7 @@ class SceneTodoList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { todos, currentPage } = this.props;
-    const { currentTodo, todos: nextTodos, currentPage: nextCurrentPage } = nextProps;
-
-    // if (todos.length !== 0 && nextTodos.length > todos.length) {
-    //   this.props.preparePomodoro(0);
-    // }
-    // else if (nextTodos.length >= currentPage) {
-    //   this.props.preparePomodoro(currentPage-1);
-    // }
+    const { currentTodo } = nextProps;
 
     if (currentTodo) {
       this.setState({ scrollEnabled: currentTodo.pomodoro.currentState !== 'started' });

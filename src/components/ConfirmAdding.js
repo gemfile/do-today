@@ -32,7 +32,7 @@ class ConfirmAdding extends Component {
   }
 
   render() {
-    const { wholeContainerStyle, writingContainerStyle, modalStyle } = styles;
+    const { wholeContainerStyle, modalStyle } = styles;
 
     return (
       <Modal
@@ -43,13 +43,11 @@ class ConfirmAdding extends Component {
         transparent
       >
         <View style={wholeContainerStyle}>
-          <View style={writingContainerStyle}>
-            <Writing
-              ref={component => {this.writing = component}}
-              onAccept={() => this.props.setVislbleOfConfirmAdding(false)}
-              onDecline={() => this.props.setVislbleOfConfirmAdding(false)}
-            />
-          </View>
+          <Writing
+            ref={component => {this.writing = component}}
+            onAccept={() => this.props.setVislbleOfConfirmAdding(false)}
+            onDecline={() => this.props.setVislbleOfConfirmAdding(false)}
+          />
         </View>
       </Modal>
     );
@@ -65,9 +63,6 @@ const styles = {
     flex: 1,
     position: 'relative',
   },
-  writingContainerStyle: {
-    top: 60
-  }
 };
 
 const mapStateToProps = ({ modalVisible }: ReducersState) => {

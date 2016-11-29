@@ -9,7 +9,7 @@ import { Color } from './common';
 import DeleteImage from './img/delete.png';
 import ArchiveImage from './img/inbox_done.png';
 
-const PlainFab = MKButton.plainFab().withBackgroundColor('argb(255, 255, 255, 0)').build();
+const PlainFab = MKButton.plainFab().withBackgroundColor('rgba(255, 255, 255, 0)').build();
 
 class PomodoroButtonRemove extends Component
 {
@@ -117,16 +117,16 @@ class PomodoroButtonRemove extends Component
 
 const styles = {
   buttonStyle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center'
   },
   animationStyle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',

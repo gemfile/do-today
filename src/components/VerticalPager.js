@@ -72,7 +72,7 @@ class VerticalPager extends Component {
     // );
   // }
 
-  componentDidUpdate(prevProps: Props, prevState) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     const { currentPage, heightOfPage } = this.props;
     const { pageCount } = this.state;
     const { pageCount: prevPageCount } = prevState;

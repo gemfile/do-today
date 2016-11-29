@@ -7,18 +7,24 @@ import { MKButton } from 'react-native-material-kit';
 import type { ReducersState } from '../FlowType';
 import { CardSection, Input, ImageView, Color } from './common';
 import WriteImage from './img/write.png';
+import PlusImage from './img/plus_white.png';
 
-const ColoredButtonAdd =
-  MKButton.accentColoredFlatButton().
-  withText('Add').withTextStyle({color: Color.Green}).build();
+const FabCancel =
+  new MKButton.Builder()
+  .withFab(true)
+  .withRippleLocation('center')
+  .withRippleColor('rgba(158, 158, 158, 0.2)')
+  .withBackgroundColor(Color.Transparent).build();
 
-const ColoredButtonAddDiabled =
-  MKButton.accentColoredFlatButton().
-  withText('Add').withTextStyle({color: Color.Dim}).build();
+const ButtonAdd =
+  MKButton.coloredButton()
+  .withBackgroundColor(Color.Green)
+  .withText('Add').withTextStyle({color: Color.White}).build();
 
-const ColoredButtonCancel =
-  MKButton.accentColoredFlatButton().
-  withText('Cancel').withTextStyle({color: Color.Green}).build();
+const DiabledButtonAdd =
+  MKButton.coloredButton()
+  .withBackgroundColor(Color.Dim)
+  .withText('Add').withTextStyle({color: Color.White}).build();
 
 class Writing extends Component {
   input: Input;
@@ -62,18 +68,13 @@ class Writing extends Component {
     const { typingState } = this.props;
     const { text } = typingState;
     const isValueEmpty = text === '';
-    const ColoredButtonAddSelected =
-      isValueEmpty ? ColoredButtonAddDiabled : ColoredButtonAdd;
+    const ButtonAddSelected =
+      isValueEmpty ? DiabledButtonAdd : ButtonAdd;
 
     return (
       <View style={styles.lowerContainerStyle}>
         <View style={styles.buttonContainerStyle}>
-          <ColoredButtonCancel
-            onPress={this.onEndEditing.bind(this)}
-          />
-        </View>
-        <View style={styles.buttonContainerStyle}>
-          <ColoredButtonAddSelected
+          <ButtonAddSelected
             enabled={!isValueEmpty}
             onPress={this.onSubmitEditing.bind(this)}
           />
@@ -86,8 +87,11 @@ class Writing extends Component {
     const {
       wholeContainerStyle,
       upperContainerStyle,
-      imageStyle,
+      penImageStyle,
       inputContainerStyle,
+      cancelButtonStyle,
+      cancelImageStyle,
+      emptyAreaStyle
     } = styles;
 
     const { text, isFocused } = this.props.typingState;
@@ -95,9 +99,12 @@ class Writing extends Component {
     return (
       <CardSection>
         <View style={wholeContainerStyle}>
+          <FabCancel style={cancelButtonStyle} onPress={this.onEndEditing.bind(this)} >
+            <ImageView imageSource={PlusImage} imageStyle={cancelImageStyle}/>
+          </FabCancel>
 
           <View style={upperContainerStyle}>
-            <ImageView imageStyle={imageStyle} imageSource={WriteImage} />
+            <ImageView imageStyle={penImageStyle} imageSource={WriteImage} />
             <View style={inputContainerStyle}>
               <Input
                 placeholder={'What To Do'}
@@ -113,6 +120,8 @@ class Writing extends Component {
             </View>
           </View>
 
+          <View style={emptyAreaStyle} />
+
           { this.renderButton() }
 
         </View>
@@ -126,23 +135,20 @@ const styles = {
     flex: 1,
     flexDirection: 'column',
   },
-
   upperContainerStyle: {
     height: 60,
-    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
-  imageStyle: {
+  penImageStyle: {
     width: 24,
     height: 24,
     tintColor: Color.Dim
   },
-
   inputContainerStyle: {
     flex: 6,
     marginRight: 2
   },
-
   lowerContainerStyle: {
     flexDirection: 'row',
     justifyContent: 'flex-end'
@@ -151,8 +157,18 @@ const styles = {
     height: 40,
     width: 100,
     alignSelf: 'flex-end',
-    marginRight: 7
+    marginRight: 3,
+    marginBottom: 3,
   },
+  cancelButtonStyle: {
+    width: 60, height: 60
+  },
+  cancelImageStyle: {
+    tintColor: Color.Green, transform: [{ rotate: '45deg' }]
+  },
+  emptyAreaStyle: {
+    flex: 1
+  }
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({

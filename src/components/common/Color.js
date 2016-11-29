@@ -10,7 +10,8 @@ const Color = {
   Dim: '#cccccc',
   Clickable: '#b8b8b8',
   Background: '#bcbfc7',
-  TodoBackground: '#fff5f5'
+  TodoBackground: '#fff5f5',
+  Transparent: 'rgba(255, 255, 255, 0)',
 };
 
 export { Color };

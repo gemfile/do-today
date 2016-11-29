@@ -9,7 +9,7 @@ import { setVislbleOfConfirmAdding } from 'actions';
 import { Color } from './common';
 import WriteImage from './img/write.png';
 
-const PlainFab = MKButton.plainFab().withBackgroundColor('argb(255, 255, 255, 0)').build();
+const PlainFab = MKButton.plainFab().withBackgroundColor('rgba(255, 255, 255, 0)').build();
 
 class PomodoroButtonAdd extends Component
 {
@@ -30,9 +30,9 @@ class PomodoroButtonAdd extends Component
 
 const styles = {
   buttonStyle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
