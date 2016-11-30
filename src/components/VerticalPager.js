@@ -192,7 +192,7 @@ const styles = {
     margin: 0
   },
   dotStyle: {
-    backgroundColor: 'rgba(0,0,0,.2)',
+    backgroundColor: Color.Deactivated,
     width: 8,
     height: 8,
     borderRadius: 4,

@@ -83,7 +83,7 @@ const styles = {
     flex: 1,
     flexDirection: 'row',
     position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     top: 0,
     left: 0,
     right: 0,

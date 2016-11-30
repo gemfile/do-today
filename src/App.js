@@ -119,7 +119,7 @@ const styles = {
   iconStyle: {
     width: 22,
     height: 22,
-    tintColor: 'rgba(0,0,0,.2)',
+    tintColor: Color.Deactivated,
   },
   highlightingStyle: {
     tintColor: Color.White

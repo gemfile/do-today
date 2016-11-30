@@ -139,6 +139,7 @@ class TodoCircle extends Component {
         nextPomodoro.endTime < now;
 
       const finished =
+        currentPomodoro.currentState === 'taken' &&
         nextPomodoro.currentState === 'finished';
 
       // console.log('1', currentPomodoro.currentState, nextPomodoro.currentState);
