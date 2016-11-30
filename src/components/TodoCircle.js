@@ -38,7 +38,6 @@ type State = {
   heightOfTime: number,
   opacityOfTime: number,
   progress: number,
-  color: string,
 }
 
 class TodoCircle extends Component {
@@ -51,6 +50,7 @@ class TodoCircle extends Component {
   fullSeconds: number;
   updatingData: boolean;
   startOnce: boolean;
+  colorMap: {[name: string]: string};
 
   constructor(props) {
     super(props);
@@ -64,7 +64,14 @@ class TodoCircle extends Component {
       heightOfTime: 0,
       opacityOfTime: 0,
       progress: 0,
-      color: Color.Dim
+    };
+    this.colorMap = {
+      start: Color.Red,
+      stop: Color.Red,
+      get: Color.Red,
+      take: Color.Green,
+      skip: Color.Green,
+      ['']: Color.Dim,
     };
 
     this.secondsLeft = secondsLeft;
@@ -158,9 +165,9 @@ class TodoCircle extends Component {
           this.ticking( nextPomodoro.startTime, ()=>finishRest(todo) );
         }
 
-        if (stopped || got || skipped || finished ) {
-          SoundPlayer.play('stop', 4);
-          this.animateProgress(this.fullSeconds - this.secondsLeft, Easing.sin, 395 );
+        if ( stopped || got || skipped || finished ) {
+          SoundPlayer.play( 'stop', 4 );
+          this.animateProgress( this.fullSeconds - this.secondsLeft, Easing.sin, 395 );
 
           clearPomodoro();
         }
@@ -170,7 +177,7 @@ class TodoCircle extends Component {
     }
   }
 
-  ticking(startTime, onComplete) {
+  ticking( startTime, onComplete ) {
     const currentTime = new Date().getTime();
     const elapsedTime = (currentTime - startTime) / 1000;
     const nextTargetTime = Math.max(this.fullSeconds - elapsedTime - 1, 0);
@@ -188,7 +195,7 @@ class TodoCircle extends Component {
         1000
       );
     } else {
-      setTimeout( onComplete, nextTimeOffset );
+      setTimeout(onComplete, nextTimeOffset);
     }
   }
 
@@ -231,7 +238,7 @@ class TodoCircle extends Component {
 
   render() {
     const { containerStyle, titleTextStyle, timeTextStyle, rotate } = styles;
-    const { style: styleProps } = this.props;
+    const { style: styleProps, todo } = this.props;
     const { width, height } = styleProps;
     const {
       widthOfTitle,
@@ -241,9 +248,10 @@ class TodoCircle extends Component {
       heightOfTime,
       opacityOfTime,
       progress,
-      color
     } = this.state;
+    const color = this.colorMap[todo.pomodoro.nextState];
     const timeTextColor = progress === 1 ? color : Color.White;
+
 
     return (
       <View

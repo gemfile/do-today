@@ -26,9 +26,9 @@ class PomodoroButtonPlay extends Component {
     minutesAtATime: number
   }
   aniCount: number;
-  buttonMap: { [name: string]: MKButton };
-  buttonColorMap: { [name: string]: string };
-  iconMap: { [name: string]: View };
+  buttonMap: {[name: string]: MKButton};
+  buttonColorMap: {[name: string]: string};
+  iconMap: {[name: string]: View};
   state: {
     bounceValue: Animated.Value,
     renderingIcon: string,
