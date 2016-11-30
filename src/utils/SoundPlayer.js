@@ -2,13 +2,11 @@
 
 import Sound from 'react-native-sound';
 
-const repeatPlaying = (sound, count, volume) => {
-  sound.setVolume(volume).play(success => {
+const repeat = async (sound, count, volume) => {
+  while (count > 0) {
+    await new Promise( resolve => sound.setVolume(volume).play(resolve) );
     count -= 1;
-    if (success && count > 0) {
-      repeatPlaying(sound, count, volume);
-    }
-  });
+  }
 };
 
 class SoundPlayer {
@@ -32,7 +30,7 @@ class SoundPlayer {
   play(name: string, repeatCount: number = 1) {
     const sound = this.soundMap[name];
     if (this.volume !== 0 && sound) {
-      repeatPlaying(sound, repeatCount, this.volume);
+      repeat(sound, repeatCount, this.volume);
     }
   }
 

@@ -39,8 +39,6 @@ class SceneTodoList extends Component {
     const { currentTodo } = nextProps;
 
     if (currentTodo) {
-      console.log('hoi', currentTodo.pomodoro.currentState);
-
       this.setState({
         scrollEnabled: (
           currentTodo.pomodoro.currentState !== 'started' &&
