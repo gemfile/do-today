@@ -22,7 +22,7 @@ const MAX_HEIGHT = 48;
 
 class Pomodoro extends Component {
   state: {
-    minutesAtATime: number,
+    minutesForPomodoro: number,
     secondsLeft: number,
     fullSeconds: number,
     submenuButton: SubmenuButton,
@@ -36,10 +36,10 @@ class Pomodoro extends Component {
   constructor(props: Props) {
     super(props);
 
-    const minutesAtATime = 1;
-    const secondsLeft = minutesAtATime * 60;
+    const minutesForPomodoro = 1;
+    const secondsLeft = minutesForPomodoro * 60;
     this.state = {
-      minutesAtATime,
+      minutesForPomodoro,
       secondsLeft,
       fullSeconds: secondsLeft,
       submenuButton: 'start',

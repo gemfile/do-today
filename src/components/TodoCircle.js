@@ -27,7 +27,7 @@ type Props = {
   finishRest: (todo: Object) => Object,
   loaded: boolean,
   completed: boolean,
-  minutesAtATime: number,
+  minutesLeft: number,
 };
 
 type State = {
@@ -55,7 +55,6 @@ class TodoCircle extends Component {
   constructor(props) {
     super(props);
 
-    const secondsLeft = this.props.minutesAtATime * 60;
     this.state = {
       widthOfTitle: 0,
       heightOfTitle: 0,
@@ -74,8 +73,6 @@ class TodoCircle extends Component {
       ['']: Color.Dim,
     };
 
-    this.secondsLeft = secondsLeft;
-    this.fullSeconds = secondsLeft;
     this.animatedValueForProgress = new Animated.Value(0);
     this.progressListener = new AnimatedValueSubscription(
       this.animatedValueForProgress,
@@ -87,9 +84,16 @@ class TodoCircle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { todo, clearPomodoro, loaded, completePomodoro, finishRest } = this.props;
+    const { todo, clearPomodoro, completePomodoro, finishRest, minutesLeft } = this.props;
+    const { loaded, todo: nextTodo, minutesLeft: nextMinutesLeft } = nextProps;
+
     const { pomodoro: currentPomodoro } = todo;
-    const { pomodoro: nextPomodoro } = nextProps.todo;
+    const { pomodoro: nextPomodoro } = nextTodo;
+
+    if (!this.secondsLeft || minutesLeft !== nextMinutesLeft) {
+      this.secondsLeft = nextMinutesLeft * 60;
+      this.fullSeconds = this.secondsLeft;
+    }
 
     if (currentPomodoro && nextPomodoro) {
       const now = new Date().getTime();
@@ -142,16 +146,16 @@ class TodoCircle extends Component {
         currentPomodoro.currentState === 'taken' &&
         nextPomodoro.currentState === 'finished';
 
-      // console.log('1', currentPomodoro.currentState, nextPomodoro.currentState);
-      // console.log('2', started, taken, stopped, notYetCompleted, completed, got, skipped, notYetFinished, finished);
-      // console.log('3', nextPomodoro.endTime, now);
-
       if (completed) {
         this.animatedValueForProgress.setValue(1);
         this.secondsLeft = 0;
       }
 
       if (loaded) {
+        // console.log('0', todo.index, this.startOnce);
+        // console.log('1', currentPomodoro, nextPomodoro);
+        // console.log('2', started, taken, stopped, notYetCompleted, completed, got, skipped, notYetFinished, finished);
+        // console.log('3', nextPomodoro.endTime, now);
         if (notYetCompleted) {
           completePomodoro(todo);
         }
@@ -172,9 +176,10 @@ class TodoCircle extends Component {
 
           clearPomodoro();
         }
+
+        this.startOnce = false;
       }
 
-      this.startOnce = false;
     }
   }
 
@@ -252,7 +257,6 @@ class TodoCircle extends Component {
     } = this.state;
     const color = this.colorMap[todo.pomodoro.nextState];
     const timeTextColor = progress === 1 ? color : Color.White;
-
 
     return (
       <View
@@ -344,10 +348,24 @@ const styles = {
 };
 
 const mapStateToProps = ({ todosState }: ReducersState, { todo }: Props) => {
-  const { currentPage, minutesAtATime } = todosState.toObject();
+  const { currentPage, minutesForPomodoro, minutesForBreak } = todosState.toObject();
+
+  let minutesLeft = 0;
+  switch (todo.pomodoro.nextState) {
+    case 'start':
+    case 'stop':
+    minutesLeft = minutesForPomodoro;
+    break;
+
+    case 'take':
+    case 'skip':
+    minutesLeft = minutesForBreak;
+    break;
+  }
+
   return {
     loaded: currentPage === todo.index,
-    minutesAtATime: minutesAtATime
+    minutesLeft,
   };
 };
 

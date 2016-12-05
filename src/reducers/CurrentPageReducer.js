@@ -13,7 +13,7 @@ export default (state: CurrentPageState = 0, action: CurrentPageAction) => {
     case FETCH_CURRENT_PAGE: {
       const keyOfStorage = action.payload.rootRefKey;
       const currentPage = action.payload.value.currentPage;
-      if (currentPage) {
+      if (Number.isInteger(currentPage)) {
         LocalStorage.setItem(`${keyOfStorage}/currentPage`, currentPage);
         return currentPage;
       }

@@ -7,13 +7,14 @@ import { Color } from '../components/common';
 import {
   FETCH_TODOS,
   LOAD_TODOS,
-  PREPARE_POMODORO
+  PREPARE_POMODORO,
+  // FETCH_CURRENT_PAGE
 } from '../actions/ActionType';
 import type { TodosState, Action } from '../FlowType';
 type Todo = { title: string, id: string, pomodoro: Object };
 type TodoStateAction = Action<{
   rootRefKey: string,
-  value: { todos: {todoId: Todo} }
+  value: {todos: {todoId: Todo}} & {currentPage: number}
 }>;
 
 const TODOS = 'todos';
@@ -77,7 +78,8 @@ const initialState = Map({
   isLoading: false,
   currentPage: 0,
   currentTodo: null,
-  minutesAtATime: .5
+  minutesForPomodoro: .5,
+  minutesForBreak: .5,
 });
 
 export default (state: TodosState = initialState, action: TodoStateAction) => {
@@ -108,6 +110,9 @@ export default (state: TodosState = initialState, action: TodoStateAction) => {
 
     case PREPARE_POMODORO:
       return updateCurrentTodo( state.set('currentPage', action.payload) );
+
+    // case FETCH_CURRENT_PAGE:
+    //   return updateCurrentTodo( state.set('currentPage', action.payload.value.currentPage) );
 
     default:
       return state;

@@ -117,8 +117,8 @@ export const deleteTodos = (todos: Array<Object>) => () => {
   rootRef.update(updates);
 };
 
-export const startPomodoro = (todo: Object, minutesAtATime: number) => {
-  const endTime = new Date(Date.now() + (minutesAtATime * 60 * 1000));
+export const startPomodoro = (todo: Object, minutesForPomodoro: number) => {
+  const endTime = new Date(Date.now() + (minutesForPomodoro * 60 * 1000));
   makeSchedule( '0', 'Your pomodoro has finished!', 'Take a Break', endTime );
   const payload = {
     nextState: 'stop',
@@ -179,8 +179,8 @@ export const finishRest = (todo: Object) => {
   return { type: FINISH_REST, payload };
 }
 
-export const takeRest = (todo: Object, minutesAtATime: number) => {
-  const endTime = new Date(Date.now() + (minutesAtATime * 60 * 1000));
+export const takeRest = (todo: Object, minutesForRest: number) => {
+  const endTime = new Date(Date.now() + (minutesForRest * 60 * 1000));
   makeSchedule( '0', "Time's up!", 'Ready to start', endTime );
   const payload = {
     nextState: 'skip',

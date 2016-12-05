@@ -18,12 +18,13 @@ const PlainFabGreen = MKButton.plainFab().withBackgroundColor(Color.Green).build
 
 class PomodoroButtonPlay extends Component {
   props: {
-    startPomodoro: (todo: Object, minutesAtATime: number) => Object,
+    startPomodoro: (todo: Object, minutesForPomodoro: number) => Object,
     stopPomodoro: (todo: Object) => Object,
     getPomodoro: (todo: Object) => Object,
-    takeRest: (todo: Object) => Object,
+    takeRest: (todo: Object, minutesForBreak: number) => Object,
     currentTodo: Object,
-    minutesAtATime: number
+    minutesForPomodoro: number,
+    minutesForBreak: number
   }
   aniCount: number;
   buttonMap: {[name: string]: MKButton};
@@ -122,7 +123,7 @@ class PomodoroButtonPlay extends Component {
     if (currentTodo) {
       switch (currentTodo.pomodoro.nextState) {
         case 'start':
-        return startPomodoro(currentTodo, this.props.minutesAtATime);
+        return startPomodoro(currentTodo, this.props.minutesForPomodoro);
 
         case 'stop':
         return stopPomodoro(currentTodo);
@@ -131,7 +132,7 @@ class PomodoroButtonPlay extends Component {
         return getPomodoro(currentTodo);
 
         case 'take':
-        return takeRest(currentTodo, this.props.minutesAtATime);
+        return takeRest(currentTodo, this.props.minutesForBreak);
 
         case 'skip':
         return skipRest(currentTodo);
@@ -222,9 +223,12 @@ const styles = {
 };
 
 const mapStateToProps = ({ todosState }: ReducersState) => {
+  const { currentTodo, minutesForPomodoro, minutesForBreak } = todosState.toObject();
+
   return {
-    currentTodo: todosState.get('currentTodo'),
-    minutesAtATime: todosState.get('minutesAtATime')
+    currentTodo,
+    minutesForPomodoro,
+    minutesForBreak
   };
 };
 

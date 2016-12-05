@@ -17,7 +17,7 @@ const initialState = Map({
   nextState: 'start',
   startTime: -1,
   endTime: -1,
-  minutesAtATime: 1
+  minutesForPomodoro: 1
 });
 
 export default (state: State = initialState, action: Object) => {
