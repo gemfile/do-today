@@ -80,6 +80,8 @@ class TodoCircle extends Component {
         this.setState({ progress: data.value });
       }
     );
+    this.secondsLeft = props.minutesLeft * 60;
+    this.fullSeconds = this.secondsLeft;
     this.startOnce = true;
   }
 
@@ -90,7 +92,7 @@ class TodoCircle extends Component {
     const { pomodoro: currentPomodoro } = todo;
     const { pomodoro: nextPomodoro } = nextTodo;
 
-    if (!this.secondsLeft || minutesLeft !== nextMinutesLeft) {
+    if (minutesLeft !== nextMinutesLeft) {
       this.secondsLeft = nextMinutesLeft * 60;
       this.fullSeconds = this.secondsLeft;
     }
@@ -157,17 +159,17 @@ class TodoCircle extends Component {
         // console.log('2', started, taken, stopped, notYetCompleted, completed, got, skipped, notYetFinished, finished);
         // console.log('3', nextPomodoro.endTime, now);
         if (notYetCompleted) {
-          completePomodoro(todo);
+          completePomodoro(nextTodo);
         }
         if (started) {
-          this.ticking( nextPomodoro.startTime, ()=>completePomodoro(todo) );
+          this.ticking( nextPomodoro.startTime, ()=>completePomodoro(nextTodo) );
         }
 
         if (notYetFinished) {
-          finishRest(todo);
+          finishRest(nextTodo);
         }
         if (taken) {
-          this.ticking( nextPomodoro.startTime, ()=>finishRest(todo) );
+          this.ticking( nextPomodoro.startTime, ()=>finishRest(nextTodo) );
         }
 
         if ( stopped || got || skipped || finished ) {
@@ -213,6 +215,9 @@ class TodoCircle extends Component {
       progress: nextProgress
     } = nextState;
 
+    const { minutesLeft } = this.props;
+    const { minutesLeft: nextMinutesLeft } = nextProps;
+
     const { width, height } = this.props.style;
     const { width: nextWidth, height: nextHeight } = nextProps.style;
 
@@ -221,7 +226,8 @@ class TodoCircle extends Component {
       height !== nextHeight ||
       widthOfTitle !== nextWidthOfTitle ||
       widthOfTime !== nextWidthOfTime ||
-      progress !== nextProgress
+      progress !== nextProgress ||
+      minutesLeft !== nextMinutesLeft
     );
   }
 
@@ -239,7 +245,7 @@ class TodoCircle extends Component {
       duration
     }).start( callback );
 
-    return {nextSecondsLeft, nextTimeOffset: duration};
+    return { nextSecondsLeft, nextTimeOffset: duration };
   }
 
   render() {
@@ -299,7 +305,7 @@ class TodoCircle extends Component {
             });
           }}
         >
-          {secondsToMinutes(this.secondsLeft)}
+          { secondsToMinutes(this.secondsLeft) }
         </Text>
 
         <Text

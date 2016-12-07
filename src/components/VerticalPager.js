@@ -174,10 +174,10 @@ class VerticalPager extends Component {
 
 const styles = {
   containerStyle: {
-    flex: 1
+    flex: 1,
   },
   scrollViewStyle: {
-    backgroundColor: '#6A85B1',
+    backgroundColor: Color.Background,
   },
   paginationContainerStyle: {
     position: 'absolute',

@@ -14,7 +14,7 @@ import PomodoroButtonRemove from './PomodoroButtonRemove';
 import ConfirmAdding from './ConfirmAdding';
 import Tomatoes from './Tomatoes';
 
-class SceneTodoList extends Component {
+class SceneTodoCircles extends Component {
   props: {
     fetchTodos: () => () => void,
     fetchCurrentPage: () => () => void,
@@ -175,4 +175,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   preparePomodoro
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(SceneTodoList);
+export default connect(mapStateToProps, mapDispatchToProps)(SceneTodoCircles);

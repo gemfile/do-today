@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import reducers from './reducers';
 import RootNavigator from './RootNavigator';
 import RootTabs from './RootTabs';
-import SceneTodoCircleList from './components/SceneTodoCircleList';
+import SceneTodoCircles from './components/SceneTodoCircles';
 import { ImageView, Color } from './components/common';
 import TodoListImage from './components/img/todo_list.png';
 import StatsImage from './components/img/stats.png';
@@ -62,7 +62,7 @@ class App extends Component {
   renderScene(sceneName: string) {
     switch (sceneName) {
       case 'scene_todo_list':
-        return <SceneTodoCircleList />
+        return <SceneTodoCircles />
 
       case 'scene_todo':
       default:

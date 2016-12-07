@@ -122,9 +122,11 @@ export const startPomodoro = (todo: Object, minutesForPomodoro: number) => {
   makeSchedule( '0', 'Your pomodoro has finished!', 'Take a Break', endTime );
   const payload = {
     nextState: 'stop',
-    currentState: 'started'
+    currentState: 'started',
+    startTime: new Date().getTime(),
+    endTime: endTime.getTime(),
   };
-  updatePomodoro( todo, payload, new Date().getTime(), endTime.getTime() );
+  updatePomodoro( todo, payload );
 
   return { type: START_POMODORO, payload };
 }
@@ -160,9 +162,12 @@ export const clearPomodoro = () => {
 }
 
 export const completePomodoro = (todo: Object) => {
+  const { pomodoro } = todo;
   const payload = {
     nextState: 'get',
-    currentState: 'completed'
+    currentState: 'completed',
+    startTime: pomodoro.startTime,
+    endTime: pomodoro.endTime,
   };
   updatePomodoro(todo, payload);
 
@@ -181,34 +186,42 @@ export const finishRest = (todo: Object) => {
 
 export const takeRest = (todo: Object, minutesForRest: number) => {
   const endTime = new Date(Date.now() + (minutesForRest * 60 * 1000));
-  makeSchedule( '0', "Time's up!", 'Ready to start', endTime );
+  makeSchedule( '0', "The break is over.", 'Time to Work', endTime );
   const payload = {
     nextState: 'skip',
-    currentState: 'taken'
+    currentState: 'taken',
+    startTime: new Date().getTime(),
+    endTime: endTime.getTime(),
   }
-  updatePomodoro( todo, payload, new Date().getTime(), endTime.getTime() );
+  updatePomodoro( todo, payload );
 
   return { type: TAKE_REST, payload };
 };
 
 export const getPomodoro = (todo: Object) => {
+  const { pomodoro } = todo;
+  const lengthOfDetails = pomodoro.details ? Object.keys(pomodoro.details).length : 0;
+  const details = {
+    ...pomodoro.details,
+    [lengthOfDetails]: {startTime: pomodoro.startTime, endTime: pomodoro.endTime}
+  };
+
   const payload = {
     nextState: 'take',
     currentState: 'got',
+    details
   };
-  updatePomodoro(todo, payload, -1, -1, 1);
+  updatePomodoro(todo, payload, 1);
 
   return { type: GET_POMODORO, payload };
 };
 
-const updatePomodoro = (todo, payload, nextStartTime = -1, nextEndTime = -1, countOffset = 0) => {
+const updatePomodoro = (todo, payload, countOffset = 0) => {
   const { id, pomodoro } = todo;
-  const { count } = pomodoro;
-
+  const { count, details } = pomodoro;
   const nextPomodoro = {
-    startTime: nextStartTime,
-    endTime: nextEndTime,
     count: count + countOffset,
+    details,
     ...payload
   };
 

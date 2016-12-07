@@ -48,8 +48,13 @@ const onActivityPause = () => {
   if (!isBackground) {
     isBackground = true;
 
-    if (currentTodo && currentTodo.pomodoro.currentState === "started") {
-      notifyTick('0', 'Your pomodoro is running!', 'Stay Focused');
+    if (currentTodo) {
+      if (currentTodo.pomodoro.currentState === "started") {
+        notifyTick('0', 'Your pomodoro is running!', 'Stay Focused');
+      }
+      if (currentTodo.pomodoro.currentState === "taken") {
+        notifyTick('0', 'Take a rest.', 'You Deserve It');
+      }
     }
   }
 }
@@ -78,8 +83,8 @@ const initialState = Map({
   isLoading: false,
   currentPage: 0,
   currentTodo: null,
-  minutesForPomodoro: .5,
-  minutesForBreak: .5,
+  minutesForPomodoro: 25,
+  minutesForBreak: 5,
 });
 
 export default (state: TodosState = initialState, action: TodoStateAction) => {

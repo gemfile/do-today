@@ -21,6 +21,7 @@ class Tomatoes extends Component {
     const { height } = this.state;
 
     const needUpdate =
+      ( currentTodo && !nextTodo ) ||
       ( !currentTodo && nextTodo ) ||
       currentTodo &&
       nextTodo &&
