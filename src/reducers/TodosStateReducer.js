@@ -57,13 +57,13 @@ const onActivityPause = () => {
       }
     }
   }
-}
+};
 
 const onActivityResume = () => {
   if (isBackground) {
     isBackground = false;
   }
-}
+};
 
 let currentTodo;
 const updateCurrentTodo = (state) => {
