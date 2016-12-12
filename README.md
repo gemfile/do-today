@@ -5,21 +5,27 @@
 
 # Do Today
 
-Pomodoro App written in React Native for demo purpose. (Available only on Android)
+[Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) App written in React Native for demo purpose. (available only on Android)
 
 ## Features
+- Make a task
+- Set the timer
+- Focus
+- Get the pomodoro
+- Record a task
+- Visualize what you've done
 
 ## Plugins used
-- [immutable-js](https://github.com/facebook/immutable-js/) - blah
-- [react-native-activity-android](https://github.com/jaysoo/react-native-activity-android) - blah
-- [react-native-device-info](https://github.com/rebeccahughes/react-native-device-info) - blah
-- [react-native-firestack](https://github.com/fullstackreact/react-native-firestack) - blah
-- [react-native-material-kit](https://github.com/xinthink/react-native-material-kit) - blah
-- [react-native-push-notification](https://github.com/zo0r/react-native-push-notification) - blah
-- [react-native-sound](https://github.com/zmxv/react-native-sound) - blah
-- [react-redux](https://github.com/reactjs/react-redux) - blah
-- [redux](https://github.com/reactjs/redux) - blah
-- [redux-thunk](https://github.com/gaearon/redux-thunk) - blah
+
+- [redux](https://github.com/reactjs/redux)
+- [redux-thunk](https://github.com/gaearon/redux-thunk)
+- [immutable-js](https://github.com/facebook/immutable-js/)
+- [react-native-activity-android](https://github.com/jaysoo/react-native-activity-android)
+- [react-native-device-info](https://github.com/rebeccahughes/react-native-device-info)
+- [react-native-firestack](https://github.com/fullstackreact/react-native-firestack)
+- [react-native-material-kit](https://github.com/xinthink/react-native-material-kit)
+- [react-native-push-notification](https://github.com/zo0r/react-native-push-notification)
+- [react-native-sound](https://github.com/zmxv/react-native-sound)
 
 ## Running
 #### Clone & install

@@ -80,7 +80,7 @@ const updateCurrentTodo = (state) => {
 
 const initialState = Map({
   todos: [],
-  isLoading: false,
+  phaseOfLoading: '',
   currentPage: 0,
   currentTodo: null,
   minutesForPomodoro: 25,
@@ -111,7 +111,7 @@ export default (state: TodosState = initialState, action: TodoStateAction) => {
     }
 
     case LOAD_TODOS:
-      return state.set('isLoading', action.payload);
+      return state.set('phaseOfLoading', action.payload);
 
     case PREPARE_POMODORO:
       return updateCurrentTodo( state.set('currentPage', action.payload) );

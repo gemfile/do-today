@@ -107,7 +107,7 @@ class Writing extends Component {
             <ImageView imageStyle={penImageStyle} imageSource={WriteImage} />
             <View style={inputContainerStyle}>
               <Input
-                placeholder={'What To Do'}
+                placeholder={'Make a task'}
                 onFocus={this.onFocus.bind(this)}
                 onChangeText={this.onChangeText.bind(this)}
                 onEndEditing={this.onEndEditing.bind(this)}

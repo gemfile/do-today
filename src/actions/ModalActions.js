@@ -16,7 +16,7 @@ export const focus = (isFocused: boolean) => ({
   payload: isFocused
 });
 
-export const setVislbleOfConfirmAdding = (visible: boolean) => ({
+export const showModalAdding = (visible: boolean) => ({
   type: SET_VIAIBLE_OF_CONFIRM_ADDING,
   payload: visible
 });

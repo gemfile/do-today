@@ -30,19 +30,19 @@ type Dispatch = (action: Object) => void;
 export const fetchTodos = () => (
   (dispatch: Dispatch) => {
     LocalStorage.getItem(`${rootRefKey}/${TODOS}`, (data) => {
-      dispatchFetchingOfTodos(dispatch, {[TODOS]: data}, true);
+      dispatchFetchingOfTodos(dispatch, {[TODOS]: data}, 'local');
     }).then(
       () => {
         rootRef.child(`${TODOS}`).on('value', snapshot => {
-          dispatchFetchingOfTodos(dispatch, {[TODOS]: snapshot.val()}, false);
+          dispatchFetchingOfTodos(dispatch, {[TODOS]: snapshot.val()}, 'remote');
         });
       }
     );
   }
 );
 
-const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
-  dispatch({ type: LOAD_TODOS, payload: isLocal });
+const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, stateOfLoading: string) => {
+  dispatch({ type: LOAD_TODOS, payload: stateOfLoading });
 
   if (value !== null) {
     dispatch({ type: FETCH_TODOS, payload: {rootRefKey, value} });

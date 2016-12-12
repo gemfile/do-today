@@ -10,7 +10,7 @@ export type NavigationState = {
 };
 export type NavigatingPositionState = number;
 export type ModalVisibleState = {
-  confirmAdding: boolean
+  adding: boolean
 };
 export type CurrentPageState = number;
 export type ReducersState = {

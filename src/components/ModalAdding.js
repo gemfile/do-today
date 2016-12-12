@@ -4,22 +4,22 @@ import React, { Component } from 'react';
 import { View, Modal, Keyboard, LayoutAnimation } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { setVislbleOfConfirmAdding } from 'actions';
+import { showModalAdding } from 'actions';
 import type { ReducersState } from '../FlowType';
 import { Color } from './common';
 import Writing from './Writing';
 
-class ConfirmAdding extends Component {
+class ModalAdding extends Component {
   props: {
     visible: boolean,
-    setVislbleOfConfirmAdding: (visible: boolean) => Object,
+    showModalAdding: (visible: boolean) => Object,
   }
   writing: Writing;
   keyboardDidHide: Object;
 
   componentDidMount() {
     this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', () => {
-      this.props.setVislbleOfConfirmAdding(false);
+      this.props.showModalAdding(false);
     });
   }
 
@@ -39,14 +39,14 @@ class ConfirmAdding extends Component {
         style={modalStyle}
         visible={this.props.visible}
         animationType='fade'
-        onRequestClose={() => this.props.setVislbleOfConfirmAdding(false)}
+        onRequestClose={() => this.props.showModalAdding(false)}
         transparent
       >
         <View style={wholeContainerStyle}>
           <Writing
             ref={component => {this.writing = component}}
-            onAccept={() => this.props.setVislbleOfConfirmAdding(false)}
-            onDecline={() => this.props.setVislbleOfConfirmAdding(false)}
+            onAccept={() => this.props.showModalAdding(false)}
+            onDecline={() => this.props.showModalAdding(false)}
           />
         </View>
       </Modal>
@@ -66,12 +66,12 @@ const styles = {
 };
 
 const mapStateToProps = ({ modalVisible }: ReducersState) => {
-  const { confirmAdding: visible } = modalVisible;
+  const { adding: visible } = modalVisible;
   return { visible };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  setVislbleOfConfirmAdding,
+  showModalAdding,
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfirmAdding);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalAdding);

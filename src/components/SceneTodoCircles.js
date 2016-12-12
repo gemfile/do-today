@@ -4,14 +4,14 @@ import React, { Component } from 'react';
 import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTodos, fetchCurrentPage, preparePomodoro } from 'actions';
-import type { ReducersState } from '../FlowType';
+import { fetchTodos, fetchCurrentPage, preparePomodoro, showModalAdding } from 'actions';
+import type { ReducersState, ModalVisibleState } from '../FlowType';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
 import PomodoroButtonPlay from './PomodoroButtonPlay';
 import PomodoroButtonAdd from './PomodoroButtonAdd';
 import PomodoroButtonRemove from './PomodoroButtonRemove';
-import ConfirmAdding from './ConfirmAdding';
+import ModalAdding from './ModalAdding';
 import Tomatoes from './Tomatoes';
 
 class SceneTodoCircles extends Component {
@@ -19,9 +19,12 @@ class SceneTodoCircles extends Component {
     fetchTodos: () => () => void,
     fetchCurrentPage: () => () => void,
     preparePomodoro: () => Object,
+    showModalAdding: (visible: boolean) => Object,
     todos: Array<Object>,
     currentTodo: Object,
-    currentPage: number
+    currentPage: number,
+    modalVisible: ModalVisibleState,
+    phaseOfLoading: string
   };
 
   state = {
@@ -36,7 +39,7 @@ class SceneTodoCircles extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentTodo } = nextProps;
+    const { currentTodo, todos, modalVisible, showModalAdding, phaseOfLoading } = nextProps;
 
     if (currentTodo) {
       this.setState({
@@ -45,6 +48,10 @@ class SceneTodoCircles extends Component {
           currentTodo.pomodoro.currentState !== 'taken'
         )
       });
+    }
+
+    if (phaseOfLoading === 'remote' && todos.length === 0 && modalVisible.adding === false) {
+      showModalAdding(true);
     }
   }
 
@@ -128,7 +135,7 @@ class SceneTodoCircles extends Component {
         </View>
 
         <View style={modalContainerStyle}>
-          <ConfirmAdding />
+          <ModalAdding />
         </View>
       </View>
     );
@@ -165,14 +172,15 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ todosState, currentPage }: ReducersState) => {
-  return { ...todosState.toObject(), currentPage };
+const mapStateToProps = ({ todosState, currentPage, modalVisible }: ReducersState) => {
+  return { ...todosState.toObject(), currentPage, modalVisible };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,
   fetchCurrentPage,
-  preparePomodoro
+  preparePomodoro,
+  showModalAdding
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SceneTodoCircles);

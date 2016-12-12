@@ -314,6 +314,8 @@ class TodoCircle extends Component {
             rotate,
             { left: (height-widthOfTime)/2 - 60, bottom: (width-heightOfTime)/2, opacity: opacityOfTime }
           ]}
+          ellipsizeMode='tail'
+          numberOfLines={1}
           onLayout={event => {
             const layout = event.nativeEvent.layout;
             this.setState({
@@ -338,6 +340,7 @@ const styles = {
     alignItems: 'center',
   },
   titleTextStyle: {
+    width: 184,
     position: 'absolute',
     color: Color.Deactivated,
     fontSize: 20,
