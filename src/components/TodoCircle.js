@@ -1,10 +1,10 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Text, Animated, Easing } from 'react-native';
+import { View, Text, Animated, Easing, TouchableNativeFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { clearPomodoro, completePomodoro, finishRest } from 'actions';
+import { clearPomodoro, completePomodoro, finishRest, showModalEditing } from 'actions';
 import type { ReducersState } from '../FlowType';
 import { Color } from './common';
 import CanvasView from 'natives/CanvasView';
@@ -25,6 +25,7 @@ type Props = {
   clearPomodoro: () => Object,
   completePomodoro: (todo: Object) => Object,
   finishRest: (todo: Object) => Object,
+  showModalEditing: (visible: boolean, todo: Object) => Object,
   loaded: boolean,
   completed: boolean,
   minutesLeft: number,
@@ -215,8 +216,8 @@ class TodoCircle extends Component {
       progress: nextProgress
     } = nextState;
 
-    const { minutesLeft } = this.props;
-    const { minutesLeft: nextMinutesLeft } = nextProps;
+    const { minutesLeft, todo } = this.props;
+    const { minutesLeft: nextMinutesLeft, todo: nextTodo } = nextProps;
 
     const { width, height } = this.props.style;
     const { width: nextWidth, height: nextHeight } = nextProps.style;
@@ -227,7 +228,8 @@ class TodoCircle extends Component {
       widthOfTitle !== nextWidthOfTitle ||
       widthOfTime !== nextWidthOfTime ||
       progress !== nextProgress ||
-      minutesLeft !== nextMinutesLeft
+      minutesLeft !== nextMinutesLeft ||
+      todo !== nextTodo
     );
   }
 
@@ -249,8 +251,14 @@ class TodoCircle extends Component {
   }
 
   render() {
-    const { containerStyle, titleTextStyle, timeTextStyle, rotate } = styles;
-    const { style: styleProps, todo } = this.props;
+    const {
+      containerStyle,
+      textContainerStyle,
+      titleTextStyle,
+      timeTextStyle,
+      rotate
+    } = styles;
+    const { style: styleProps, todo, showModalEditing } = this.props;
     const { width, height } = styleProps;
     const {
       widthOfTitle,
@@ -285,37 +293,8 @@ class TodoCircle extends Component {
           style={rotate}
         />
 
-        <Text
-          style={[
-            timeTextStyle,
-            rotate,
-            {
-              left: (height-widthOfTitle)/2,
-              bottom: (width-heightOfTitle)/2,
-              opacity: opacityOfTitle,
-              color: timeTextColor
-            }
-          ]}
-          onLayout={event => {
-            const layout = event.nativeEvent.layout;
-            this.setState({
-              widthOfTitle: layout.width,
-              heightOfTitle: layout.height,
-              opacityOfTitle: 1
-            });
-          }}
-        >
-          { secondsToMinutes(this.secondsLeft) }
-        </Text>
-
-        <Text
-          style={[
-            titleTextStyle,
-            rotate,
-            { left: (height-widthOfTime)/2 - 60, bottom: (width-heightOfTime)/2, opacity: opacityOfTime }
-          ]}
-          ellipsizeMode='tail'
-          numberOfLines={1}
+        <TouchableNativeFeedback
+          background={TouchableNativeFeedback.Ripple(Color.Deactivated, false)}
           onLayout={event => {
             const layout = event.nativeEvent.layout;
             this.setState({
@@ -325,8 +304,50 @@ class TodoCircle extends Component {
             });
           }}
         >
-          {this.props.todo.title}
-        </Text>
+          <View
+            style={[
+              textContainerStyle,
+              rotate,
+              {
+                left: (height-widthOfTime)/2,
+                bottom: (width-heightOfTime)/2,
+              }
+            ]}
+          >
+            <Text style={[ timeTextStyle, {color: timeTextColor, opacity: opacityOfTime} ]}>
+              { secondsToMinutes(this.secondsLeft) }
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+
+        <TouchableNativeFeedback
+          background={TouchableNativeFeedback.Ripple(Color.Deactivated, false)}
+          onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            this.setState({
+              widthOfTitle: layout.width,
+              heightOfTitle: layout.height,
+              opacityOfTitle: 1
+            });
+          }}
+          onPress={ ()=>showModalEditing(true, todo) }
+        >
+          <View
+            style={[
+              textContainerStyle,
+              rotate,
+              { left: (height-widthOfTitle)/2 - 66, bottom: (width-heightOfTitle)/2, opacity: opacityOfTitle }
+            ]}
+          >
+            <Text
+              style={titleTextStyle}
+              ellipsizeMode='tail'
+              numberOfLines={1}
+            >
+              {this.props.todo.title}
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     );
   }
@@ -341,14 +362,16 @@ const styles = {
   },
   titleTextStyle: {
     width: 184,
-    position: 'absolute',
+    textAlign: 'center',
     color: Color.Deactivated,
-    fontSize: 20,
+    fontSize: 16,
     fontFamily: 'sans-serif-light'
   },
-  timeTextStyle: {
+  textContainerStyle: {
     position: 'absolute',
-    fontSize: 48,
+  },
+  timeTextStyle: {
+    fontSize: 52,
     fontFamily: 'sans-serif-light'
   },
   rotate: {
@@ -381,7 +404,8 @@ const mapStateToProps = ({ todosState }: ReducersState, { todo }: Props) => {
 const mapDispatchToProps = dispatch => bindActionCreators({
   clearPomodoro,
   completePomodoro,
-  finishRest
+  finishRest,
+  showModalEditing
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoCircle);

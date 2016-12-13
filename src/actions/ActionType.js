@@ -22,4 +22,6 @@ export const NAVIGATE_FORWARD = 'navigate_forward';
 export const NAVIGATE_JUMP = 'navigate_jump';
 export const NOTIFY_NAVIGATING_POSITION = 'notify_navigating_position';
 
-export const SET_VIAIBLE_OF_CONFIRM_ADDING = 'set_viaible_of_confirm_adding';
+export const SET_VIAIBLE_OF_ADDING = 'set_viaible_of_adding';
+export const SET_VIAIBLE_OF_EDITING = 'set_viaible_of_editing';
+export const SET_VIAIBLE_OFF = 'set_viaible_off';

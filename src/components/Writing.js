@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addTodo, typing, focus } from 'actions';
+import { typing, focus } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import type { ReducersState } from '../FlowType';
 import { CardSection, Input, ImageView, Color } from './common';
@@ -19,23 +19,28 @@ const FabCancel =
 const ButtonAdd =
   MKButton.coloredButton()
   .withBackgroundColor(Color.Green)
-  .withText('Add').withTextStyle({color: Color.White}).build();
+  .build();
 
 const DiabledButtonAdd =
   MKButton.coloredButton()
   .withBackgroundColor(Color.Dim)
-  .withText('Add').withTextStyle({color: Color.White}).build();
+  .build();
 
 class Writing extends Component {
   input: Input;
   props: {
-    addTodo: (title: string) => () => void,
     typing: (text: string) => Object,
     focus: (isFocused: boolean) => Object,
     typingState: {text: string, isFocused: boolean},
     onDecline: () => void,
-    onAccept: () => void
+    onAccept: () => void,
+    placeholder: string,
+    buttonText: string
   };
+
+  componentWillUnmount() {
+    this.onEndEditing();
+  }
 
   onFocus() {
     this.props.focus(true);
@@ -46,38 +51,41 @@ class Writing extends Component {
   }
 
   onEndEditing() {
-    this.props.focus(false);
-    this.props.onDecline();
+    const { focus, typing, onDecline } = this.props;
+
+    focus(false);
+    typing('');
+    onDecline();
   }
 
   onSubmitEditing() {
-    const { focus, typing, addTodo, typingState } = this.props;
+    const { focus, typing, typingState } = this.props;
     const latestText = typingState.text;
 
     focus(false);
     typing('');
     this.input.clear();
-    this.props.onAccept();
-
-    if (latestText !== '') {
-      addTodo(latestText);
-    }
+    this.props.onAccept(latestText);
   }
 
   renderButton() {
-    const { typingState } = this.props;
+    const { typingState, buttonText } = this.props;
     const { text } = typingState;
+    const { lowerContainerStyle, buttonContainerStyle, buttonTextStyle } = styles;
+
     const isValueEmpty = text === '';
     const ButtonAddSelected =
       isValueEmpty ? DiabledButtonAdd : ButtonAdd;
 
     return (
-      <View style={styles.lowerContainerStyle}>
-        <View style={styles.buttonContainerStyle}>
+      <View style={lowerContainerStyle}>
+        <View style={buttonContainerStyle}>
           <ButtonAddSelected
             enabled={!isValueEmpty}
             onPress={this.onSubmitEditing.bind(this)}
-          />
+          >
+            <Text style={buttonTextStyle}>{buttonText || 'Add'}</Text>
+          </ButtonAddSelected>
         </View>
       </View>
     );
@@ -94,7 +102,8 @@ class Writing extends Component {
       emptyAreaStyle
     } = styles;
 
-    const { text, isFocused } = this.props.typingState;
+    const { placeholder, typingState } = this.props;
+    const { text, isFocused } = typingState;
 
     return (
       <CardSection>
@@ -107,7 +116,7 @@ class Writing extends Component {
             <ImageView imageStyle={penImageStyle} imageSource={WriteImage} />
             <View style={inputContainerStyle}>
               <Input
-                placeholder={'Make a task'}
+                placeholder={placeholder || 'Make a task'}
                 onFocus={this.onFocus.bind(this)}
                 onChangeText={this.onChangeText.bind(this)}
                 onEndEditing={this.onEndEditing.bind(this)}
@@ -160,6 +169,9 @@ const styles = {
     marginRight: 3,
     marginBottom: 3,
   },
+  buttonTextStyle: {
+    color: Color.White
+  },
   cancelButtonStyle: {
     width: 60, height: 60
   },
@@ -172,7 +184,6 @@ const styles = {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  addTodo,
   typing,
   focus
 }, dispatch);

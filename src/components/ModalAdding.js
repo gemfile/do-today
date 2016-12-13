@@ -1,10 +1,10 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Modal, Keyboard, LayoutAnimation } from 'react-native';
+import { View, Modal, LayoutAnimation } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { showModalAdding } from 'actions';
+import { showModalAdding, addTodo } from 'actions';
 import type { ReducersState } from '../FlowType';
 import { Color } from './common';
 import Writing from './Writing';
@@ -13,15 +13,9 @@ class ModalAdding extends Component {
   props: {
     visible: boolean,
     showModalAdding: (visible: boolean) => Object,
+    addTodo: (title: string) => () => void,
   }
-  writing: Writing;
   keyboardDidHide: Object;
-
-  componentDidMount() {
-    this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', () => {
-      this.props.showModalAdding(false);
-    });
-  }
 
   componentWillUpdate() {
     LayoutAnimation.spring();
@@ -33,20 +27,20 @@ class ModalAdding extends Component {
 
   render() {
     const { wholeContainerStyle, modalStyle } = styles;
+    const { showModalAdding, visible, addTodo } = this.props;
 
     return (
       <Modal
         style={modalStyle}
-        visible={this.props.visible}
+        visible={visible}
         animationType='fade'
-        onRequestClose={() => this.props.showModalAdding(false)}
+        onRequestClose={() => showModalAdding(false)}
         transparent
       >
         <View style={wholeContainerStyle}>
           <Writing
-            ref={component => {this.writing = component}}
-            onAccept={() => this.props.showModalAdding(false)}
-            onDecline={() => this.props.showModalAdding(false)}
+            onAccept={(latestText) => {addTodo(latestText), showModalAdding(false)}}
+            onDecline={() => showModalAdding(false)}
           />
         </View>
       </Modal>
@@ -72,6 +66,7 @@ const mapStateToProps = ({ modalVisible }: ReducersState) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   showModalAdding,
+  addTodo,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalAdding);

@@ -1,10 +1,10 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View } from 'react-native'
+import { View, Keyboard } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTodos, fetchCurrentPage, preparePomodoro, showModalAdding } from 'actions';
+import { fetchTodos, fetchCurrentPage, preparePomodoro, showModalAdding, hideModal } from 'actions';
 import type { ReducersState, ModalVisibleState } from '../FlowType';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
@@ -12,6 +12,7 @@ import PomodoroButtonPlay from './PomodoroButtonPlay';
 import PomodoroButtonAdd from './PomodoroButtonAdd';
 import PomodoroButtonRemove from './PomodoroButtonRemove';
 import ModalAdding from './ModalAdding';
+import ModalEditing from './ModalEditing';
 import Tomatoes from './Tomatoes';
 
 class SceneTodoCircles extends Component {
@@ -20,6 +21,7 @@ class SceneTodoCircles extends Component {
     fetchCurrentPage: () => () => void,
     preparePomodoro: () => Object,
     showModalAdding: (visible: boolean) => Object,
+    hideModal: () => Object,
     todos: Array<Object>,
     currentTodo: Object,
     currentPage: number,
@@ -34,8 +36,13 @@ class SceneTodoCircles extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchTodos();
-    this.props.fetchCurrentPage();
+    const { fetchTodos, fetchCurrentPage, hideModal } = this.props;
+
+    fetchTodos();
+    fetchCurrentPage();
+    Keyboard.addListener('keyboardDidHide', () => {
+      hideModal();
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -136,6 +143,7 @@ class SceneTodoCircles extends Component {
 
         <View style={modalContainerStyle}>
           <ModalAdding />
+          <ModalEditing />
         </View>
       </View>
     );
@@ -180,7 +188,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTodos,
   fetchCurrentPage,
   preparePomodoro,
-  showModalAdding
+  showModalAdding,
+  hideModal
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SceneTodoCircles);

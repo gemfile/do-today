@@ -3,7 +3,9 @@
 import {
   TYPING,
   FOCUS,
-  SET_VIAIBLE_OF_CONFIRM_ADDING
+  SET_VIAIBLE_OF_ADDING,
+  SET_VIAIBLE_OF_EDITING,
+  SET_VIAIBLE_OFF
 } from './ActionType';
 
 export const typing = (text: string) => ({
@@ -17,6 +19,15 @@ export const focus = (isFocused: boolean) => ({
 });
 
 export const showModalAdding = (visible: boolean) => ({
-  type: SET_VIAIBLE_OF_CONFIRM_ADDING,
+  type: SET_VIAIBLE_OF_ADDING,
   payload: visible
 });
+
+export const showModalEditing = (visible: boolean, todo: Object) => ({
+  type: SET_VIAIBLE_OF_EDITING,
+  payload: { visible, todo }
+});
+
+export const hideModal = () => ({
+  type: SET_VIAIBLE_OFF,
+})

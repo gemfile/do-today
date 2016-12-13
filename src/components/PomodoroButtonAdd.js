@@ -20,11 +20,11 @@ class PomodoroButtonAdd extends Component
 
   render() {
     const { writeImageStyle, buttonStyle } = styles;
-    const { buttonEnabled } = this.props;
+    const { buttonEnabled, showModalAdding } = this.props;
 
     if (buttonEnabled) {
       return (
-        <PlainFab style={buttonStyle} onPress={ ()=>this.props.showModalAdding(true) }>
+        <PlainFab style={buttonStyle} onPress={ ()=>showModalAdding(true) }>
           <Image source={WriteImage} style={writeImageStyle} />
         </PlainFab>
       );

@@ -81,6 +81,13 @@ export const addTodo = (title: string) => () => {
   });
 };
 
+export const editTodo = (title: string, todo: Object) => () => {
+  let updates = {};
+  const { id } = todo;
+  updates[`/${TODOS}/${id}/title`] = title;
+  rootRef.update(updates);
+};
+
 export const archiveTodo = (todo: Object) => () => {
   let updates = {};
   const { id, title, pomodoro } = todo;
