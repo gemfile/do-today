@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { startPomodoro, stopPomodoro, getPomodoro, takeRest, skipRest } from 'actions';
 import { MKButton } from 'react-native-material-kit';
-import type { ReducersState } from '../FlowType';
-import { Color, ImageView, Style } from './common';
+import type { ReducersState } from '../../FlowType';
+import { Color, ImageView, Style } from '../common';
 import PlayImage from './img/play.png';
 import CompleteImage from './img/tomato.png';
 import RestImage from './img/coffee.png';
@@ -211,14 +211,14 @@ const styles = {
   getImageStyle: {
     tintColor: Color.White,
     marginBottom: 2,
-    width: 26,
-    height: 26
+    width: 28,
+    height: 28
   },
   takeImageStyle: {
     tintColor: Color.White,
     marginLeft: 7,
-    width: 26,
-    height: 26
+    width: 28,
+    height: 28
   }
 };
 

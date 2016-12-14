@@ -92,7 +92,9 @@ const styles = {
     alignItems: 'center'
   },
   imageStyle: {
-    margin: 1
+    margin: 1,
+    width: 30,
+    height: 30,
   }
 }
 

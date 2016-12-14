@@ -9,19 +9,22 @@ import reducers from './reducers';
 import RootNavigator from './RootNavigator';
 import RootTabs from './RootTabs';
 import SceneTodoCircles from './components/SceneTodoCircles';
+import SceneArchives from './components/SceneArchives';
+import SceneSettings from './components/SceneSettings';
 import { ImageView, Color } from './components/common';
-import TodoListImage from './components/img/todo_list.png';
-import StatsImage from './components/img/stats.png';
+import TodoListImage from './assets/img/todo_list.png';
+import StatsImage from './assets/img/stats.png';
+import SettingsImage from './assets/img/settings.png';
 import PushNotification from 'react-native-push-notification'
 
 const initPushNotification = () => {
   PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
-      onRegister: (token) => {
+      onRegister: (/*token*/) => {
         // console.log( 'TOKEN:', token );
       },
       // (required) Called when a remote or local notification is opened or received
-      onNotification: (notification) => {
+      onNotification: (/*notification*/) => {
           // console.log( 'NOTIFICATION:', notification );
       },
       // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
@@ -44,13 +47,13 @@ const initPushNotification = () => {
   });
 
   PushNotification.registerNotificationActions(['Get', 'Abandone']);
-  DeviceEventEmitter.addListener('notificationActionReceived', action => {
-    const info = JSON.parse(action.dataJSON);
-    if (info.action == 'Get') {
-
-    } else if (info.action == 'Abandone') {
-
-    }
+  DeviceEventEmitter.addListener('notificationActionReceived', (/*action*/) => {
+    // const info = JSON.parse(action.dataJSON);
+    // if (info.action == 'Get') {
+    //
+    // } else if (info.action == 'Abandone') {
+    //
+    // }
   });
 };
 
@@ -61,14 +64,15 @@ class App extends Component {
 
   renderScene(sceneName: string) {
     switch (sceneName) {
-      case 'scene_todo_list':
+      case 'scene_todo_circles':
         return <SceneTodoCircles />
 
-      case 'scene_todo':
+      case 'scene_archives':
+        return <SceneArchives />
+
+      case 'scene_settings':
       default:
-        return (
-          <View />
-        );
+        return <SceneSettings />
     }
   }
 
@@ -114,11 +118,12 @@ const styles = {
   },
   iconImageMap: {
     '0': TodoListImage,
-    '1': StatsImage
+    '1': StatsImage,
+    '2': SettingsImage
   },
   iconStyle: {
-    width: 22,
-    height: 22,
+    width: 20,
+    height: 20,
     tintColor: Color.Deactivated,
   },
   highlightingStyle: {

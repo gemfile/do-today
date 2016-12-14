@@ -1,11 +1,13 @@
+/* @flow */
+
 import React, { Component } from 'react';
 import { MKButton } from 'react-native-material-kit';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { deleteTodo, archiveTodo } from 'actions';
 import { View, Animated, Easing, Image } from 'react-native';
-import type { ReducersState } from '../FlowType';
-import { Color } from './common';
+import type { ReducersState } from '../../FlowType';
+import { Color } from '../common';
 import DeleteImage from './img/delete.png';
 import ArchiveImage from './img/inbox_done.png';
 

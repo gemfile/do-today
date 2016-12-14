@@ -5,7 +5,7 @@ import { View, Keyboard } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos, fetchCurrentPage, preparePomodoro, showModalAdding, hideModal } from 'actions';
-import type { ReducersState, ModalVisibleState } from '../FlowType';
+import type { ReducersState, ModalVisibleState } from '../../FlowType';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
 import PomodoroButtonPlay from './PomodoroButtonPlay';

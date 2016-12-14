@@ -83,8 +83,8 @@ const initialState = Map({
   phaseOfLoading: '',
   currentPage: 0,
   currentTodo: null,
-  minutesForPomodoro: 25,
-  minutesForBreak: 5,
+  minutesForPomodoro: .5,
+  minutesForBreak: .5,
 });
 
 export default (state: TodosState = initialState, action: TodoStateAction) => {

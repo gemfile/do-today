@@ -5,8 +5,8 @@ import { View, Modal, Keyboard, LayoutAnimation } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { showModalEditing, editTodo, typing } from 'actions';
-import type { ReducersState } from '../FlowType';
-import { Color } from './common';
+import type { ReducersState } from '../../FlowType';
+import { Color } from '../common';
 import Writing from './Writing';
 
 class ModalEditing extends Component {

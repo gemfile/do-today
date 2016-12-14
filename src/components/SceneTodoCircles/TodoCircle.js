@@ -5,8 +5,8 @@ import { View, Text, Animated, Easing, TouchableNativeFeedback } from 'react-nat
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearPomodoro, completePomodoro, finishRest, showModalEditing } from 'actions';
-import type { ReducersState } from '../FlowType';
-import { Color } from './common';
+import type { ReducersState } from '../../FlowType';
+import { Color } from '../common';
 import CanvasView from 'natives/CanvasView';
 import AnimatedValueSubscription from 'utils/AnimatedValueSubscription';
 import { secondsToMinutes } from 'utils/TimeFormat';
@@ -363,7 +363,7 @@ const styles = {
   titleTextStyle: {
     width: 184,
     textAlign: 'center',
-    color: Color.Deactivated,
+    color: 'rgba(255, 255, 255, 0.6)',
     fontSize: 16,
     fontFamily: 'sans-serif-light'
   },

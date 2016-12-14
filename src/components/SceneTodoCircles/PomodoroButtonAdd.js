@@ -6,7 +6,7 @@ import { MKButton } from 'react-native-material-kit';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { showModalAdding } from 'actions';
-import { Color } from './common';
+import { Color } from '../common';
 import WriteImage from './img/write.png';
 
 const PlainFab = MKButton.plainFab().withBackgroundColor('rgba(255, 255, 255, 0)').build();

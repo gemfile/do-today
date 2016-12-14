@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { ScrollView, View } from 'react-native'
-import { Color, ImageView } from './common';
+import { Color, ImageView } from '../common';
 import LockImage from './img/lock_circle_close.png';
 
 type Props = {

@@ -1,11 +1,13 @@
+/* @flow */
+
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { typing, focus } from 'actions';
 import { MKButton } from 'react-native-material-kit';
-import type { ReducersState } from '../FlowType';
-import { CardSection, Input, ImageView, Color } from './common';
+import type { ReducersState } from '../../FlowType';
+import { CardSection, Input, ImageView, Color } from '../common';
 import WriteImage from './img/write.png';
 import PlusImage from './img/plus_white.png';
 
