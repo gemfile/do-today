@@ -9,8 +9,8 @@ const { StateUtils: NavigationStateUtils } = NavigationExperimental;
 const initialState = {
   index: 0,
   routes: [
-    { key: 'settings' },
     { key: 'todo_circles' },
+    { key: 'settings' },
     { key: 'archives' },
   ],
 };
