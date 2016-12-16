@@ -186,7 +186,6 @@ const styles = {
     width: 16,
     flexDirection: 'column',
     justifyContent: 'center',
-
   },
   dotContainerStyle: {
     margin: 0

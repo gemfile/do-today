@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { View } from 'react-native';
+import { Color } from './Color';
 
 type Props = {
   style?: Object,
@@ -24,9 +25,9 @@ const CardSection = ({ style, children }: Props) => {
 const styles = {
   containerStyle: {
     flex: 1,
+    borderBottomWidth: 1,
     padding: 5,
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
+    borderColor: Color.Deactivated,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',

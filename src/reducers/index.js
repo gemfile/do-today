@@ -5,6 +5,7 @@ import NavigatingPositionReducer from './NavigatingPositionReducer';
 import TypingStateReducer from './TypingStateReducer';
 import ModalVisibleReducer from './ModalVisibleReducer';
 import CurrentPageReducer from './CurrentPageReducer';
+import SettingsReducer from './SettingsReducer';
 
 export default combineReducers({
   todosState: TodosStateReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   navigatingPosition: NavigatingPositionReducer,
   currentPage: CurrentPageReducer,
   modalVisible: ModalVisibleReducer,
+  settings: SettingsReducer,
 });
