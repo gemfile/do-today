@@ -137,7 +137,7 @@ dependencies {
     compile project(':react-native-activity-android')
     compile project(':react-native-sound')
     compile project(':react-native-push-notification')
-    compile('com.google.android.gms:play-services-gcm:9.6.0'){
+    compile('com.google.android.gms:play-services-gcm:9.8.0'){
         force = true
     }
     compile project(':react-native-material-kit')
@@ -145,7 +145,7 @@ dependencies {
     compile project(':react-native-device-info')
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.facebook.react:react-native:0.38.+'
+    compile 'com.facebook.react:react-native:0.39.2'
     // From node_modules
 }
 

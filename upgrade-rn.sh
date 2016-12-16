@@ -1,6 +1,6 @@
 
 #Download the patch
-curl https://github.com/ncuillery/rn-diff/compare/rn-0.34.0...rn-0.37.0.diff > upgrade-rn.patch
+curl https://github.com/ncuillery/rn-diff/compare/rn-0.38.0...rn-0.39.0.diff > upgrade-rn.patch
 
 # Replace RnDiffApp occurences
 appNameCamelCase=todo_today
