@@ -10,7 +10,7 @@
     "firebase": "^3.6.4",
     "immutable": "^3.8.1",
     "react": "^15.4.1",
-    "react-native": "^0.38.0",
+    "react-native": "^0.39.2",
     "react-native-activity-android": "file:./react-native-activity-android",
     "react-native-device-info": "^0.9.7",
     "react-native-firestack": "^2.3.5",

@@ -294,7 +294,6 @@ class TodoCircle extends Component {
         />
 
         <TouchableNativeFeedback
-          background={TouchableNativeFeedback.Ripple(Color.Deactivated, false)}
           onLayout={event => {
             const layout = event.nativeEvent.layout;
             this.setState({
@@ -321,7 +320,6 @@ class TodoCircle extends Component {
         </TouchableNativeFeedback>
 
         <TouchableNativeFeedback
-          background={TouchableNativeFeedback.Ripple(Color.Deactivated, false)}
           onLayout={event => {
             const layout = event.nativeEvent.layout;
             this.setState({

@@ -40,9 +40,9 @@ class SceneTodoCircles extends Component {
 
     fetchTodos();
     fetchCurrentPage();
-    Keyboard.addListener('keyboardDidHide', () => {
-      hideModal();
-    });
+    // Keyboard.addListener('keyboardDidHide', () => {
+    //   hideModal();
+    // });
   }
 
   componentWillReceiveProps(nextProps) {
