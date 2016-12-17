@@ -21,8 +21,12 @@ class LocalStorage {
 
   async getItem(key: string, onGetItem: (item: any) => void) {
     try {
-      const value = await AsyncStorage.getItem(key);
-      onGetItem(JSON.parse(value));
+      const jsonValue = await AsyncStorage.getItem(key)
+      const value = JSON.parse(jsonValue);
+      if (onGetItem) {
+        onGetItem(value);
+      }
+      return value;
     } catch (error) {
       console.log(error);
     }
