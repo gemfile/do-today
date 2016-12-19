@@ -31,19 +31,19 @@ class PomodoroButtonPlay extends Component {
   buttonColorMap: {[name: string]: string};
   iconMap: {[name: string]: View};
   state: {
-    bounceValue: Animated.Value,
     renderingIcon: string,
     isAnimating: boolean
   };
+  bounceValue: Animated.Value;
 
   constructor(props) {
     super(props);
 
     this.state = {
-      bounceValue: new Animated.Value(1),
       renderingIcon: '',
       isAnimating: false,
     };
+    this.bounceValue = new Animated.Value(1),
     this.aniCount = 0;
     this.buttonMap = {
       start: PlainFabRed,
@@ -76,7 +76,7 @@ class PomodoroButtonPlay extends Component {
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
     const { currentTodo: nextTodo } = nextProps;
-    const { bounceValue } = this.state;
+    const { bounceValue } = this;
 
     const needUpdate =
       ( !currentTodo && nextTodo ) ||
@@ -156,7 +156,7 @@ class PomodoroButtonPlay extends Component {
             animationStyle,
             {
               backgroundColor: buttonColor,
-              transform: [{ scale: this.state.bounceValue }],
+              transform: [{ scale: this.bounceValue }],
               opacity: animationOpacity
             }
           ]}

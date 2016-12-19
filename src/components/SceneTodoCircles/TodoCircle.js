@@ -14,7 +14,7 @@ import SoundPlayer from 'utils/SoundPlayer';
 
 const WIDTH_OF_CIRCLE = 300;
 const HEIGHT_OF_CIRCLE = 300;
-const WIDTH_OF_STROKE = 10;
+const WIDTH_OF_STROKE = 9;
 
 type Props = {
   todo: Object,
@@ -293,7 +293,7 @@ class TodoCircle extends Component {
           style={rotate}
         />
 
-        <TouchableNativeFeedback
+        <View
           onLayout={event => {
             const layout = event.nativeEvent.layout;
             this.setState({
@@ -302,22 +302,19 @@ class TodoCircle extends Component {
               opacityOfTime: 1
             });
           }}
+          style={[
+            textContainerStyle,
+            rotate,
+            {
+              left: (height-widthOfTime)/2,
+              bottom: (width-heightOfTime)/2,
+            }
+          ]}
         >
-          <View
-            style={[
-              textContainerStyle,
-              rotate,
-              {
-                left: (height-widthOfTime)/2,
-                bottom: (width-heightOfTime)/2,
-              }
-            ]}
-          >
-            <Text style={[ timeTextStyle, {color: timeTextColor, opacity: opacityOfTime} ]}>
-              { secondsToMinutes(this.secondsLeft) }
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
+          <Text style={[ timeTextStyle, {color: timeTextColor, opacity: opacityOfTime} ]}>
+            { secondsToMinutes(this.secondsLeft) }
+          </Text>
+        </View>
 
         <TouchableNativeFeedback
           onLayout={event => {
@@ -361,7 +358,7 @@ const styles = {
   titleTextStyle: {
     width: 184,
     textAlign: 'center',
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: Color.PlainText,
     fontSize: 16,
     fontFamily: 'sans-serif-light'
   },

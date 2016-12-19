@@ -1,5 +1,5 @@
 [![dependencies](https://david-dm.org/gemfile/do-today.svg)]()
-[![react-native](https://img.shields.io/badge/react--native-v0.38-05A5D1.svg)](https://facebook.github.io/react-native)
+[![react-native](https://img.shields.io/badge/react--native-v0.39.2-05A5D1.svg)](https://facebook.github.io/react-native)
 [![buddybuild](https://dashboard.buddybuild.com/api/statusImage?appID=581045aafe5e8501000ad4e6&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/581045aafe5e8501000ad4e6/build/latest)
 [![gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/do-today/Lobby)
 
@@ -13,7 +13,10 @@
 - Focus
 - Get the pomodoro
 - Record a task
-- Visualize what you've done
+
+## To do
+- Visualize what I've done
+- Running on iOS
 
 ## Plugins used
 
@@ -34,11 +37,11 @@
 - `cd do-today`
 - run `npm install`
 
-#### iOS
-
-- Not available yet.
-
 #### Android
 
 - Run `android avd` and start an emulator
 - Run `react-native run-android`
+
+#### iOS
+
+- Not available yet.

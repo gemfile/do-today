@@ -24,16 +24,16 @@ class PomodoroButtonRemove extends Component
   aniCount: number;
 
   state = {
-    bounceValue: new Animated.Value(1),
     count: 0,
     isAnimating: false,
   };
+  bounceValue = new Animated.Value(1);
   aniCount = 0;
 
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
     const { currentTodo: nextTodo } = nextProps;
-    const { bounceValue } = this.state;
+    const { bounceValue } = this;
 
     const needUpdate =
       currentTodo &&
@@ -85,7 +85,7 @@ class PomodoroButtonRemove extends Component
 
   render() {
     const { buttonStyle, animationStyle } = styles;
-    const { count, isAnimating, bounceValue } = this.state;
+    const { count, isAnimating } = this.state;
     const { buttonEnabled } = this.props;
 
     const buttonOpacity = isAnimating ? 0 : 1;
@@ -98,7 +98,7 @@ class PomodoroButtonRemove extends Component
             style={[
               animationStyle,
               {
-                transform: [{ scale: bounceValue }],
+                transform: [{ scale: this.bounceValue }],
                 opacity: animationOpacity
               }
             ]}
@@ -143,7 +143,7 @@ const styles = {
   },
   archiveImageStyle: {
     tintColor: Color.White,
-    transform: [{ scale: .7 }],
+    transform: [{ scale: .68 }],
   },
 };
 

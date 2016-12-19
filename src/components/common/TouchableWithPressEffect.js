@@ -13,20 +13,16 @@ type Props = {
 };
 
 class TouchableWithPressEffect extends Component {
-  state: {
-    bounceValue: Animated.Value
-  };
+  bounceValue: Animated.Value
 
   constructor(props: Props) {
     super(props);
-    this.state = {
-      bounceValue: new Animated.Value(1)
-    };
+    this.bounceValue = new Animated.Value(1);
   }
 
   onPress() {
-    this.state.bounceValue.setValue(MAX_BOUNCE);
-    Animated.spring(this.state.bounceValue, {
+    this.bounceValue.setValue(MAX_BOUNCE);
+    Animated.spring(this.bounceValue, {
       toValue: 1,
       friction: 7,
     }).start();
@@ -38,7 +34,7 @@ class TouchableWithPressEffect extends Component {
   }
 
   onPressIn() {
-    Animated.timing(this.state.bounceValue, {
+    Animated.timing(this.bounceValue, {
       toValue: MAX_BOUNCE,
       easing: Easing.cubic,
       duration: 100
@@ -58,7 +54,7 @@ class TouchableWithPressEffect extends Component {
       >
         <Animated.View
           style={{ ...this.props.style,
-            transform: [{ scale: this.state.bounceValue }] }}
+            transform: [{ scale: this.bounceValue }] }}
         >
           { this.props.children }
         </Animated.View>

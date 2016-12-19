@@ -14,6 +14,10 @@ export type ModalVisibleState = {
   editing: boolean,
   todo: ?Object,
 };
+export type SettingsState = {
+  data: {},
+  selectedId: ?number,
+};
 export type CurrentPageState = number;
 export type ReducersState = {
   todosState: TodosState,
@@ -22,6 +26,7 @@ export type ReducersState = {
   navigatingPosition: NavigatingPositionState,
   currentPage: CurrentPageState,
   modalVisible: ModalVisibleState,
+  settings: SettingsState,
 };
 
 /* actions */

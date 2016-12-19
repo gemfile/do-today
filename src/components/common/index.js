@@ -10,3 +10,4 @@ export * from './ImageView';
 export * from './Color';
 export * from './zIndex';
 export * from './Style';
+export * from './OpenUrlText';

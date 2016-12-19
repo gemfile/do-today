@@ -44,7 +44,7 @@ const styles = {
   },
   writeImageStyle: {
     tintColor: Color.White,
-    transform: [{ scale: .7 }],
+    transform: [{ scale: .6 }],
   },
 };
 
