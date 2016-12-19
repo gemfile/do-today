@@ -10,8 +10,8 @@ const initialState = {
   index: 0,
   routes: [
     { key: 'todo_circles' },
-    { key: 'settings' },
     { key: 'archives' },
+    { key: 'settings' },
   ],
 };
 

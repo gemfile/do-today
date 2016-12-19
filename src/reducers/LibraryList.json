@@ -2,11 +2,9 @@
   {
       "id": 0,
       "title": "Credits",
-      "description": "Webpack is a module bundler. It packs CommonJs/AMD modules i. e. for the browser. Allows to split your codebase into multiple bundles, which can be loaded on demand."
     },
     {
       "id": 1,
-      "title": "React",
-      "description": "React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes."
+      "title": "Support",
     }
   ]

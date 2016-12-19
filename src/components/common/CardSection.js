@@ -25,7 +25,6 @@ const CardSection = ({ style, children }: Props) => {
 const styles = {
   containerStyle: {
     flex: 1,
-    borderBottomWidth: 1,
     padding: 5,
     borderColor: Color.Deactivated,
     flexDirection: 'row',

@@ -11,14 +11,14 @@ class Tomatoes extends Component {
   }
 
   state = {
-    height: new Animated.Value(0),
     count: 0,
   };
+  height = new Animated.Value(0);
 
   componentWillReceiveProps(nextProps) {
     const { currentTodo } = this.props;
     const { currentTodo: nextTodo } = nextProps;
-    const { height } = this.state;
+    const { height } = this;
 
     const needUpdate =
       ( currentTodo && !nextTodo ) ||
@@ -58,7 +58,7 @@ class Tomatoes extends Component {
   render() {
     const { wholeContainerStyle, imageStyle } = styles;
     const { currentTodo } = this.props;
-    const { height, count } = this.state;
+    const { count } = this.state;
 
     let renderTomatoes;
     if (currentTodo) {
@@ -72,7 +72,7 @@ class Tomatoes extends Component {
     }
 
     return (
-      <Animated.View style={[ wholeContainerStyle, {height} ]}>
+      <Animated.View style={[ wholeContainerStyle, {height: this.height} ]}>
         { renderTomatoes }
       </Animated.View>
     );

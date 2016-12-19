@@ -86,7 +86,7 @@ const styles = {
     ...Style.shadowStyle
   },
   selectedLineStyle: {
-    height: 0,
+    height: 2,
     backgroundColor: Color.White,
     position: 'absolute',
     bottom: 0

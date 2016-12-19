@@ -53,7 +53,7 @@ const styles = {
     flex: 1,
   },
   wholeContainerStyle: {
-    backgroundColor: Color.Deactivated,
+    backgroundColor: 'white',
     flex: 1,
     position: 'relative',
   },
