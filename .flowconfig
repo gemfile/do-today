@@ -14,6 +14,11 @@
 .*/Libraries/react-native/React.js
 .*/Libraries/react-native/ReactNative.js
 
+; Ignore imported modules
+.*/node_modules/react-native-firestack/lib/firestack.js
+.*/node_modules/react-native-firestack/lib/modules/base.js
+.*/node_modules/react-native-firestack/firestack.ios.js
+
 [include]
 
 [libs]

@@ -70,12 +70,12 @@ const updateCurrentTodo = (state) => {
   const todos = state.get('todos');
   const currentPage = state.get('currentPage');
 
-  if (todos.length !== 0 && currentPage !== -1) {
-    currentTodo = todos.find(todo => todo.index === currentPage);
-    return state.set('currentTodo', currentTodo);
-  }
+  currentTodo =
+    (todos.length !== 0 && currentPage !== -1) ?
+    todos.find(todo => todo.index === currentPage) :
+    null;
 
-  return state;
+  return state.set('currentTodo', currentTodo);
 };
 
 const initialState = Map({

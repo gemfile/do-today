@@ -38,8 +38,8 @@ class PomodoroButtonRemove extends Component
     const needUpdate =
       currentTodo &&
       nextTodo &&
-      ((currentTodo.pomodoro.count === 0 && nextTodo.pomodoro.count !== 0) ||
-      (currentTodo.pomodoro.count !== 0 && nextTodo.pomodoro.count === 0));
+      ( (currentTodo.pomodoro.count === 0 && nextTodo.pomodoro.count !== 0) ||
+        (currentTodo.pomodoro.count !== 0 && nextTodo.pomodoro.count === 0) );
 
     if (needUpdate) {
       if (this.aniCount === 0) {
@@ -119,7 +119,7 @@ class PomodoroButtonRemove extends Component
         </View>
       );
     } else {
-      return null;
+      return <View style={buttonStyle} />;
     }
   }
 }

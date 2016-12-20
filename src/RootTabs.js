@@ -4,13 +4,14 @@ import React, { Component } from 'react';
 import { View, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { navigateJump } from 'actions';
+import { navigateJump, hideModal } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import { Color, zIndex, Style } from './components/common';
 
 class RootTabs extends Component {
   props: {
     navigationState: Object,
+    hideModal: () => Object,
     navigateJump: (key: string) => Object,
     navigatingPosition: (position: number) => Object,
     renderTabIcon: (tabIndex: string, isSelected:boolean) => React.Element<*>
@@ -26,7 +27,10 @@ class RootTabs extends Component {
   }
 
   onPress(route) {
-    this.props.navigateJump(route);
+    const { navigateJump, hideModal } = this.props;
+
+    navigateJump(route);
+    hideModal();
   }
 
   renderTabs() {
@@ -86,7 +90,7 @@ const styles = {
     ...Style.shadowStyle
   },
   selectedLineStyle: {
-    height: 2,
+    // height: 2,
     backgroundColor: Color.White,
     position: 'absolute',
     bottom: 0
@@ -100,6 +104,7 @@ const mapStateToProps = ({ navigationState, navigatingPosition }) => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   navigateJump,
+  hideModal
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(RootTabs);

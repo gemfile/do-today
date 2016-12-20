@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import { MKButton } from 'react-native-material-kit';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ class PomodoroButtonAdd extends Component
         </PlainFab>
       );
     } else {
-      return null;
+      return <View style={buttonStyle} />;
     }
   }
 }

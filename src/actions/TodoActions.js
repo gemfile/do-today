@@ -42,11 +42,10 @@ export const fetchTodos = () => (
 );
 
 const dispatchFetchingOfTodos = (dispatch: Dispatch, value: Object, stateOfLoading: string) => {
-  dispatch({ type: LOAD_TODOS, payload: stateOfLoading });
-
   if (value !== null) {
     dispatch({ type: FETCH_TODOS, payload: {rootRefKey, value} });
   }
+  dispatch({ type: LOAD_TODOS, payload: stateOfLoading });
 };
 
 export const fetchCurrentPage = () => (
@@ -63,14 +62,13 @@ export const fetchCurrentPage = () => (
 );
 
 const dispatchFetchingOfPomodoro = (dispatch: Dispatch, value: Object, isLocal: boolean) => {
-  dispatch({ type: LOAD_CURRENT_PAGE, payload: isLocal });
-
   if (value !== null) {
     dispatch({ type: FETCH_CURRENT_PAGE, payload: {rootRefKey, value} });
   }
+  dispatch({ type: LOAD_CURRENT_PAGE, payload: isLocal });
 };
 
-export const addTodo = (title: string) => () => {
+export const addTodo = (title: string) => {
   rootRef.child(`${TODOS}`).push({
     title,
     pomodoro: {
@@ -79,24 +77,27 @@ export const addTodo = (title: string) => () => {
       count: 0,
     }
   });
+  return { type: LOAD_TODOS, payload: 'loading' };
 };
 
-export const editTodo = (title: string, todo: Object) => () => {
+export const editTodo = (title: string, todo: Object) => {
   let updates = {};
   const { id } = todo;
   updates[`/${TODOS}/${id}/title`] = title;
   rootRef.update(updates);
+  return { type: LOAD_TODOS, payload: 'loading' };
 };
 
-export const archiveTodo = (todo: Object) => () => {
+export const archiveTodo = (todo: Object) => {
   let updates = {};
   const { id, title, pomodoro } = todo;
   updates[`/${TODOS}/${id}`] = null;
   updates[`/archives/${id}`] = { title, pomodoro };
   rootRef.update(updates);
+  return { type: LOAD_TODOS, payload: 'loading' };
 }
 
-export const archiveTodos = (todos: Array<Object>) => () => {
+export const archiveTodos = (todos: Array<Object>) => {
   let updates = {};
   todos.forEach(todo => {
     const { id, title, pomodoro } = todo;
@@ -104,17 +105,19 @@ export const archiveTodos = (todos: Array<Object>) => () => {
     updates[`/archives/${id}`] = { title, pomodoro };
   });
   rootRef.update(updates);
+  return { type: LOAD_TODOS, payload: 'loading' };
 };
 
-export const deleteTodo = (todo: Object) => () => {
+export const deleteTodo = (todo: Object) => {
   let updates = {};
   const { id, title, pomodoro } = todo;
   updates[`/${TODOS}/${id}`] = null;
   updates[`/deletes/${id}`] = { title, pomodoro };
   rootRef.update(updates);
+  return { type: LOAD_TODOS, payload: 'loading' };
 }
 
-export const deleteTodos = (todos: Array<Object>) => () => {
+export const deleteTodos = (todos: Array<Object>) => {
   let updates = {};
   todos.forEach(todo => {
     const { id, title, pomodoro } = todo;
@@ -122,6 +125,7 @@ export const deleteTodos = (todos: Array<Object>) => () => {
     updates[`/deletes/${id}`] = { title, pomodoro };
   });
   rootRef.update(updates);
+  return { type: LOAD_TODOS, payload: 'loading' };
 };
 
 export const startPomodoro = (todo: Object, minutesForPomodoro: number) => {

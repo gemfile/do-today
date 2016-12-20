@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { View, Keyboard } from 'react-native'
+import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos, fetchCurrentPage, preparePomodoro, showModalAdding, hideModal } from 'actions';
@@ -36,7 +36,7 @@ class SceneTodoCircles extends Component {
   };
 
   componentDidMount() {
-    const { fetchTodos, fetchCurrentPage, hideModal } = this.props;
+    const { fetchTodos, fetchCurrentPage } = this.props;
 
     fetchTodos();
     fetchCurrentPage();
@@ -108,7 +108,7 @@ class SceneTodoCircles extends Component {
       scrollEnabled,
     } = this.state;
 
-    const { currentPage } = this.props;
+    const { currentPage, currentTodo } = this.props;
 
     return (
       <View style={wholeContainerStyle}>
@@ -136,8 +136,8 @@ class SceneTodoCircles extends Component {
         />
 
         <View style={[ buttonContainerStyle, {width} ]}>
-          <PomodoroButtonRemove buttonEnabled={scrollEnabled} />
-          <PomodoroButtonPlay />
+          <PomodoroButtonRemove buttonEnabled={currentTodo && scrollEnabled} />
+          <PomodoroButtonPlay buttonEnabled={currentTodo && scrollEnabled} />
           <PomodoroButtonAdd buttonEnabled={scrollEnabled} />
         </View>
 

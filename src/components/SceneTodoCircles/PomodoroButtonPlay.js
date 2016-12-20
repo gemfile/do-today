@@ -24,7 +24,8 @@ class PomodoroButtonPlay extends Component {
     takeRest: (todo: Object, minutesForBreak: number) => Object,
     currentTodo: Object,
     minutesForPomodoro: number,
-    minutesForBreak: number
+    minutesForBreak: number,
+    buttonEnabled: boolean
   }
   aniCount: number;
   buttonMap: {[name: string]: MKButton};
@@ -80,6 +81,7 @@ class PomodoroButtonPlay extends Component {
 
     const needUpdate =
       ( !currentTodo && nextTodo ) ||
+      ( currentTodo && !nextTodo ) ||
       currentTodo &&
       nextTodo &&
       ( currentTodo.pomodoro.nextState !== nextTodo.pomodoro.nextState ||
@@ -96,7 +98,7 @@ class PomodoroButtonPlay extends Component {
         easing: Easing.quad,
         duration: 100
       }).start( () => {
-        this.setState({ renderingIcon: nextTodo.pomodoro.nextState });
+        this.setState({ renderingIcon: nextTodo ? nextTodo.pomodoro.nextState : '' });
         Animated.timing(bounceValue, {
           toValue: 1,
           easing: Easing.elastic(1), // Springy

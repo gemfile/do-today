@@ -25,7 +25,7 @@ class ListItem extends Component {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
-  renderDescription(title: 'Credits' | 'Support') {
+  renderDescription(title: string) {
     const { textStyle, textContainerStyle } = styles;
 
     switch (title) {

@@ -23,13 +23,12 @@ class Tomatoes extends Component {
     const needUpdate =
       ( currentTodo && !nextTodo ) ||
       ( !currentTodo && nextTodo ) ||
-      currentTodo &&
-      nextTodo &&
-      (currentTodo.id !== nextTodo.id ||
-      currentTodo.pomodoro.count !== nextTodo.pomodoro.count);
+      ( currentTodo &&
+        nextTodo &&
+        (currentTodo.id !== nextTodo.id ||
+        currentTodo.pomodoro.count !== nextTodo.pomodoro.count) );
 
     if (needUpdate) {
-      this.aniCount++;
       Animated.timing(
         height,
         {
@@ -39,7 +38,7 @@ class Tomatoes extends Component {
         }
       ).start(
         () => {
-          if (nextTodo.pomodoro.count > 0) {
+          if (nextTodo && nextTodo.pomodoro.count > 0) {
             this.setState({ count: nextTodo.pomodoro.count });
             Animated.timing(
               height,

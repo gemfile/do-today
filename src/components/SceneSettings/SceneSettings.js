@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { View, ListView } from 'react-native';
 import { connect } from 'react-redux';
 import ListItem from './ListItem';
-import { CardSection } from '../common';
 import type { ReducersState } from '../../FlowType';
 
 class SceneSettings extends Component {
@@ -29,21 +28,13 @@ class SceneSettings extends Component {
 
   renderHeader() {
     return (
-      <View
-        style={{ flex: 1, padding: 8 }}
-        onLayout={event => {
-          const layout = event.nativeEvent.layout;
-          console.log('hoi', layout.width);
-        }}
-      />
+      <View style={styles.headerStyle} />
     )
   }
 
   render() {
-    const { containerStyle } = styles;
-
     return (
-      <View style={containerStyle}>
+      <View style={styles.containerStyle}>
         <ListView
           dataSource={this.dataSource}
           renderRow={this.renderRow}
@@ -58,6 +49,10 @@ const styles = {
   containerStyle: {
     flex: 1,
     top: 60
+  },
+  headerStyle: {
+    flex: 1,
+    padding: 8
   },
 }
 

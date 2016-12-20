@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { showModalAdding, addTodo } from 'actions';
 import type { ReducersState } from '../../FlowType';
-import { Color } from '../common';
 import Writing from './Writing';
 
 class ModalAdding extends Component {

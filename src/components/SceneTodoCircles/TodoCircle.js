@@ -78,7 +78,7 @@ class TodoCircle extends Component {
     this.progressListener = new AnimatedValueSubscription(
       this.animatedValueForProgress,
       (data: Object) => {
-        this.setState({ progress: data.value });
+        this.setState({ progress: Math.round(data.value * 1000)/1000 });
       }
     );
     this.secondsLeft = props.minutesLeft * 60;
@@ -271,7 +271,7 @@ class TodoCircle extends Component {
     } = this.state;
     const color = this.colorMap[todo.pomodoro.nextState];
     const timeTextColor = progress === 1 ? color : Color.White;
-
+    const timeText = progress === 1 ? 0 : this.fullSeconds * (1 - progress);
     return (
       <View
         style={[
@@ -312,7 +312,7 @@ class TodoCircle extends Component {
           ]}
         >
           <Text style={[ timeTextStyle, {color: timeTextColor, opacity: opacityOfTime} ]}>
-            { secondsToMinutes(this.secondsLeft) }
+            { secondsToMinutes(timeText) }
           </Text>
         </View>
 
