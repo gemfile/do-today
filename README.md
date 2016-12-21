@@ -1,7 +1,7 @@
-[![dependencies](https://david-dm.org/gemfile/do-today.svg)]()
+[![dependencies](https://david-dm.org/gemfile/do-today.svg)](https://david-dm.org/gemfile/do-today)
 [![react-native](https://img.shields.io/badge/react--native-v0.39.2-05A5D1.svg)](https://facebook.github.io/react-native)
-[![buddybuild](https://dashboard.buddybuild.com/api/statusImage?appID=581045aafe5e8501000ad4e6&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/581045aafe5e8501000ad4e6/build/latest)
 [![gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/do-today/Lobby)
+[![buddybuild](https://dashboard.buddybuild.com/api/statusImage?appID=581045aafe5e8501000ad4e6&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/581045aafe5e8501000ad4e6/build/latest)
 
 # Do Today
 
@@ -35,8 +35,7 @@
 #### Clone & install
 
 - Clone this repo `git clone git@github.com:gemfile/do-today.git`
-- `cd do-today`
-- run `npm install`
+- Run `cd do-today; npm install`
 
 #### Android
 
