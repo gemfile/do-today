@@ -44,7 +44,7 @@ class ListItem extends Component {
       return (
         <CardSection>
           <Text style={textContainerStyle}>
-            <Text style={textStyle}>{`Icons made by `}</Text>
+            <Text style={textStyle}>{`Tomato icons made by `}</Text>
             <OpenUrlText
               text={'madebyoliver'}
               url={'http://www.flaticon.com/authors/madebyoliver'}
@@ -60,7 +60,17 @@ class ListItem extends Component {
               url={'http://creativecommons.org/licenses/by/3.0'}
             />
             <Text style={textStyle}>{`.`}</Text>
+
+            <Text style={textStyle}>{`
+
+Other all icons made by `}</Text>
+            <OpenUrlText
+              text={'Alexandru Stoica'}
+              url={'https://dribbble.com/shots/2888226-1800-Free-Minimal-Icon-Pack-20x20'}
+            />
+            <Text style={textStyle}>{` is licensed by FREE LICENSE.`}</Text>
           </Text>
+
 
         </CardSection>
       );
@@ -98,7 +108,8 @@ const styles = {
     marginHorizontal: 30
   },
   textStyle: {
-    color: Color.PlainText
+    color: Color.PlainText,
+    fontSize: 14
   }
 };
 

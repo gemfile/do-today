@@ -7,8 +7,7 @@ import { bindActionCreators } from 'redux';
 import { startPomodoro, stopPomodoro, getPomodoro, takeRest, skipRest } from 'actions';
 import { MKButton } from 'react-native-material-kit';
 import type { ReducersState } from '../../FlowType';
-import { Color, ImageView, Style } from '../common';
-import PlayImage from './img/play.png';
+import { Color, ImageView, Style, RightArrow } from '../common';
 import CompleteImage from './img/tomato.png';
 import RestImage from './img/coffee.png';
 
@@ -65,7 +64,7 @@ class PomodoroButtonPlay extends Component {
 
     const { playImageStyle, stopImageStyle, getImageStyle, takeImageStyle } = styles;
     this.iconMap = {
-      start: <ImageView imageSource={PlayImage} imageStyle={playImageStyle} />,
+      start: <RightArrow width={14} height={16} color={Color.White} style={playImageStyle} />,
       stop: <View style={stopImageStyle} />,
       get: <ImageView imageSource={CompleteImage} imageStyle={getImageStyle} />,
       take: <ImageView imageSource={RestImage} imageStyle={takeImageStyle}/>,
@@ -202,8 +201,7 @@ const styles = {
     ...Style.shadowStyle
   },
   playImageStyle: {
-    tintColor: Color.White,
-    marginLeft: 3
+    marginLeft: 3,
   },
   stopImageStyle: {
     backgroundColor: Color.White,

@@ -52,6 +52,7 @@ class TodoCircle extends Component {
   updatingData: boolean;
   startOnce: boolean;
   colorMap: {[name: string]: string};
+  secondsBefore: number;
 
   constructor(props) {
     super(props);
@@ -83,6 +84,7 @@ class TodoCircle extends Component {
     );
     this.secondsLeft = props.minutesLeft * 60;
     this.fullSeconds = this.secondsLeft;
+    this.secondsBefore = 0;
     this.startOnce = true;
   }
 
@@ -182,7 +184,6 @@ class TodoCircle extends Component {
 
         this.startOnce = false;
       }
-
     }
   }
 
@@ -195,7 +196,6 @@ class TodoCircle extends Component {
       = this.animateProgress(nextTargetTime - this.secondsLeft);
 
     if (nextSecondsLeft > 0) {
-      SoundPlayer.play('tick');
       setTimeout(
         ()=>{
           const { currentState } = this.props.todo.pomodoro;
@@ -250,6 +250,15 @@ class TodoCircle extends Component {
     return { nextSecondsLeft, nextTimeOffset: duration };
   }
 
+  playTickSound(floatSecondsCurrent) {
+    const intSecondsCurrent = ~~floatSecondsCurrent;
+    if ((this.secondsBefore - intSecondsCurrent) === 1) {
+      SoundPlayer.play('tick');
+    }
+
+    this.secondsBefore = intSecondsCurrent;
+  }
+
   render() {
     const {
       containerStyle,
@@ -271,7 +280,9 @@ class TodoCircle extends Component {
     } = this.state;
     const color = this.colorMap[todo.pomodoro.nextState];
     const timeTextColor = progress === 1 ? color : Color.White;
-    const timeText = progress === 1 ? 0 : this.fullSeconds * (1 - progress);
+    const currentSeconds = progress === 1 ? 0 : this.fullSeconds * (1 - progress);
+    this.playTickSound(currentSeconds);
+
     return (
       <View
         style={[
@@ -312,7 +323,7 @@ class TodoCircle extends Component {
           ]}
         >
           <Text style={[ timeTextStyle, {color: timeTextColor, opacity: opacityOfTime} ]}>
-            { secondsToMinutes(timeText) }
+            { secondsToMinutes(currentSeconds) }
           </Text>
         </View>
 
