@@ -26,6 +26,7 @@
 - [react-native-activity-android](https://github.com/jaysoo/react-native-activity-android)
 - [react-native-device-info](https://github.com/rebeccahughes/react-native-device-info)
 - [react-native-firestack](https://github.com/fullstackreact/react-native-firestack)
+- [react-native-indicator](https://github.com/wangdicoder/react-native-indicator)
 - [react-native-material-kit](https://github.com/xinthink/react-native-material-kit)
 - [react-native-push-notification](https://github.com/zo0r/react-native-push-notification)
 - [react-native-sound](https://github.com/zmxv/react-native-sound)
@@ -40,7 +41,7 @@
 #### Android
 
 - Run `android avd` and start an emulator
-- Run `react-native run-android`
+- Run `cd android; ./gradlew installRelease`
 
 #### iOS
 

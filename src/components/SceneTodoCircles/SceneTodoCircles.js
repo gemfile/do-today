@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchTodos, fetchCurrentPage, preparePomodoro, showModalAdding, hideModal } from 'actions';
+import { RotationHoleLoader } from 'react-native-indicator';
 import type { ReducersState, ModalVisibleState } from '../../FlowType';
 import VerticalPager from './VerticalPager';
 import TodoCircle from './TodoCircle';
@@ -14,6 +15,7 @@ import PomodoroButtonRemove from './PomodoroButtonRemove';
 import ModalAdding from './ModalAdding';
 import ModalEditing from './ModalEditing';
 import Tomatoes from './Tomatoes';
+import { Color } from '../common';
 
 class SceneTodoCircles extends Component {
   props: {
@@ -100,6 +102,7 @@ class SceneTodoCircles extends Component {
       buttonContainerStyle,
       modalContainerStyle,
       modifyingContainerStyle,
+      indicatorContainerStyle
     } = styles;
 
     const {
@@ -108,7 +111,13 @@ class SceneTodoCircles extends Component {
       scrollEnabled,
     } = this.state;
 
-    const { currentPage, currentTodo } = this.props;
+    const { currentPage, currentTodo, todos } = this.props;
+
+    const RenderIndicator = todos.length === 0 ? (
+      <View style={indicatorContainerStyle}>
+        <RotationHoleLoader color={Color.Green}/>
+      </View>
+    ) : null;
 
     return (
       <View style={wholeContainerStyle}>
@@ -134,6 +143,8 @@ class SceneTodoCircles extends Component {
           scrollEnabled={scrollEnabled}
           currentPage={currentPage}
         />
+
+        {RenderIndicator}
 
         <View style={[ buttonContainerStyle, {width} ]}>
           <PomodoroButtonRemove buttonEnabled={currentTodo && scrollEnabled} />
@@ -163,6 +174,16 @@ const styles = {
     top: 60,
     height: 60,
     zIndex: 6,
+  },
+  indicatorContainerStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonContainerStyle: {
     position: 'absolute',
